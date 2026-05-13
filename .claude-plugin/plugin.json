@@ -1,0 +1,21 @@
+{
+  "name": "moqui-coding-assistant",
+  "version": "0.1.0",
+  "description": "Reusable workflows for Moqui coding, repo and component management, deployment operations, integration patterns, XML contract checks, and focused verification while preserving local component conventions.",
+  "author": {
+    "name": "Aditi Patel",
+    "email": "aditi.patel@hotwax.co",
+    "url": "https://github.com/hotwax"
+  },
+  "license": "UNLICENSED",
+  "keywords": [
+    "moqui",
+    "coding",
+    "components",
+    "deployments",
+    "integrations",
+    "review",
+    "services",
+    "entities"
+  ]
+}
