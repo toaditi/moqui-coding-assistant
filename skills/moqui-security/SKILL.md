@@ -1,9 +1,9 @@
 ---
-name: moqui-security-delivery
-description: Create or update Moqui security artifacts and exposure settings while preserving existing authorization strategy and avoiding accidental public access. Use when the user asks to change ArtifactGroups, ArtifactAuthz, service exposure, screen access, or related security data in a Moqui repository.
+name: moqui-security
+description: Author or edit Moqui security artifacts and exposure settings while preserving the existing authorization strategy and avoiding accidental public access. Use when the user asks to change ArtifactGroups, ArtifactAuthz, service exposure (`allow-remote`, `authenticate`), screen access (`require-authentication`), or related security data.
 ---
 
-# Moqui Security Delivery
+# Moqui Security
 
 ## Procedure
 

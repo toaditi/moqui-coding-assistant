@@ -1,9 +1,9 @@
 ---
-name: moqui-screen-delivery
-description: Create or update Moqui XML screens while preserving local hierarchy, transition, form, and security patterns. Use when the user asks to change files under `screen/`, add transitions or subscreens, or refactor screen orchestration in a Moqui component.
+name: moqui-screen
+description: Author or edit Moqui XML screens while preserving local hierarchy, transition, form, and security patterns. Use when the user asks to change files under `screen/`, add transitions or subscreens, or refactor screen orchestration in a Moqui component.
 ---
 
-# Moqui Screen Delivery
+# Moqui Screen
 
 ## Procedure
 

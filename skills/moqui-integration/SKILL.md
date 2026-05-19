@@ -1,9 +1,9 @@
 ---
-name: moqui-integration-management
-description: Design, update, and review Moqui external integrations while preserving the repository’s current patterns for remote services, system-message configuration, connector components, and remote endpoint storage. Use when the user asks to manage external integrations, outbound API calls, inbound webhook handling, remote configuration, or integration-specific components in a Moqui repository.
+name: moqui-integration
+description: Design, update, and review Moqui external integrations while preserving local patterns for remote services, system-message configuration, connector components, and remote endpoint storage. Use when the user asks about outbound API calls, inbound webhook handling, remote configuration, or integration-specific components.
 ---
 
-# Moqui Integration Management
+# Moqui Integration
 
 ## Quick start
 

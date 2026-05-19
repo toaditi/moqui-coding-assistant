@@ -1,9 +1,9 @@
 ---
-name: moqui-deployment-operations
-description: Guide Moqui build, load, packaging, runtime-embedding, and Tomcat deployment operations using the repository’s actual Gradle tasks. Use when the user asks how to run, load, package, or deploy a Moqui backend, or when operational verification must be tied to backend build tasks.
+name: moqui-deployment
+description: Build, load, package, embed, and deploy a Moqui backend (including Tomcat) using the repository's actual Gradle tasks. Use when the user asks how to run, load, package, or deploy a Moqui backend, or when operational verification must be tied to backend build tasks.
 ---
 
-# Moqui Deployment Operations
+# Moqui Deployment
 
 ## Quick start
 

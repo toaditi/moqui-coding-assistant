@@ -1,9 +1,9 @@
 ---
-name: moqui-component-management
-description: Create, retrieve, update, package, and reason about Moqui runtime components using the repository’s existing component and Gradle workflows. Use when the user asks to manage components, add a component, inspect component dependencies, package a component, or update installed components in a Moqui backend.
+name: moqui-component
+description: Manage the lifecycle of Moqui runtime components — create, retrieve, update, inspect dependencies, and package — using the repository's existing component and Gradle workflows. Use when the user asks to add a component, update installed components, or package one or more components.
 ---
 
-# Moqui Component Management
+# Moqui Component
 
 ## Quick start
 

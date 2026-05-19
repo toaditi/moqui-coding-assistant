@@ -1,9 +1,9 @@
 ---
-name: moqui-entity-delivery
-description: Create or update Moqui entities and view-entities while preserving local data model patterns, naming, descriptions, relationships, and short-alias conventions. Use when the user asks to add fields, relationships, entities, or view-entities in `entity/*.xml`.
+name: moqui-entity
+description: Author or edit Moqui entities and view-entities while preserving local data model patterns, naming, descriptions, relationships, and short-alias conventions. Use when the user asks to add fields, relationships, entities, or view-entities in `entity/*.xml`.
 ---
 
-# Moqui Entity Delivery
+# Moqui Entity
 
 ## Procedure
 
