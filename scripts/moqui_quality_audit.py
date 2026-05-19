@@ -36,6 +36,14 @@ TEXT_PATTERNS = [
 
 ATTR_RE = re.compile(r'([A-Za-z_][\w:.-]*)="([^"]*)"')
 
+# Maximum non-blank lines allowed inside an inline <script> block within a <service>'s
+# <actions>. Above this, the audit flags `service-inline-script-large` and the logic
+# should be refactored into XML actions or extracted to a script/*.groovy file.
+INLINE_SCRIPT_MAX_LINES = 20
+
+SCRIPT_BLOCK_RE = re.compile(r"<script\b[^>]*>([\s\S]*?)</script>", re.DOTALL)
+CDATA_WRAPPER_RE = re.compile(r"<!\[CDATA\[|\]\]>")
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -184,6 +192,29 @@ def scan_service_file(path: Path, root: Path, findings: list[dict[str, object]],
         authenticate = attrs.get("authenticate", "true")
         if allow_remote == "true" and authenticate in {"false", "anonymous-all"}:
             findings.append(make_finding("warn", "service-public-remote", path, line, f"Remote service `{full_name}` is exposed with authenticate=`{authenticate}`.", root))
+
+        # Skip script-type services entirely — the whole "body" lives in an external groovy file.
+        if attrs.get("type") == "script":
+            continue
+        for script_match in SCRIPT_BLOCK_RE.finditer(block):
+            body = CDATA_WRAPPER_RE.sub("", script_match.group(1))
+            nonblank = sum(1 for body_line in body.splitlines() if body_line.strip())
+            if nonblank > INLINE_SCRIPT_MAX_LINES:
+                script_line = line_for_offset(text, match.start() + script_match.start())
+                findings.append(
+                    make_finding(
+                        "warn",
+                        "service-inline-script-large",
+                        path,
+                        script_line,
+                        (
+                            f"Inline `<script>` in service `{full_name}` has {nonblank} non-blank lines "
+                            f"(threshold {INLINE_SCRIPT_MAX_LINES}). Refactor into XML actions, or extract "
+                            f"to a `script/*.groovy` file referenced via `type=\"script\" location=\"...\"`."
+                        ),
+                        root,
+                    )
+                )
 
 
 def scan_entity_file(path: Path, root: Path, findings: list[dict[str, object]], symbols: list[dict[str, object]]) -> None:

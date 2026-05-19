@@ -12,8 +12,9 @@ Use these principles when creating or updating Moqui artifacts.
 
 - Put data contracts in `entity/`.
 - Put service interfaces and exposure settings in `service/`.
-- Put orchestration in XML actions when the logic is simple and readable there.
-- Move non-trivial logic into `script/` Groovy when XML actions become difficult to read or reuse.
+- **Prefer XML actions.** If the logic can be expressed cleanly with `<entity-find>`, `<service-call>`, `<set>`, `<if>`, `<iterate>`, and the other built-in action tags, write it in XML. XML is the default; Groovy is the deliberate exception.
+- Reach for Groovy only when XML actions are demonstrably the wrong tool: complex branching, non-trivial transformations, regex/string manipulation that the action tags cannot express, or logic that is genuinely easier to read and test in Groovy. "I can type Groovy faster" is not a reason.
+- **The 30% rule for inline `<script>`.** If the Groovy needed for a service exceeds roughly 30% of the service body, move it to its own `script/**/*.groovy` file and call it via `<script location="..."/>`. Inline `<script>` blocks are for short, local fragments — not for hiding a script-sized chunk inside an XML service.
 - Keep screens focused on UI composition, navigation, and thin orchestration.
 
 ## Prefer explicit contracts
