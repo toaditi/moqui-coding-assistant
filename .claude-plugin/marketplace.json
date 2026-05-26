@@ -1,0 +1,14 @@
+{
+  "name": "moqui-coding-assistant",
+  "owner": {
+    "name": "Aditi Patel",
+    "email": "aditi.patel@hotwax.co"
+  },
+  "plugins": [
+    {
+      "name": "moqui-coding-assistant",
+      "source": ".",
+      "description": "Moqui coding, components, integrations, deployments, and review workflows."
+    }
+  ]
+}
