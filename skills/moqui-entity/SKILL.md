@@ -12,6 +12,7 @@ description: Author or edit Moqui entities and view-entities while preserving lo
 3. Preserve local modeling patterns while applying Moqui defaults:
    - `UpperCamelCase` entity names
    - `lowerCamelCase` fields
+   - fully qualified entity names when referencing entities (e.g. `org.apache.ofbiz.order.order.OrderHeader`), matching Moqui convention; use the same qualified pattern in data files and other framework artifacts
    - `short-alias` on entities and relationships where the component uses them
    - `<description>` blocks
 4. Keep structural changes narrow:
