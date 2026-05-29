@@ -20,6 +20,7 @@ Use these principles when creating or updating Moqui artifacts.
 ## Prefer explicit contracts
 
 - Use clear names for services, entities, transitions, and fields.
+- Reference entities by their fully qualified name (e.g. `org.apache.ofbiz.order.order.OrderHeader`), as Moqui convention expects. Apply the same fully qualified pattern consistently in service code, data files, and other framework artifacts.
 - Avoid `process` in names when a more precise verb exists.
 - Add `<description>` blocks to services and entities.
 - Treat authentication, `allow-remote`, and security group membership as part of the contract, not as afterthoughts.
