@@ -26,9 +26,12 @@ description: Author or edit Moqui XML screens while preserving local hierarchy, 
 - Do not bury substantial business logic in screen XML just because the edit started there.
 - Do not add duplicate transition or form names in the same screen.
 - Do not widen public screen access without checking the component’s existing security posture.
+- Do not put `condition` on `<container>` or `<container-box>` — it is silently ignored and the block always renders. Use a `<section name="..." condition="...">` wrapper instead (audit code `screen-container-condition`).
+- Do not write bare `key`/`text` on `<list-options>` — they are expand strings, not field names. Interpolate the row field: `key="${idField}" text="${labelField}"` (audit code `screen-list-options-literal`).
 
 ## References
 
 - Philosophy: `../../assets/moqui-authoring-philosophy.md`
 - Change sequence: `../../assets/moqui-change-sequence.md`
 - Layout guide: `../../assets/moqui-layout.md`
+- Framework pitfalls: `../../assets/moqui-framework-pitfalls.md`

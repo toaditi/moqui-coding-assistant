@@ -7,6 +7,8 @@ Use this checklist before handoff, review approval, or merge.
 - XML files parse cleanly.
 - Service, entity, and screen definitions do not collide with existing definitions.
 - Screen transitions and form names are unique within each file.
+- Screens have no `condition` on `<container>`/`<container-box>` (silently ignored; audit code `screen-container-condition`).
+- `<list-options>` `key`/`text` interpolate the row field with `${...}`, not bare names (audit code `screen-list-options-literal`).
 
 ## Contracts and naming
 

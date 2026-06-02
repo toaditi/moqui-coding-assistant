@@ -25,8 +25,10 @@ description: Build, load, package, embed, and deploy a Moqui backend (including 
 - Do not flatten local-load, package-build, and Tomcat deploy into a single generic “deploy” story.
 - Do not invent production infrastructure steps beyond what the repo provides.
 - Do not recommend broad load tasks when a narrower seed or packaging task is sufficient.
+- Do not assume an entity or seed change is live just because the code was edited. New entity columns are added by a **restart** (under `entity_add_missing_startup=true`) — a running server keeps returning `Unknown column`. New seed/ext-seed rows are **not** applied by a restart; they need an explicit `load` against the target DB. When both apply, stop the server (it holds the txlog lock), load seed, then relaunch. See Framework pitfalls.
 
 ## References
 
 - Deployment guide: `../../assets/moqui-deployment-operations.md`
 - Codebase guide: `../../assets/moqui-codebase-management.md`
+- Framework pitfalls: `../../assets/moqui-framework-pitfalls.md`

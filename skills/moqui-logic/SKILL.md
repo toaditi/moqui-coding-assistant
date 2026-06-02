@@ -28,9 +28,11 @@ description: Author or edit Moqui business logic (XML actions or Groovy) while p
 - Do not let an inline `<script>` block grow past ~30% of the service body — extract it to a dedicated `script/**/*.groovy` file and reference it with `<script location="..."/>`.
 - Do not introduce Groovy utilities or helpers when the component already has a clearer local pattern.
 - Do not use broad refactors when the task only needs a local behavior correction.
+- Do not pass a non-boolean-returning closure to `EntityList.findAll`/`find`/`filter` — those methods cast the result straight to `boolean` (no Groovy truthiness), so `findAll{ it.someId }` throws `ClassCastException` at runtime on non-empty lists. Always return a real boolean: `find{ it.someId != null }`. See Framework pitfalls.
 
 ## References
 
 - Philosophy: `../../assets/moqui-authoring-philosophy.md`
 - Change sequence: `../../assets/moqui-change-sequence.md`
 - Checklist: `../../assets/moqui-quality-checklist.md`
+- Framework pitfalls: `../../assets/moqui-framework-pitfalls.md`

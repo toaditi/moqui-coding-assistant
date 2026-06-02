@@ -30,9 +30,11 @@ description: Author or edit Moqui service definitions while preserving local nam
 - Do not introduce a new service namespace if the component already has an established location for that concern.
 - Do not reach for Groovy when XML actions can express the logic cleanly. Prefer XML; use Groovy only when it is demonstrably the right tool.
 - Do not let an inline `<script>` block exceed ~30% of the service body. If it does, extract it to a dedicated `script/**/*.groovy` file and call it via `<script location="..."/>`.
+- Do not add a service that drives an entity's `statusId` to a new value without also seeding the matching `moqui.basic.StatusFlowTransition` row and loading it into every target DB — the entity-auto `update#<Entity>` validates the transition and otherwise fails at runtime with `[400] Status change not allowed`. See Framework pitfalls.
 
 ## References
 
 - Philosophy: `../../assets/moqui-authoring-philosophy.md`
 - Change sequence: `../../assets/moqui-change-sequence.md`
 - Checklist: `../../assets/moqui-quality-checklist.md`
+- Framework pitfalls: `../../assets/moqui-framework-pitfalls.md`

@@ -290,6 +290,42 @@ def scan_screen_file(path: Path, root: Path, findings: list[dict[str, object]], 
         if len(lines) > 1:
             findings.append(make_finding("warn", "duplicate-form", path, lines[0], f"Form `{name}` is defined multiple times in the same screen.", root))
 
+    # `condition` is silently dropped on <container>/<container-box> (not in xml-screen-3.xsd);
+    # the container always renders. Use a <section condition="..."> wrapper instead.
+    for match in re.finditer(r"<container(?:-box)?\b[^>]*\bcondition=\"[^\"]*\"[^>]*>", text, re.DOTALL):
+        line = line_for_offset(text, match.start())
+        findings.append(
+            make_finding(
+                "warn",
+                "screen-container-condition",
+                path,
+                line,
+                "`condition` is ignored on `<container>`/`<container-box>` and the block always renders. "
+                "Wrap it in `<section name=\"...\" condition=\"...\">` instead.",
+                root,
+            )
+        )
+
+    # <list-options> key/text are expand strings, not field names. A bare value like
+    # key="endpoint" renders the literal word, never the row's field; it must be ${endpoint}.
+    for match in re.finditer(r"<list-options\b[^>]*>", text, re.DOTALL):
+        attrs = parse_attrs(match.group(0))
+        line = line_for_offset(text, match.start())
+        for attr in ("key", "text"):
+            value = attrs.get(attr)
+            if value and "${" not in value:
+                findings.append(
+                    make_finding(
+                        "warn",
+                        "screen-list-options-literal",
+                        path,
+                        line,
+                        f"`<list-options {attr}=\"{value}\">` is a literal string, not a field reference. "
+                        f"Interpolate the row field as `{attr}=\"${{{value}}}\"`.",
+                        root,
+                    )
+                )
+
 
 def scan_text_patterns(path: Path, root: Path, findings: list[dict[str, object]]) -> None:
     text = path.read_text(encoding="utf-8", errors="replace")
