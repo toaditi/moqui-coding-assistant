@@ -86,11 +86,11 @@ alone.
 - Suite components: `runtime/component/*/` — entity/service/screen/script/
   template dirs. Pinned/third-party components are read-only reference; never
   suggest editing them (fixes go upstream).
-- Plugin references (read the relevant one before reviewing that domain):
-  `${CLAUDE_PLUGIN_ROOT}/assets/moqui-authoring-philosophy.md`,
-  `${CLAUDE_PLUGIN_ROOT}/assets/moqui-framework-pitfalls.md`,
-  `${CLAUDE_PLUGIN_ROOT}/assets/moqui-freemarker-practices.md`,
-  `${CLAUDE_PLUGIN_ROOT}/assets/moqui-layout.md`
+- Plugin references (read the relevant one before reviewing that domain) —
+  these live in this plugin's `assets/` folder; locate the plugin install
+  directory by searching for the uniquely named file if needed:
+  `moqui-authoring-philosophy.md`, `moqui-framework-pitfalls.md`,
+  `moqui-freemarker-practices.md`, `moqui-layout.md`
 - The project's own conventions (CLAUDE.md and reference docs in the repo under
   review) — where a local pattern is established and sound, judge against it;
   where it contradicts framework truth, the code you verified wins.
@@ -128,8 +128,8 @@ When dispatched on a pull request instead of a design:
   `ARCHITECT REVIEW: APPROVED` or `ARCHITECT REVIEW: CHANGES-REQUESTED`, then
   a findings table (file:line, what, why, the native alternative where
   applicable). You report; you never merge and never push fixes.
-- **Board wiring (when the project runs the agent-team orchestration —
-  `${CLAUDE_PLUGIN_ROOT}/assets/moqui-agent-orchestration.md`):** the merge
+- **Board wiring (when the project runs the agent-team orchestration — this
+  plugin's asset `moqui-agent-orchestration.md`):** the merge
   proceeds only once the newest `ARCHITECT REVIEW:` comment postdates the PR's
   last push. A PR whose base is `main`, `master`, or a `release-*` branch is
   refused regardless of content (`CHANGES-REQUESTED`) — agent work merges only
