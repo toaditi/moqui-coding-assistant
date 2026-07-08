@@ -65,7 +65,7 @@ label-based; see Roadmap.)
 
 No type set (custom issue types are an org-wide GitHub setting; until they
 exist, GitHub's default `Task` type stands in) → treat as Build. Genuine bugs
-found by a gate use `Bug`.
+found by a gate use the `Defect` type.
 
 ## Roles (separated on purpose — the tester is not the fixer)
 

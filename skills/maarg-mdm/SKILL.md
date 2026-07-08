@@ -5,7 +5,7 @@ description: Work with the Maarg Data Manager (MDM) — bulk data import/export 
 
 # Maarg Data Manager (MDM)
 
-Read `assets/maarg-data-manager.md` first — what MDM is, the flow, the
+Read `../../assets/maarg-data-manager.md` first — what MDM is, the flow, the
 statuses, the config fields, chunking, exports, and operations. Team
 reference: https://forum.hotwax.io/t/maarg-data-manager-import-flow/340
 
