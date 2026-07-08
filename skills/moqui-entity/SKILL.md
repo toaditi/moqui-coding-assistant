@@ -37,6 +37,13 @@ and the framework's built-ins — the join often already exists
 (`GeoAssocAndToDetail`, `FacilityContactDetailByPurpose`,
 `ShopifyShopAndProduct`…). Reuse beats redeclaring.
 
+**Index check for every view:** for each join key and condition field
+in the view, confirm coverage in the member entity's definition — PK,
+`<relationship>` (FK indexes are automatic), or a declared `<index>`.
+A filtered field with no coverage on a large table = add the
+`<index>` in the same change. The entity XML is the metadata — no
+database needed.
+
 ## Guardrails
 
 - Do not create a parallel entity package when the component already has a stable package for the domain.
