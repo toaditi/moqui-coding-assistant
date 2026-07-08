@@ -22,6 +22,28 @@ description: Author or edit Moqui entities and view-entities while preserving lo
    - `python3 ../../scripts/moqui_quality_audit.py audit --root "<repo-root>" --paths "<entity-file>"`
 6. Verify the smallest compile or runtime path that exercises the changed entity contract.
 
+## Smell words — when a description means "view-entity"
+
+| When the design or code says… | It means… |
+|---|---|
+| "for each X, look up its Y" | a loop with lookups → one view-entity find |
+| "filter X by a field that lives on Y" | a join → view-entity |
+| "check it is still valid / current / not expired" | `<date-filter/>` on the dated member |
+| "then sort and take the first / second" | `<order-by>` in the find — never sort in memory |
+| "count / total per group" | alias with `function="count|sum"` — never accumulate in a loop |
+
+Before declaring a new view: search the component's `entity/*.xml`
+and the framework's built-ins — the join often already exists
+(`GeoAssocAndToDetail`, `FacilityContactDetailByPurpose`,
+`ShopifyShopAndProduct`…). Reuse beats redeclaring.
+
+**Index check for every view:** for each join key and condition field
+in the view, confirm coverage in the member entity's definition — PK,
+`<relationship>` (FK indexes are automatic), or a declared `<index>`.
+A filtered field with no coverage on a large table = add the
+`<index>` in the same change. The entity XML is the metadata — no
+database needed.
+
 ## Guardrails
 
 - Do not create a parallel entity package when the component already has a stable package for the domain.

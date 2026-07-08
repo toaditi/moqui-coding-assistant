@@ -20,6 +20,24 @@ description: Author or edit Moqui security artifacts and exposure settings while
    - `python3 ../../scripts/moqui_quality_audit.py audit --root "<repo-root>" --paths "<changed-files>"`
 5. Call out every access widening explicitly in the final summary.
 
+## instance_purpose — the instance safety switch
+
+Every instance declares its purpose in the Moqui conf:
+`dev` (MoquiDevConf), `production` (default and docker conf). Read it
+ONE way: `System.getProperty('instance_purpose')`.
+
+Rules:
+
+- **Dev-only tooling** (test-data generators, fixture loaders, debug
+  surfaces) must gate on `== 'dev'` and refuse otherwise. The
+  framework default is `production` (`MoquiDefaultConf.xml:11`), so an
+  unset property fails closed — keep it that way: check for the exact
+  value `dev`, never for "not production".
+- **Never gate business logic on it** — it selects safety posture,
+  not behavior. An order flows the same on every instance.
+- Show it on ops/about screens (the oms and maarg-util screens
+  already do) so a human can always see what an instance thinks it is.
+
 ## Guardrails
 
 - Do not widen anonymous or remote access as a side effect of a functional change.
