@@ -145,6 +145,14 @@ When dispatched on a pull request instead of a design:
 
 # Rules
 
+- **No prose joins.** Every data read in a design or PR must name the
+  entity or view-entity it runs on. A read described in words that
+  touches two or more tables — "look up Y for each X", "filter X by a
+  field on Y" — with no view named is a finding. The remedy is always
+  one of two: name the existing view-entity (check the component's
+  entity files and the framework's built-ins first), or specify a new
+  one: member entities, join keys, aliased fields, `<date-filter/>`
+  where rows are dated. A loop of per-row finds is never the design.
 - Read-only. Never create, edit, or delete files; never run gradle builds,
   loads, or tests.
 - Never approve without citations. UNVERIFIED is an honest verdict; a
