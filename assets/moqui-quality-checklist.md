@@ -16,12 +16,14 @@ Use this checklist before handoff, review approval, or merge.
 - Avoid `process` in service, transition, file, and variable names.
 - Services and entities include `<description>` blocks.
 - Entity full names remain stable when package or `entity-name` changes.
+- Scheduled or long-running services declare a `semaphore` policy instead of hand-rolled locks.
 
 ## Exposure and safety
 
 - Public or remote services have deliberate authentication settings.
 - `allow-remote="true"` is justified and not paired with accidental public access.
 - Changes do not widen access silently.
+- User-facing String parameters have a deliberate `allow-html` setting (`none` is the default; `safe`/`any` must be justified).
 
 ## Implementation hygiene
 

@@ -35,6 +35,25 @@ is never read. You must interpolate: `key="${endpoint}" text="${description}"`.
 - **Fix:** `<list-options list="myList" key="${idField}" text="${labelField}"/>`.
 - **Audit code:** `screen-list-options-literal` (warn).
 
+## Services
+
+### `ServiceJobRunLock` is not run history
+
+`moqui.service.job.ServiceJobRunLock` holds one row per job with a bare
+`lastRunTime` that the scheduler writes as a coordination lock (its own
+description: "managed automatically by the service job runner"). Code that reads
+it for monitoring runs fine and shows a timestamp — but has no duration, no
+error flag, no error text, and misses ad-hoc runs' outcomes. The run-history
+entity is `moqui.service.job.ServiceJobRun`: one record per execution with
+`startTime`, `endTime`, `hasError`, `errors`, `messages`. The official docs are
+explicit: "track execution of Jobs using moqui.service.job.ServiceJobRun
+records."
+
+- **Symptom:** a job dashboard or health check shows "last run" but never shows
+  failures; errors are invisible until someone reads the log.
+- **Fix:** query `ServiceJobRun` by `jobName`, `order-by="-startTime"`, limit 1
+  (the `jobName` index makes this cheap). See `moqui-service-engine.md`.
+
 ## Logic (Groovy)
 
 ### `EntityList.findAll` / `find` / `filter` cast the closure result straight to `boolean`
