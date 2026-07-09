@@ -70,10 +70,9 @@ file:line or a moqui.org URL. Sections:
 Monitoring query pattern (latest run):
 
 ```xml
-<entity-find entity-name="moqui.service.job.ServiceJobRun" list="jobRuns">
+<entity-find entity-name="moqui.service.job.ServiceJobRun" list="jobRuns" limit="1">
     <econdition field-name="jobName" value="my_job_name"/>
     <order-by field-name="-startTime"/>
-    <limit>1</limit>
 </entity-find>
 ```
 
