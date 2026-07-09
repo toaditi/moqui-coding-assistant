@@ -36,10 +36,9 @@ the scheduler can coordinate and recover stuck jobs, not for dashboards.
 **Monitoring query pattern** — latest run for a job:
 
 ```xml
-<entity-find entity-name="moqui.service.job.ServiceJobRun" list="jobRuns">
+<entity-find entity-name="moqui.service.job.ServiceJobRun" list="jobRuns" limit="1">
     <econdition field-name="jobName" value="my_job_name"/>
     <order-by field-name="-startTime"/>
-    <limit>1</limit>
 </entity-find>
 ```
 
