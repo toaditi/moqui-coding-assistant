@@ -46,7 +46,18 @@ and a doc-page citation, the two independently agree.
 ## Services
 
 - [Service Definition](https://www.moqui.org/m/docs/framework/Logic+and+Services/Service+Definition) —
-  XML actions vs Groovy, in/out parameters, validation.
+  XML actions vs Groovy, in/out parameters, validation sub-elements
+  (`matches`, `number-range`, `text-email`, ...), `allow-html`, and the
+  `semaphore` attribute (native single-instance execution for long-running
+  services).
+- [Service Implementation](https://www.moqui.org/m/docs/framework/Logic+and+Services/Service+Implementation) —
+  script/inline/java/entity-auto runners; entity-auto automatic behaviors
+  (`store` create-or-update, sequenced ID generation, `fromDate` auto-set,
+  `oldStatusId`/`statusChanged`, `StatusFlowTransition` enforcement).
+- [Calling Services](https://www.moqui.org/m/docs/framework/Logic+and+Services/Calling+Services) —
+  the `ec.service` DSL: sync/async/job, `requireNewTransaction`,
+  `disableAuthz`, `special()` TX commit/rollback hooks, `callFuture()`,
+  `distribute`.
 - [Service ECA Rules](https://www.moqui.org/m/docs/framework/Logic+and+Services/Service+ECA+Rules) —
   SECA's 7 firing phases relative to the named service call: **pre-auth,
   pre-validate, pre-service, post-service, post-commit, tx-commit,
@@ -56,7 +67,11 @@ and a doc-page citation, the two independently agree.
 - [Overview of XML Actions](https://www.moqui.org/m/docs/framework/Logic+and+Services/Overview+of+XML+Actions) —
   the mini-language used inside services and screens.
 - [Service Jobs](https://www.moqui.org/m/docs/framework/Logic+and+Services/Service+Jobs) —
-  scheduled/recurring service execution.
+  scheduled/recurring service execution via `ServiceJob` records. States the
+  monitoring rule verbatim: **"User can track execution of Jobs using
+  moqui.service.job.ServiceJobRun records"** (`ServiceJobRunLock` is the
+  scheduler's lock, not run history). Ad-hoc runs:
+  `ec.service.job("name").parameters(ctx).run()` returns the `jobRunId`.
 
 ## User interface
 

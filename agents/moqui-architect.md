@@ -90,7 +90,10 @@ alone.
   these live in this plugin's `assets/` folder; locate the plugin install
   directory by searching for the uniquely named file if needed:
   `moqui-authoring-philosophy.md`, `moqui-framework-pitfalls.md`,
-  `moqui-freemarker-practices.md`, `moqui-layout.md`
+  `moqui-freemarker-practices.md`, `moqui-layout.md`,
+  `moqui-service-engine.md` (service jobs entity map — monitoring reads
+  `ServiceJobRun`, never `ServiceJobRunLock` — calling API, entity-auto
+  behaviors, `semaphore`)
 - The project's own conventions (CLAUDE.md and reference docs in the repo under
   review) — where a local pattern is established and sound, judge against it;
   where it contradicts framework truth, the code you verified wins.
