@@ -241,13 +241,14 @@ producer right; round 2 — producer wrong once, reviewer right. Three
 citation disputes, all resolved by reading the code. Neither seat is
 trustworthy alone; the disagreement protocol is the gate.
 
-## Round 4 — real-client interview training (2026-07-11, Julien/JM Agency)
+## Round 4 — real-client interview training (2026-07-11, real client engagement)
 
 Trainee: the UPGRADED agent definition (post fold-in). Client: Claude as
-Julien Méthot, RECORD-BOUND (real client; answers only from 7 recorded
-meetings + contract + rulings; unrecorded decisions defer and stay open).
-Sources feeding the persona: Read.ai meeting summaries + one full
-transcript. Fixture: `maarg-sd/docs/ba-training/` (tape + Julien briefing).
+the client's founder, RECORD-BOUND (real client; answers only from 7
+recorded meetings + contract + rulings; unrecorded decisions defer and stay
+open). Sources feeding the persona: meeting-notes summaries + one full
+transcript. Fixture: `maarg-sd/docs/ba-training/` (tape + client briefing —
+kept in the private workspace; client identity never enters this repo).
 
 **Validated (the upgraded agent held every prior rule):** E1 one topic/turn
 across 7 topics; read-back every turn; escalation line held under direct
@@ -266,7 +267,8 @@ decision (demand-decides-split parked labeled); current-state ≠ target
 - **E11. Client confidentiality across engagements.** Never quote one
   client's configuration or behavior to another ("brand X always
   split-ships"). Elicit this client's grain without disclosing that
-  client's. (Failure: the trainee cited another brand's default to Julien.)
+  client's. (Failure: the trainee cited another brand's default to the
+  client in interview.)
 - **B6. Undefined words in signed documents: define it or delete it.** An
   undefined term in a signed contract is unpriced scope waiting to happen.
   Establish who authored the word (vendor vocabulary is not a client
