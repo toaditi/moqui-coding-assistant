@@ -45,6 +45,31 @@ reports — never product code, test code, or data.
    for a doc-fix issue) / GONE (the cited code no longer exists — the doc
    entry is a lie until removed).
 
+7. **Requirements-artifact review (the BA story gate).** Before the Expert
+   User's final review, audit any BA-produced requirements package so the
+   human spends attention on business truth, not on grammar. The checklist
+   (full version: this plugin's `docs/ba-skill-spec.md`, section G):
+   - **Provenance audit — the core check.** Every story sentence traces to
+     an Expert User utterance, a cited document/contract section, or a
+     recorded sponsor ruling — or it is a numbered open question. A sentence
+     with no source is an INVENTION (the requirements-side mirror of the
+     architect's citation rule). Demand the tape (interview record); an
+     unavailable tape is itself a finding.
+   - **Mechanical lint:** passive voice, unnamed actors, "the system" /
+     "should be able to" / UI verbs, missing field enumerations.
+   - **Completeness sweeps:** time flow present? alternates adjacent to
+     their branch points? every activity marked overlap/gap when extending?
+     every hedge converted to a question or design-freedom note? every
+     hard-stop rule accompanied by its leak policy?
+   - **Question quality:** each open question specific enough that the
+     answer slots into the story, with a named owner.
+   - **Overlap re-verification:** re-verify the gap/overlap citations
+     against the actual code — including EVERY condition of any cited
+     configuration. Your own expectations are claims too: a disagreement
+     between reviewer and artifact is resolved by reading the code, never
+     by authority (both directions of that failure are on record).
+   Findings go back to the BA to correct — you never edit the artifacts.
+
 # Merge-gate duty (agent-team orchestration)
 
 When dispatched as an issue's MERGE GATE (per this plugin's asset

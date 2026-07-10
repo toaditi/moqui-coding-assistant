@@ -117,3 +117,206 @@ test = process story = HEMP artifact, the same idea in three names.
   over the whole business first, then detailed analysis/design/build per
   part, in parallel. Handle late change by updating the process story — the
   change flows through to design and build from there, not around it.
+
+## The business analyst's artifact templates
+
+These are the **requirements-side** artifacts the business analyst produces
+(HEMP ch. 3–4). The design-side artifacts below them in the artifact table —
+data statement, data model, screen outline, data mapping, process outline,
+system interface — are **not** the analyst's: the architect and UI designer
+own those, working from the story the analyst wrote. Keep every artifact
+stand-alone: understandable with no author present.
+
+### Business process story (the primary artifact)
+
+```
+# <Feature / scope name>
+Business case: <link to the objective(s) this serves>
+Actors: <names — each defined in the actor list>
+
+## Main flow
+<n>. <Actor> <active verb> <object, with the fields recorded or reviewed>.
+     — system-under-build stays UNNAMED ("Company automatically notifies the
+       Customer"); actor systems are NAMED (Shopify, NetSuite, the carrier,
+       the payment gateway). Verbs: record / review / notify / approve /
+       receive — never submit / enter / display / click.
+
+   Alternate — <condition>: the distinguishing condition is the FIRST words
+   of the paragraph. Keep it next to the branch point. The sentence that
+   returns to the main flow names the step it rejoins.
+
+## Time flow (activities triggered by time, not by the flow above)
+<nightly / per settlement / month-end> — <Actor> <verb> <object>.
+```
+
+On a large scope: write ONE high-level story first, **bold** each high-level
+activity, then break each bold sentence into its own linked sub-story whose
+title IS that sentence. Detail stops at the fields an actor records/reviews;
+heavier field/rule detail goes in a linked supporting doc.
+
+### Idea to incorporate
+
+A crosscutting business rule/objective that **can** be woven into the story.
+Record it once in an "Ideas to Incorporate" list so the interview keeps
+flowing; later break it into steps and add those steps to **every** activity
+it touches. (Book example: address validation added to every activity that
+records a postal address.)
+
+### Requirement statement
+
+An idea that **cannot** be woven into a flow — a standing rule or a system
+constraint. Keep it as a short standalone statement used alongside the story;
+if it applies to one activity, link it from that activity.
+
+### Actor definition
+
+`<Name> — <person / system>; <primary role>; <how it overlaps/differs from
+other actors>.` Actor systems (Shopify, NetSuite, carrier) are actors too.
+
+### User experience story
+
+A "day in the life" of ONE important actor (a customer, a heavy or
+complex-role user). Single actor, so the actor need not be named each
+sentence; light design hints allowed but minimized. Use it to surface
+activities, then fold every activity it reveals back into the business
+process story. It is never a design basis.
+
+### Business case
+
+Why / objectives, structured by objective (not by flow), cross-linked to the
+story activities each objective drives. **No confidential ROI or budget** —
+everyone on the project reads it. Write it first when used, so objectives
+shape the story.
+
+### Overlap description (extend-existing-system mode)
+
+The activities it covers, plus step-by-step instructions for how those
+activities are **already** done in the system — detailed enough for someone
+who has never seen it, citing the service/entity/screen by **stable name**
+(not `file:line`, which rots in a durable doc). **Verify against the real
+system and validate with the Expert User** — an unverified overlap is the
+most expensive requirements bug. Doubles as end-user documentation. *Partial
+overlap*: mostly supported — describe the gap only at the point the activity
+breaks; leave the rest.
+
+### Gap description
+
+The activities NOT supported, plus an optional sub-list of existing artifacts
+(entities, services) worth reusing when designing the gap. *Partial gap*: an
+unsupported activity where some data model or logic already exists. Link each
+gap from the story. When every activity is marked overlap or gap, the story
+becomes the supported-vs-build map that scopes the design.
+
+### Open questions (to the Expert User)
+
+Numbered list of what the story cannot answer yet. Never fill a hole with an
+invention — a hole becomes a question. "Q3: when a POS return arrives without
+a receipt, who approves the credit?"
+
+## Worked example — a Shopify order, then a return
+
+A compact end-to-end in the templates above (the OMS mode: extend an existing
+system). The system-under-build stays unnamed; Shopify / NetSuite / the
+carrier are named actor systems. Every overlap cites a real, verified service
+or entity in the suite.
+
+**Business case (excerpt).** Objective: capture every channel's orders in one
+operational system so fulfillment and finance work from a single record.
+
+**Actors.**
+- Customer — buys and returns goods; interacts rarely.
+- Shopify (actor system) — the e-commerce platform; captures the order and the
+  return request.
+- Company — the organization running fulfillment (the system-under-build,
+  unnamed).
+- Warehouse Worker — picks, packs, ships, receives returns.
+- NetSuite (actor system) — the ERP; the financial ledger.
+- Carrier (actor system) — moves the parcel.
+
+**Business process story (high-level; bold expands to a sub-story).**
+
+**Company captures the order.** Shopify notifies Company of a new order.
+Company records the order: customer, items, quantities, prices, ship-to
+address, payment status.
+
+**Company fulfills the order.** Company assigns the order to a warehouse.
+Warehouse Worker picks and packs the items. Company notifies the Carrier of
+the shipment. Warehouse Worker records the shipment. Company notifies the
+Customer.
+> Alternate — item out of stock: If the assigned warehouse cannot fill an
+> item, Company reassigns the item to a warehouse that has it, or notifies the
+> Customer of a backorder. Rejoining "Company fulfills the order", Warehouse
+> Worker picks the reassigned items.
+
+**Company records the sale in the ledger.** Company notifies NetSuite of the
+shipped order.
+
+**Customer returns an item.** Customer requests a return in Shopify. Shopify
+notifies Company of the return request. Company records the requested return:
+order, items, reason. Warehouse Worker receives the returned items and records
+their condition. Company authorizes the refund and notifies NetSuite. Company
+notifies the Customer that the refund is issued.
+
+*Idea to incorporate:* every activity that records a postal address validates
+it against the address service — add to the order ship-to and the return
+ship-from.
+
+**Gap / overlap.**
+
+| Activity | Overlap / Gap | Evidence (verified name) |
+|---|---|---|
+| Company records the order | Overlap | shopify-oms-bridge `create#ShopifyOrder` (webhook path `OrdersCreate` → `consume#OrdersCreateWebhookPayloadSystemMessage`); lands `OrderHeader` / `OrderItem` (oms, ofbiz-oms-udm) |
+| Company records the requested return | Overlap | shopify-oms-bridge `create#ShopifyInProgressReturn` / `create#ShopifyCompletedReturn`; lands `ReturnHeader` (oms, ofbiz-oms-udm) |
+| Company notifies NetSuite of the shipped order | Overlap | mantle-netsuite-connector `generate#NewOrdersSyncFeed` / `generate#FulfilledOrderItemsFeed` |
+| <client-specific twist, e.g. a bespoke exchange rule> | Gap | — the design+build focuses here |
+
+**Open questions.**
+- Q1: When a returned item arrives with no originating Shopify return request,
+  who authorizes the refund, and at what value?
+
+**Handoff.** The architect turns each gap into data statements → data model
+(`moqui-entity`) and process / interface designs; QA turns each story activity
+into an acceptance scenario (the story IS the test spec).
+
+## Engagement-hardened additions (from a full real engagement)
+
+Practices and three artifact shapes proven in a complete pre-order
+requirements engagement (multi-round elicitation, then document, contract,
+and defect-history reconciliation). Rule rationale + evidence:
+`docs/ba-skill-spec.md`.
+
+**Record-keeping practices (all artifacts):**
+- Version every artifact; the story header carries the **sign-off stamp**
+  ("SIGNED OFF by the Expert User (name), date — vN") and what changed per
+  version.
+- Open questions carry a **named owner**; answered ones move to an
+  `## Answered` log with the answer, who, and the date — the story history.
+- **Escalations quote BOTH conflicting sources verbatim** and are marked
+  "escalated, not resolved" until the sponsor rules.
+- What the business explicitly declines is an **explicit non-requirement**
+  ("no embargo holds — if that changes it is a new conversation, not a
+  hidden feature").
+- Gap/overlap headers **pin the component versions** the verdicts were
+  checked against; report **every condition** of any cited configuration.
+- **Keep the tape**: the Expert User's words (interview record), preserved
+  alongside the artifacts — provenance review is impossible without it.
+
+**Legacy-evidence record** (when engineering documents are a source):
+facts mined (Fn) · contradictions with the Expert User's understanding
+(Cn: their belief, the record, the disclosure outcome — requirements
+usually stand, reclassified "keep what works" → "build what legacy only
+pretended to do") · reliability cautions for the Architect (Bn — defects
+not to rebuild) · corrections applied to the other artifacts.
+
+**Contract coverage map** (when a signed contract is a source): promise by
+promise — Pn | contract § | verdict COVERED / PARTIAL / MISSING /
+CONFLICTS | where it landed (story step / R-rule / Qn). Plus contract
+internal contradictions (recommend closing them with the client in
+writing), and package requirements the contract never priced — the sponsor
+carries those knowingly.
+
+**Defect-history traceability** (when a regression/issue list is a
+source): per case — issue link | verdict STORY-COVERED (step/rule) /
+IMPLICIT-REQUIREMENT-MISSING (draft the missing sentence) / LEGACY-ONLY
+(reason; another client's integrations never enter this client's scope) —
+handed to QA so regression cases stay mapped to the story.
