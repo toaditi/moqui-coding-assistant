@@ -15,7 +15,7 @@ unverified green.
   citation-by-citation against framework code), a Builder (implements
   one task, never certifies its own work), and a QA Technician
   (verifies claims adversarially; hunts tests that can never fail).
-- **16 reference assets** — the knowledge the skills and agents cite:
+- **15 reference assets** — the knowledge the skills and agents cite:
   framework pitfalls, authoring philosophy, integration patterns, the
   HEMP requirements method, agent orchestration, and more.
 
