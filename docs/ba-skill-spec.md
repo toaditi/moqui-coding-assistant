@@ -241,6 +241,56 @@ producer right; round 2 — producer wrong once, reviewer right. Three
 citation disputes, all resolved by reading the code. Neither seat is
 trustworthy alone; the disagreement protocol is the gate.
 
+## Round 4 — real-client interview training (2026-07-11, Julien/JM Agency)
+
+Trainee: the UPGRADED agent definition (post fold-in). Client: Claude as
+Julien Méthot, RECORD-BOUND (real client; answers only from 7 recorded
+meetings + contract + rulings; unrecorded decisions defer and stay open).
+Sources feeding the persona: Read.ai meeting summaries + one full
+transcript. Fixture: `maarg-sd/docs/ba-training/` (tape + Julien briefing).
+
+**Validated (the upgraded agent held every prior rule):** E1 one topic/turn
+across 7 topics; read-back every turn; escalation line held under direct
+client pressure ("when do I get the phase answer?" → factual state, no
+promise, urgency quoted to sponsor); deferrals stayed open (Q29 accounting;
+Q32 region-face; Q34 widths; Q35 audit; Q36 ledger mechanics); musing ≠
+decision (demand-decides-split parked labeled); current-state ≠ target
+(manual split recorded as temporary workaround).
+
+**New rules from round 4:**
+- **E10. Weight every recorded item: FIRM / LEAN / THEORY / HOMEWORK.** A
+  technical client thinks aloud; the record must carry his labels ("write
+  that as my lean and confirm it when there's actual checkout copy"). A
+  lean gets an open confirmation item, never a rule. A working theory gets
+  a pressure-test owner, never adoption.
+- **E11. Client confidentiality across engagements.** Never quote one
+  client's configuration or behavior to another ("brand X always
+  split-ships"). Elicit this client's grain without disclosing that
+  client's. (Failure: the trainee cited another brand's default to Julien.)
+- **B6. Undefined words in signed documents: define it or delete it.** An
+  undefined term in a signed contract is unpriced scope waiting to happen.
+  Establish who authored the word (vendor vocabulary is not a client
+  requirement), whether it is on the launch bar, and route it to the
+  written clarification list with a define-or-delete disposition.
+- **B7. Elicit the minimum launchable bar.** When scope phasing is
+  disputed, convert the dispute into the client's concrete acceptance
+  criteria ("at go-live, which of these must be true?") so the sponsor's
+  ruling lands against a real bar, not a vibe.
+- **G7. Audit even the client's self-assessment.** "Did I ever bring it
+  up?" is a checkable claim — check it before writing it down (the trainee
+  verified zero waitlist mentions across seven meetings before recording
+  the disowning).
+- **D5 (extends D-family). Meeting-AI summaries are hearsay.** A summary
+  line is never load-bearing provenance — pull the transcript for any claim
+  that changes scope, money, or phase. (Round-3 finding, validated again:
+  the summary inverted the client's "manual V1" meaning; the transcript
+  reversed the escalation.)
+
+**Pattern worth keeping:** requirement↔limitation wiring — when a client
+states a requirement that contradicts a platform limitation already found
+in gap/overlap, bind them explicitly ("your words are now the requirement
+it contradicts") so the build item carries both sides.
+
 ## Eval cases (replay these on the upgraded agent)
 
 | # | Input | Expected | Traps it must avoid |
