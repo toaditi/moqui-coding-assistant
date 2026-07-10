@@ -9,6 +9,11 @@ Sets up the coordination model described in
 `../../assets/moqui-agent-orchestration.md` (read it first — it is the
 normative document; this skill only automates its setup).
 
+Background reading (why this exists, and the evidence):
+`../../docs/the-supervision-bottleneck.md` (the story),
+`../../docs/agent-team-position.md` (the position),
+`../../docs/prior-art-agent-teams.md` (verified sources).
+
 ## Quick start
 
 ```bash

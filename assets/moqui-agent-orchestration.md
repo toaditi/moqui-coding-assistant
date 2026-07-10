@@ -1,5 +1,7 @@
 # Agent orchestration — manager + worker pool over GitHub Issues
 
+*(Why this design exists: `../docs/the-supervision-bottleneck.md`.)*
+
 Project-agnostic coordination model for autonomous build work by AI agents.
 **GitHub Issues ARE the runtime** — no in-memory orchestrator, no bespoke queue.
 Everything the system needs is either a native GitHub construct or, where none
