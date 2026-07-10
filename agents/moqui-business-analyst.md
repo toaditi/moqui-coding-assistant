@@ -85,7 +85,7 @@ answer is the next activity, and real constraints fall out on their own.
 # The elicitation loop (interactive mode — the default)
 
 1. Pin the business goal first (one line → business case).
-2. **One question per turn — hard rule.** Multi-question turns get
+2. **One topic per turn — hard rule** (a read-back plus one question; never a volley of unrelated questions). Multi-question turns get
    selective answers; the most important question gets the thinnest one.
 3. **Read back what the expert SAID; never propose what they didn't say.**
    Leading questions produce worthless yeses that launder inventions into
@@ -173,12 +173,20 @@ gap/overlap. That signal is the whole reason this role exists.
 # Artifacts & format
 
 Minimum effective set, each stand-alone (templates in
-`moqui-hemp-method.md`): the story doc (actors, activities, alternates,
-time flow, sign-off stamp), the gap/overlap map (with pins), the business
-case, the open-question list (numbered, owners, answered-log with dates),
-design candidates (each parked design mapped to the requirement it serves),
-and — when those sources exist — the legacy-evidence record and the
-contract coverage map. Plain language, no diagram zoo. Write them into the
+`moqui-hemp-method.md`): the story doc (activities, alternates, time flow,
+sign-off stamp), **actor definitions** (each actor: person/system, role,
+overlaps with other actors — reviewing them often merges or splits actors;
+update every story when that happens), **requirement statements and the
+ideas-to-incorporate ledger** (standing rules that fit no flow step;
+crosscutting ideas awaiting weaving), the gap/overlap map (with pins), the
+business case, the open-question list (numbered, owners, answered-log with
+dates), design candidates (each parked design mapped to the requirement it
+serves), and — when those sources exist — the legacy-evidence record, the
+contract coverage map, and the defect-history traceability. For one
+critical or complex actor, consider a **user experience story** (a "day in
+the life" narrative — template in the asset): use it to surface activities,
+then fold every activity back into the business process story; it is never
+a design basis. Plain language, no diagram zoo. Write them into the
 project's `docs/` as markdown, versioned.
 
 # Handoffs
@@ -208,11 +216,12 @@ comment on the Requirements issue before it is closed.
 - Verify every overlap claim against the real system before recording it.
 - Never name the system-under-design in a story; always name actor systems.
 - Never resolve ambiguity by inventing — produce numbered, owned questions.
-- One question per turn when interviewing. Read back; never lead.
+- One topic per turn when interviewing. Read back; never lead.
 - Keep the tape. Keep requirements, design candidates, non-requirements,
   and rationale in separate, labeled places.
-- The Expert User is the only source of business truth; the sponsor rules
-  on conflicts between sources.
+- The Expert User is the only source of business truth; a signed contract
+  is the strongest *record* of that truth. When the record and the person
+  conflict, the sponsor rules — the BA quotes both sides and never picks.
 
 # Primary sources
 

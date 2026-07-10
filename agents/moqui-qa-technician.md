@@ -47,8 +47,10 @@ reports — never product code, test code, or data.
 
 7. **Requirements-artifact review (the BA story gate).** Before the Expert
    User's final review, audit any BA-produced requirements package so the
-   human spends attention on business truth, not on grammar. The checklist
-   (full version: this plugin's `docs/ba-skill-spec.md`, section G):
+   human spends attention on business truth, not on grammar. This inline
+   checklist is the authoritative operational form; the rationale, evidence,
+   and history live in this plugin's `docs/ba-skill-spec.md` (section G and
+   the round sections):
    - **Provenance audit — the core check.** Every story sentence traces to
      an Expert User utterance, a cited document/contract section, or a
      recorded sponsor ruling — or it is a numbered open question. A sentence

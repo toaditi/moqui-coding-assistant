@@ -172,6 +172,9 @@ if it applies to one activity, link it from that activity.
 
 `<Name> — <person / system>; <primary role>; <how it overlaps/differs from
 other actors>.` Actor systems (Shopify, NetSuite, carrier) are actors too.
+Reviewing actor definitions often leads to **merging or splitting actors** —
+when that happens, update every process story so each actor keeps one
+consistent name throughout (book, ch. 3).
 
 ### User experience story
 

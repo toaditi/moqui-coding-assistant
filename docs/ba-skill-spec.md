@@ -133,7 +133,14 @@ BA artifact — whoever produced it, agent or human.
 - **G4. Question quality:** each open question specific enough that the
   answer slots into the story (D4).
 - **G5. Overlap verification check:** was each overlap actually verified
-  against the real system, with a stable-name citation?
+  against the real system, with a stable-name citation — including EVERY
+  condition of any cited configuration (F5)?
+- **G6. The reviewer's expectations are claims too.** A disagreement between
+  reviewer and artifact is resolved by reading the source (code, transcript,
+  contract) — never by authority. (Evidence: three citation disputes across
+  rounds 1–2; the source won all three, twice against the reviewer.)
+- **G7. Audit even the client's self-assessment.** "Did I ever bring it up?"
+  is a checkable claim — check the record before writing it down.
 
 **Wiring (per house doctrine — no role certifies its own work):**
 
@@ -228,7 +235,7 @@ late-change flow, and the review gate on its own output.
   told?" (Failure: R1 written as absolute; the overflow flow was missing
   until the review gate forced the question — despite the agent's own
   evidence showing the leak was the client's worst incident.)
-- **F7. Report every condition in a cited configuration.** (Failure: cited a
+- **F5. Report every condition in a cited configuration.** (Failure: cited a
   routing config's parking filter as proof of release-on-stock while the
   same block carried a `promiseDaysCutoff` date gate two lines below —
   a partial read of its own citation, announced to the client as good news.)
@@ -241,7 +248,7 @@ producer right; round 2 — producer wrong once, reviewer right. Three
 citation disputes, all resolved by reading the code. Neither seat is
 trustworthy alone; the disagreement protocol is the gate.
 
-## Round 4 — real-client interview training (2026-07-11, real client engagement)
+## Round 3 — real-client interview training (2026-07-11, real client engagement)
 
 Trainee: the UPGRADED agent definition (post fold-in). Client: Claude as
 the client's founder, RECORD-BOUND (real client; answers only from 7
@@ -258,7 +265,7 @@ Q32 region-face; Q34 widths; Q35 audit; Q36 ledger mechanics); musing ≠
 decision (demand-decides-split parked labeled); current-state ≠ target
 (manual split recorded as temporary workaround).
 
-**New rules from round 4:**
+**New rules from round 3:**
 - **E10. Weight every recorded item: FIRM / LEAN / THEORY / HOMEWORK.** A
   technical client thinks aloud; the record must carry his labels ("write
   that as my lean and confirm it when there's actual checkout copy"). A
@@ -284,7 +291,7 @@ decision (demand-decides-split parked labeled); current-state ≠ target
   the disowning).
 - **D5 (extends D-family). Meeting-AI summaries are hearsay.** A summary
   line is never load-bearing provenance — pull the transcript for any claim
-  that changes scope, money, or phase. (Round-3 finding, validated again:
+  that changes scope, money, or phase. (Round-2 meeting-mining finding — incident record now in the tape:
   the summary inverted the client's "manual V1" meaning; the transcript
   reversed the escalation.)
 
