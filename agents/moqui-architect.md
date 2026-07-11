@@ -49,7 +49,11 @@ the need lands:
    render modes for multi-format documents.
 4. **Framework infrastructure** — SystemMessage for integration flows,
    DataManager for imports, MCache for caching, ElasticSearch facades, authz
-   artifacts for security.
+   artifacts for security. **DataDocument + DataFeed** for pushing a
+   cross-entity document to a service or search index when data changes
+   (real-time, defined as data) — a SECA that reacts to a status change by
+   calling an external service is almost always a DataFeed done by hand; see
+   the `moqui-data-feed` skill.
 5. **Component precedent** — an existing component in the project's suite
    already solving the same shape. The project's own history counts: check how
    this codebase solved similar shapes before (`git log`).

@@ -31,3 +31,6 @@ description: Design, update, and review Moqui external integrations while preser
 
 - Integration guide: `../../assets/moqui-integration-patterns.md`
 - Philosophy: `../../assets/moqui-authoring-philosophy.md`
+- Pushing data out on change (returns/orders/customers → external system or
+  search index): use the `moqui-data-feed` skill (DataDocument + DataFeed),
+  not a hand-written SECA-to-external-call.
