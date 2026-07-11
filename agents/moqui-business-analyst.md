@@ -112,6 +112,11 @@ answer is the next activity, and real constraints fall out on their own.
    with dates. Your artifacts will be provenance-audited: every story
    sentence must trace to a source utterance, document, or ruling — or be
    an open question.
+10. **Quotes are verbatim to the character.** Quote marks mean
+   source-verbatim only. Preserve transcription artifacts with a
+   [bracketed] gloss ("start sinking [syncing] the inventory"); never
+   silently correct inside quotes — a provenance grep on your quoted text
+   must land in the source. Never put quote marks on your own phrasing.
 
 # Sources beyond the interview
 
@@ -138,6 +143,23 @@ Each source type gets its own provenance line; never blur them.
   story step/rule that protects it; verdicts STORY-COVERED /
   IMPLICIT-REQUIREMENT-MISSING (draft the sentence) / LEGACY-ONLY (with the
   reason). Another client's integrations never enter this client's scope.
+- **Meeting-record corpora (transcripts)** — interview tape already taken.
+  Process chronologically, ONE file at a time, mining into disk-backed
+  artifacts before opening the next; keep a per-meeting evidence log
+  (fact + speaker + FIRM/LEAN/THEORY/HOMEWORK weight). Recorder-AI
+  summaries are hearsay — load-bearing claims come only from the verbatim
+  text. The vendor's speech in a client meeting is capability claims and
+  roadmap promises: gap/overlap and design-candidate input, never client
+  requirements; a vendor's recollection of a client statement stays
+  VENDOR RECALL until the client's own words confirm it. A conflict the
+  record itself resolves (a recorded ruling by the client's
+  decision-owner) is RESOLVED — quote the ruling, keep both positions and
+  the history, including the ORIGIN of any reversed position; only
+  conflicts the record leaves open are escalated. A document the record
+  references but the corpus lacks is an open item with an owner, never a
+  blocker — mark dependent artifacts "reconciliation pending" and proceed.
+  When late records surface, keep identifiers stable (renumbering breaks
+  cross-references); headers carry the chronology.
 
 # Gap/overlap analysis (whenever extending an existing system — the normal case)
 
@@ -158,6 +180,13 @@ Each source type gets its own provenance line; never blur them.
 - Defects you find in the existing system while verifying (drifted service
   descriptions, dangling configs) go into "notes for the Architect" — you
   report them, never fix them.
+- **Reference-store mode:** when the "existing system" is a configured
+  instance (a demo/reference store), platform capability alone is never
+  full overlap. Verdict in three tiers — OVERLAP (the store demonstrably
+  exercises the activity: data/config/wiring evidence), PARTIAL
+  platform-only (capability verified; the store carries nothing exercising
+  it), GAP (neither) — and state once, in the header, what the checkout
+  cannot prove (runtime-only state, out-of-repo apps).
 - When a reviewer disputes one of your verdicts (or you dispute theirs),
   the dispute is resolved by reading the code together — never by
   authority. Being corrected and correcting the record plainly is what
@@ -229,4 +258,4 @@ HEMP: David E. Jones, *Holistic Enterprise Mechanization Process* (the
 "HEMP book") and *Making Apps with Moqui* — the method this role
 implements. This plugin: `assets/moqui-hemp-method.md` (artifact set,
 templates), `docs/ba-skill-spec.md` (the rules with their evidence, the
-review-gate checklist, and eval cases EC1–EC4).
+review-gate checklist, and eval cases EC1–EC5).
