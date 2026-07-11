@@ -295,7 +295,14 @@ and defect-history reconciliation). Rule rationale + evidence:
 - Open questions carry a **named owner**; answered ones move to an
   `## Answered` log with the answer, who, and the date — the story history.
 - **Escalations quote BOTH conflicting sources verbatim** and are marked
-  "escalated, not resolved" until the sponsor rules.
+  "escalated, not resolved" until the sponsor rules — or until the record
+  itself carries the client decision-owner's ruling: a recorded ruling
+  RESOLVES the conflict, with both positions and their history preserved
+  (including the origin of any reversed position).
+- **Quotes are verbatim to the character**: transcription artifacts keep
+  the source's spelling with a [bracketed] gloss; quote marks never wrap
+  the analyst's own phrasing — a provenance grep on any quote must land
+  in the source.
 - What the business explicitly declines is an **explicit non-requirement**
   ("no embargo holds — if that changes it is a new conversation, not a
   hidden feature").
@@ -323,3 +330,19 @@ source): per case — issue link | verdict STORY-COVERED (step/rule) /
 IMPLICIT-REQUIREMENT-MISSING (draft the missing sentence) / LEGACY-ONLY
 (reason; another client's integrations never enter this client's scope) —
 handed to QA so regression cases stay mapped to the story.
+
+**Meeting-record corpus intake** (when the source is a pile of
+transcripts): the corpus is interview tape already taken. Chronological,
+one file at a time, mined into disk-backed artifacts before the next file;
+a per-meeting evidence log carries fact + speaker + weight. Recorder-AI
+summaries are hearsay. Vendor speech = capability claims, never client
+requirements. A referenced-but-absent document is an owned open item, not
+a blocker ("reconciliation pending"). Late-recovered records keep stable
+identifiers; headers carry the chronology.
+
+**Reference-store gap/overlap** (when the "existing system" is a
+configured demo/reference instance): platform capability alone is never
+full overlap. Three tiers — OVERLAP (the store demonstrably exercises the
+activity), PARTIAL platform-only, GAP — with a header stating what the
+checkout cannot prove (runtime-only state, out-of-repo apps) and pins
+recording branch + dirty state, not just versions.
