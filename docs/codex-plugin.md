@@ -29,6 +29,12 @@ hooks.json
 The `.claude-plugin/` directory is retained for Claude Code compatibility. It
 is not a substitute for `.codex-plugin/`.
 
+The four role files under `agents/` are canonical definitions. Their matching
+Codex skills under `skills/moqui-architect/`, `skills/moqui-builder/`,
+`skills/moqui-business-analyst/`, and `skills/moqui-qa-technician/` are thin
+entry points that load those definitions. This makes the roles discoverable as
+Codex skills without duplicating their long instructions.
+
 ## Validate before publishing
 
 Run the repository validator from the repository root:

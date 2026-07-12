@@ -21,9 +21,10 @@ contract and troubleshooting notes.
 
 ## What's inside
 
-- **13 skills** — task discipline for entities, services, screens,
+- **17 skills** — task discipline for entities, services, screens,
   integrations, security, FreeMarker, the Maarg Data Manager,
-  deployment, verification, and running an agent team.
+  deployment, verification, running an agent team, and four role entry points
+  for the Architect, Builder, Business Analyst, and QA Technician.
 - **4 agent roles** — a Business Analyst (writes requirements as
   business process stories), an Architect (reviews designs and PRs
   citation-by-citation against framework code), a Builder (implements
