@@ -1,9 +1,23 @@
 # Moqui Coding Assistant
 
-A Claude Code plugin that teaches AI agents to build Moqui applications
+A Claude Code and Codex plugin that teaches AI agents to build Moqui applications
 the way the Moqui ecosystem builds them: find what the framework already
 provides, use it, and prove the result — never reinvent, never trust an
 unverified green.
+
+## Codex plugin
+
+The Codex package is declared in `.codex-plugin/plugin.json`. Keep the
+repository layout intact when installing it: skills use relative references to
+the shared `assets/`, `agents/`, `docs/`, and `scripts/` directories. The
+package can be checked before publishing with:
+
+```bash
+python3 scripts/validate_codex_plugin.py
+```
+
+See [Codex plugin layout and validation](docs/codex-plugin.md) for the package
+contract and troubleshooting notes.
 
 ## What's inside
 
