@@ -69,6 +69,25 @@ No type set (custom issue types are an org-wide GitHub setting; until they
 exist, GitHub's default `Task` type stands in) → treat as Build. Genuine bugs
 found by a gate use the `Defect` type.
 
+## Requirements definition-of-ready — the gate before Build (STANDING)
+
+A **feature** enters the board through **Requirements**, never straight into
+Build. Before filing any Build issue for a feature, the manager confirms the
+business analyst has delivered — and the Expert User has signed — three things:
+
+1. a business process story covering **every actor**, including the **internal
+   operator class** (operations / account manager, administrator, support), not
+   just the customer-and-capture happy path;
+2. a **verified gap/overlap** (build scope = gaps only);
+3. an **open-question list with no blocking opens**.
+
+Missing any → the manager files a **Requirements** issue (→ business analyst),
+not Build issues. "No type set → Build" (above) is a convenience for a lone
+mechanical task, **not a bypass for a feature.** The gate is enforced at the
+checkpoint — the manager reads the BA output — not left to a role remembering:
+**enforcement, not discipline.** Its runtime companion is the **requirements
+STOP tripwire** (Guardrails).
+
 ## Roles (separated on purpose — the tester is not the fixer)
 
 - **MANAGER** — the main session, the human's conversational counterpart.
@@ -162,6 +181,15 @@ fix cycle).
   before merging.
 - **Honesty:** any role's "done" is a lead, not proof — the next gate down
   confirms before advancing.
+- **Requirements STOP tripwire:** a new requirement surfacing *mid-build* — a
+  builder or QA hitting an unspecified case — is a **named event with a fixed
+  response**, not a judgment call: the manager halts new Build claims on that
+  feature and files a **Requirements** issue for a fresh BA pass + gap/overlap;
+  it is **never** patched ad-hoc into the current PR. Requirements surfacing
+  during build is the HEMP signal the front-half was inadequate (the entry gate
+  above was skipped or incomplete) — the business analyst raises it (its "churn
+  signal"), the manager acts on it here. The fixed response is what makes the
+  halt actually happen.
 
 ## Execution model
 
