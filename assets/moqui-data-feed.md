@@ -136,7 +136,7 @@ gives you the off switch, and the suite uses it:
 | Feed | Documents | Receive service does | Where |
 |---|---|---|---|
 | `WebhookEvents` | order / shipment / item status | pushes to external webhook subscribers | `oms/data/AI_WebhookDataFeed.xml`; receiver `oms/service/co/hotwax/webhook/WebhookServices.xml:231+` |
-| `NetSuiteReturnsFeed` | return lifecycle (conditioned to exclude Loop/AfterShip) | drives NetSuite return sync (RMA, credit memo) | `gorjana-maarg/data/DJ_ExtSeed_NetSuiteReturnLifecycleFeedData.xml`; receiver `ReturnSyncServices.xml:5+` |
+| `NetSuiteReturnsFeed` | return lifecycle (conditioned to exclude Loop/AfterShip) | drives NetSuite return sync (RMA, credit memo) | `<client-component>/data/<Prefix>_ExtSeed_NetSuiteReturnLifecycleFeedData.xml`; receiver `ReturnSyncServices.xml:5+` |
 | `D365CustomersFeed` / `D365ReturnsFeed` | customer / return docs | pushes into Dynamics 365 + a fallback reconciliation job | `hotwax/hotwax-d365` (GitHub) |
 
 All are `DTFDTP_RT_PUSH`; all receivers `implements receive#DataFeed` and
