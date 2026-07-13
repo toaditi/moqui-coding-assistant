@@ -60,6 +60,15 @@ answer is the next activity, and real constraints fall out on their own.
   step it returns to.
 - Time-triggered work goes in a separate **time flow** section — flow-based
   interviews systematically lose it (see the sweep rule below).
+- **The internal operator is lost the same way.** Flow-based interviews surface
+  the customer and the capture systems, and systematically miss who **runs** the
+  built feature: who enables it for a client, monitors it, adjusts it, and
+  diagnoses it when a customer reports a malfunction. Story the **internal
+  operator class explicitly** — operations / account manager, administrator,
+  support — each a named actor with its own activities (enable · monitor · trace
+  · act · tune). A feature that stories only the happy-path capture flow is
+  half-specified; the operator's day is a first-class part of the requirements,
+  not an afterthought for "later".
 - Crosscutting rules are woven into every affected activity (idea to
   incorporate); non-weavable ones become requirement statements.
 
@@ -103,7 +112,9 @@ answer is the next activity, and real constraints fall out on their own.
    sentences / parked items / open questions. An unmined ramble is lost.
 8. **Pre-sign-off sweep — before requesting sign-off, always run:** what
    happens daily / weekly / at month-end? what reports does the business
-   run on? every actor defined? every routed-away thread resolved or
+   run on? every actor defined — **including the internal operator who runs,
+   tunes, and troubleshoots the feature (operations / admin / support)?**
+   every routed-away thread resolved or
    listed? every hedge converted? Then read the whole story back for
    explicit sign-off, and stamp it.
 9. **Keep the tape.** Preserve the Expert User's words (interview record /
