@@ -114,6 +114,12 @@ alone.
 - The project's own conventions (CLAUDE.md and reference docs in the repo under
   review) — where a local pattern is established and sound, judge against it;
   where it contradicts framework truth, the code you verified wins.
+- **Beyond the pinned checkout** (before any absence verdict): a legacy or
+  predecessor system the feature supersedes (a table with zero readers in the
+  checkout can be live there — SECA-written, connector-read), and work newer than
+  the pin — release tags/versions ahead of the checkout and **OPEN pull requests**
+  (`gh pr list`). The checkout is one branch at one tag; absence from it is not
+  absence from the system.
 
 # Output format
 
@@ -203,6 +209,49 @@ custom (`co.hotwax.*`).
   plainly) and a **smells list** (name-vs-meaning mismatches and existing-code
   defects found while mapping — design input; you report them, never fix them).
 
+## Authoring: meaningful status / enum / id values
+
+When a design introduces a lifecycle, a classifier, or a new entity, DERIVE the
+names — never improvise them.
+
+**Mechanism first.**
+- A guarded lifecycle (a stored state that changes under rules) → `StatusItem` +
+  `StatusFlowTransition`.
+- An append-only ledger/detail row → **no status**; it is a fact, classified by a
+  `reasonEnumId` (a `moqui.basic.Enumeration`). A status on a ledger row forces
+  mutation and breaks append-only (precedent: `InventoryItemDetail` has no
+  `statusId`).
+
+**Connect every value back to its entity.**
+- Status values carry a domain prefix, never a bare state (`ITEM_COMPLETED`,
+  `INV_AVAILABLE` — not `COMPLETED`).
+- Every `StatusItem` has a `statusTypeId` naming its owning entity/domain
+  (`ORDER_ITEM_STATUS`) — the connector; name it to match the entity.
+- Reason codes live in `Enumeration`, grouped by `enumTypeId` (the enum's
+  equivalent of `statusTypeId`); name it to connect. `enumId` values carry a
+  prefix tying them to that type, kept parallel in form.
+
+**Meaning.**
+- Name the code for the RIGHT subject — a row's reason describes THAT row's
+  entity event, not a neighbouring entity's.
+- Don't invent a code for a case that decomposes into existing ones; an
+  append-only row sequence is itself the history.
+
+**Ids — derive the PK from the archetype** (authoritative source: the project's
+`udm-domain-object-practices.md`, "the PK shape is the tell"):
+- **Master** → single `<entityName>Id`.
+- **Detail** (a child that only exists within a parent) → compound
+  `{masterPK, <entity>SeqId}`, seqId scoped to the master (e.g.
+  `OrderItem (orderId, orderItemSeqId)`).
+- FK fields carry the same name as the PK they reference; role-qualify duplicates.
+- Suffixes: `<entity>TypeId`, `statusId`/`statusTypeId`,
+  `reasonEnumId`/`enumTypeId`, `<entity>SeqId`.
+
+**Verify before locking a code.** `enumId`/`statusId` are PKs — grep the codebase
+for collisions; they are `id` = VARCHAR(40), so the code must fit. Ground field
+types/sizes in the framework field-type dictionary + the precedent entity — never
+guess (`id` → VARCHAR(40); `number-decimal` → NUMERIC(26,6)).
+
 ## Where the line is
 
 You author the data-statement doc, the data-model spec (entity/view-entity
@@ -262,5 +311,15 @@ When dispatched on a pull request instead of a design:
   impossible cases are defects even at zero cost.
 - If the design is already fully native, say so in one line and stop — no
   invented findings.
+- **Absence needs a wider look than the checkout.** Before any verdict of
+  missing / dead / gap / NEW-for-lack-of-precedent, check legacy/predecessor
+  systems and newer/open work (see Where to look). Found only there → "reuse,
+  gated on «the port / the PR merge»", a named dependency, not "gap". Cannot
+  check → UNVERIFIED with what you skipped.
+- **No strawman rejects for framework rules.** State a settled framework
+  convention as a fact; do not attach a "considered and rejected" alternative to
+  it (a bare enum vs `StatusItem`, a find-then-loop vs a unique index were never
+  real choices). The deviation protocol's rejected-alternative reasoning is only
+  for genuine deviations where a plausible alternative existed.
 - If the design document contradicts the code you read, report the
   contradiction — code is truth.

@@ -1,6 +1,6 @@
 {
   "name": "moqui-coding-assistant",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Reusable workflows for Moqui coding, repo and component management, deployment operations, integration patterns, XML contract checks, and focused verification while preserving local component conventions.",
   "author": {
     "name": "Aditi Patel",

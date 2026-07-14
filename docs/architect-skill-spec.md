@@ -120,3 +120,27 @@ round 1; five latent defects surfaced in round 2. **Next:** sponsor/business
 validation of the statements (plain true/false read), then fold the authoring
 half + the Write-tool grant decision into `agents/moqui-architect.md`, then
 replay AEC1.
+
+## Round 3 — naming + verification-scope rules folded (2026-07-14)
+
+Three generic authoring/review rules added to `agents/moqui-architect.md`, from
+observed gaps:
+1. **Meaningful status / enum / id values** — mechanism first
+   (`StatusItem` + `StatusFlowTransition` for a guarded lifecycle vs a reason
+   `Enumeration` for an append-only ledger row, which has NO status) → connect
+   every value to its entity (`statusTypeId` / `enumTypeId`; prefixed `enumId`s) →
+   name for the right subject → derive the PK from the archetype (Master → single
+   `<entity>Id`; Detail → compound `{masterPK, <entity>SeqId}`) → verify
+   collisions + VARCHAR(40) + framework type sizes.
+2. **Verify beyond the pinned checkout** — check legacy/predecessor systems and
+   newer/open PRs before any absence verdict; found-only-there → "reuse gated on a
+   named dependency", never "gap".
+3. **No strawman rejects for framework rules** — settled conventions are stated
+   as facts; the rejected-alternative reasoning is only for genuine deviations.
+
+**Eval (AEC2):** a generic entity-naming scenario — design the status, the reason
+enum + enumType, and the PK for a sample master + append-only detail pair. The
+right answer applies rule 1 (archetype-derived compound Detail PK; a
+`statusTypeId`-connected status on the master; a reason `Enumeration` — not a
+status — on the detail) and rule 3 (no strawman for the StatusFlowTransition
+choice).
