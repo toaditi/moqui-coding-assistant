@@ -45,9 +45,12 @@ gh label create "status:blocked" --repo "<issue-repo>" --color D93F0B --descript
    `gh search issues --owner="«org»" --assignee="«owner»" --state=open --label=status:ready`
    An empty list is a correct result on a fresh board.
 6. **Start the watcher** when the user says go: a persistent session on a
-   cheap model that runs the search every ~4–5 minutes, routes each hit by
-   issue type to the matching agent of this plugin, enforces the WIP limit
-   (≤ 3 claimed at once), and does no issue work itself.
+   cheap model running the full operating prompt at
+   `../../assets/moqui-pool-watcher-prompt.md` — it polls every ~4–5 minutes,
+   routes each hit by issue type to the matching agent of this plugin,
+   handles the PR-state sub-cases (review / fix-cycle / merge-step / QA
+   gate), enforces the WIP limit (≤ 3 claimed at once), and does no issue
+   work itself.
 7. **File the first issue** with the user: title, type, assign to `«owner»`,
    add `status:ready`. Watch the pool claim it.
 
@@ -62,6 +65,10 @@ gh label create "status:blocked" --repo "<issue-repo>" --color D93F0B --descript
 - Merged but not closed → the QA merge gate has not run or REFUTED; read the
   issue's `QA GATE:` comment.
 
+Full health criteria, check commands, the real-incident failure-mode table,
+and the branch-protection trade-off:
+`../../assets/moqui-pipeline-health-runbook.md`.
+
 ## Guardrails
 
 - Never merge `«feature branch»` into main/release, deploy, or write to any
@@ -75,4 +82,6 @@ gh label create "status:blocked" --repo "<issue-repo>" --color D93F0B --descript
 ## References
 
 - Orchestration model (normative): `../../assets/moqui-agent-orchestration.md`
+- Watcher operating prompt: `../../assets/moqui-pool-watcher-prompt.md`
+- Pipeline health runbook: `../../assets/moqui-pipeline-health-runbook.md`
 - Architect PR gate: `../../agents/moqui-architect.md`
