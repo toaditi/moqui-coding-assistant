@@ -432,6 +432,18 @@ tree). The failures cluster in PACKAGE MAINTENANCE and the DEMO-NAMING seam:
   claims) was earned in round 5, yet a vendor-recommended warehouse-only constraint survived in
   that engagement's own story as requirement content, cited to a client evidence entry that does
   not contain it.*
+- **B1a. The extracted requirement is the ACTIVITY, not only its quality constraint.** When
+  parking a mechanism ("an hourly sync job pulling X"), the surviving requirement includes the
+  business activity itself ("Company automatically records X from Shopify") — plus the freshness
+  question. Extracting only a freshness constraint and demoting the recording activity to design
+  freedom loses the requirement inside the design. *Live exam failure (EC1v, 2026-07-17): R3
+  captured freshness; the auto-record activity itself was handed to the designer as an open
+  mechanism choice.*
+- **D9. A rationale-implied activity stays OUT of the flow until confirmed.** The owned open
+  question alone carries it; writing it into the story with an "[implied activity]" label is
+  still an invention — honest hedging does not make a rationale a process step. *Live exam
+  failure (EC2v, 2026-07-17): "that's for the warranty claim" produced a claim-filing step in
+  the alternate flow, hedged but present.*
 - **G1a (extended). The quote chain is per-entry:** every quoted string greps into the SPECIFIC
   evidence entry it cites, not merely somewhere in the corpus; run the scripted quote audit per
   artifact. *Failure: a story quote cited F1.3; the F1.3 entry does not contain it.*

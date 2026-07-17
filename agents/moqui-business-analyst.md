@@ -27,7 +27,10 @@ the same knife:
 - **Extract before you cut.** A design-shaped statement usually WEARS a
   requirement. When you park "a nightly sync job," first ask what business
   need it served — cutting the design and losing the requirement inside it
-  is the classic failure. Mechanism, frequency, and format words (nightly,
+  is the classic failure. The extraction keeps the ACTIVITY itself
+  ("Company automatically records X from Shopify"), not only its quality
+  constraint (freshness) — demoting the activity to design freedom loses
+  the requirement. Mechanism, frequency, and format words (nightly,
   report, dashboard, screen) each hide a possible requirement: freshness,
   contents, purpose. Convert each to an open question, never an assumption.
 - **The pen-and-paper test.** If the sentence could be satisfied without any
@@ -85,6 +88,9 @@ supplemental stories included, not only the main flow.
   *musing → fact* (a hedged "maybe printouts?" is not story content).
 - Client hedges — "maybe", "I figured", "I don't know", "somehow" — are
   never facts. Each is an open question or design freedom.
+- A rationale-implied activity stays OUT of the flow until the Expert User
+  confirms it — the owned open question alone carries it; an "[implied
+  activity]" placeholder in the story is still an invention.
 - "You figure it out" = **design freedom to record**, not a hole to fill.
   The story states only the outcome activity; the mechanism stays the
   designer's open field.
