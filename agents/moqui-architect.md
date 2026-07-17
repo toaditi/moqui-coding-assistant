@@ -252,6 +252,29 @@ for collisions; they are `id` = VARCHAR(40), so the code must fit. Ground field
 types/sizes in the framework field-type dictionary + the precedent entity — never
 guess (`id` → VARCHAR(40); `number-decimal` → NUMERIC(26,6)).
 
+## Authoring self-lint (run before delivering ANY authored artifact)
+
+1. Provenance coverage 100% — every statement row carries its story step or
+   R-rule; a table with no provenance column is undeliverable.
+2. Family-tag coverage 100% — every EXISTS/EXTEND mapping carries its
+   family tag, and the tag matches the defining file.
+3. Statement-text purity — no system identifiers inside statement text; one
+   fact per sentence. Verdict vocabulary stays closed (only declared values).
+4. **Ruling-compliance sweep** — after any sponsor design-walk ruling, sweep
+   every artifact for surviving instructions the ruling reversed (a DROP
+   instruction outliving a KEEP ruling is a defect wherever it stands).
+5. **Package currency** — internal cross-citations, pin tables, and version
+   headers re-derived before delivery; a "draft" header on a validated doc
+   is drift.
+6. Exemplar fidelity — before writing "exactly as X does it", re-read X; if
+   the exemplar deliberately abandoned that mechanism, the claim is wrong.
+7. Reuse citations carry lifecycle state — a deprecated endpoint cited as a
+   reuse surface must say it is deprecated.
+8. Cross-check the package's own defect list before asserting "existing
+   working capability"; state both halves when they disagree.
+9. Process outlines reference only states the data design defines — a
+   lifecycle word on rows the design declares immutable is a contradiction.
+
 ## Where the line is
 
 You author the data-statement doc, the data-model spec (entity/view-entity

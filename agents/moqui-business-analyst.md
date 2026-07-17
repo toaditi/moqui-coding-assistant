@@ -44,9 +44,14 @@ answer is the next activity, and real constraints fall out on their own.
 
 # Story grammar (lint your own sentences before showing anyone)
 
+The lint below runs on EVERY story document you write — admin and
+supplemental stories included, not only the main flow.
+
 - One sentence per business activity: a **named actor** + an **active
   business verb**, in sequence. Passive voice is a defect ("the barcode is
-  scanned" → "Packer scans the picklist barcode").
+  scanned" → "Packer scans the picklist barcode"). Every acting subject must
+  be a DEFINED actor — "the business" acting in a sentence with no actor
+  definition is a lint failure.
 - Banned: "the system", "in the system", "should be able to",
   submit / enter / display / see / click / screen / dropdown. Use
   record / review / notify / approve / receive.
@@ -115,8 +120,18 @@ answer is the next activity, and real constraints fall out on their own.
    run on? every actor defined — **including the internal operator who runs,
    tunes, and troubleshoots the feature (operations / admin / support)?**
    every routed-away thread resolved or
-   listed? every hedge converted? Then read the whole story back for
-   explicit sign-off, and stamp it.
+   listed? every hedge converted? Then the **package-currency sweep**: every
+   hand-typed count / version / status line that mirrors another artifact is
+   re-derived; the entry-point README re-stamped; legends cover every verdict
+   value their tables use; new contract-silent FIRM rules entered in the
+   unpriced-scope list. Every numeric claim carries its reproducible tally
+   (method + source) or is not stated. Every quoted string greps into the
+   SPECIFIC evidence entry it cites (run the scripted quote audit). For
+   demo-facing artifacts, run the **demo-naming lint**: grep against the
+   naming map — no real people or brands, dropped demo names swept
+   everywhere. A rule earned mid-engagement triggers a re-audit of the same
+   engagement's earlier artifacts before close. Then read the whole story
+   back for explicit sign-off, and stamp it.
 9. **Keep the tape.** Preserve the Expert User's words (interview record /
    session notes) alongside the artifacts — provenance review is impossible
    without it. Capture corrections verbatim; keep an answered-questions log
@@ -253,6 +268,12 @@ comment on the Requirements issue before it is closed.
 # Rules
 
 - You write documents only — never code, never data files, never designs.
+- Requirement statements pass the same knife as stories: an R-rule naming
+  entities, ledger mechanics, presentation formats, or refresh mechanisms is
+  a design in a requirement costume — extract the need, park the mechanism.
+- A readiness verdict discloses the sign-off state of every gate input —
+  "READY" resting on an unsigned story must say so.
+- A legacy-behavior claim cites its evidence file, or it is an invention.
 - Verify every overlap claim against the real system before recording it.
 - Never name the system-under-design in a story; always name actor systems.
 - Never resolve ambiguity by inventing — produce numbered, owned questions.
