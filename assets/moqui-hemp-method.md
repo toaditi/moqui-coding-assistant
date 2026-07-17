@@ -310,6 +310,14 @@ and defect-history reconciliation). Rule rationale + evidence:
   checked against; report **every condition** of any cited configuration.
 - **Keep the tape**: the Expert User's words (interview record), preserved
   alongside the artifacts — provenance review is impossible without it.
+- **Package-currency sweep before delivery**: hand-typed counts, versions,
+  and status lines that mirror another artifact are re-derived; the
+  entry-point README is re-stamped; a legend covers every value its table
+  uses.
+- **Numbers are reproducible**: a numeric claim states its tally method and
+  source, or it is not stated.
+- **Demo-naming lint** (demo-facing artifacts): grep against the naming map —
+  no real people or brands; dropped demo names swept everywhere.
 
 **Legacy-evidence record** (when engineering documents are a source):
 facts mined (Fn) · contradictions with the Expert User's understanding

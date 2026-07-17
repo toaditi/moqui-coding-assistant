@@ -144,3 +144,49 @@ right answer applies rule 1 (archetype-derived compound Detail PK; a
 `statusTypeId`-connected status on the master; a reason `Enumeration` — not a
 status — on the detail) and rule 3 (no strawman for the StatusFlowTransition
 choice).
+
+## Round 4 — three-engagement audit (2026-07-17, coach audit round 2)
+
+Source: adversarial audit of the Pre-Order design package (PR #301 state) and the recovered
+Transfer-Order v1 design, every finding verified in the source before landing here. Citation
+fidelity was strong where it counts (10/10 spot-checked bold EXISTS claims EXACT in code; honesty
+ledger and smells list real and used). The failures cluster in ARTIFACT MAINTENANCE and
+SELF-LINT COVERAGE, not in code reading:
+
+- **H7. Ruling-compliance sweep.** After any sponsor design-walk ruling, sweep EVERY design
+  artifact for surviving instructions that contradict the ruling — an instruction the ruling
+  reversed is a defect wherever it still stands. *Failure: data-statements.md still told builders
+  to DROP `OrderInvPromiseHistory` after the Sponsor ruled KEEP (D6, 2026-07-13); the doc was
+  edited after the ruling but never reconciled.*
+- **H8. Cite the exemplar's ACTUAL mechanism.** Before claiming "exactly as X does it", re-read X —
+  if the cited exemplar deliberately abandoned the mechanism you name, the claim is wrong.
+  *Failure: FutureInvItemRes PK-generation claimed `setSequencedIdSecondary` "exactly as
+  InventoryItemDetail" — the cited exemplar deliberately does NOT use it.*
+- **H9. Deprecation status rides every reuse citation.** A cited reuse surface carries its
+  lifecycle state; pointing a capability at a deprecated endpoint without saying so sells dead
+  road. *Failure: D25/D23/D20 direct capability F at ProductStoreSetting REST endpoints without
+  noting their deprecation.*
+- **H10. Cross-check the package's own defect list before asserting "existing working
+  capability".** A capability the same package's defect record shows NPE-ing on a live branch is
+  not "existing working capability" — state both halves. *Failure: HOLD_PRORD_PHYCL_INV queue-hold
+  presented as working while the package's defect list records the branch NPE.*
+- **S9. Process outlines may only reference states the data design defines.** A lifecycle word
+  ("promotes committed to reserved") that the entity design does not define — on rows the design
+  declares immutable — is a state-machine contradiction. *Failure: A6 release mapping vs the Res
+  design's append-only rows.*
+- **S10. Package-currency sweep (the BA's G8, applied to design docs).** Internal citations
+  (file/line/claim references between the package's own docs), pin tables, and version headers are
+  re-derived before delivery. *Failures: design-proposal cites data-statement line numbers that no
+  longer exist; three artifacts state three different pin sets; "draft v1" header on a
+  sponsor-validated doc.*
+
+**Review gate — the architect's pre-delivery self-lint (run on every authored artifact):**
+1. Provenance coverage 100%: every statement row carries its story-step/R-rule. *(Failure: the
+   PC1–PC10 table shipped with no provenance column.)*
+2. Family-tag coverage 100%: every EXISTS/EXTEND mapping carries its [O]/[M]/[H] tag, and the tag
+   matches the defining file. *(Failure: 23 of 92 rows untagged; one tag wrong by the doc's own
+   rule.)*
+3. Statement-text purity (S5): no system identifiers inside statement text; one fact per sentence.
+4. Verdict vocabulary closed: only the declared verdict values appear.
+5. Ruling-compliance sweep (H7) + internal-citation currency (S10).
+
