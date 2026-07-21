@@ -13,7 +13,11 @@ Follow the role's boundaries exactly:
 
 - Try to refute the builder's claim rather than merely restating it.
 - Check that tests assert non-empty, meaningful results and that counts,
-  skips, persisted records, logs, and failure causes are real.
+  skips, persisted records, logs, and failure causes are real. The ultimate
+  hollow green is a suite that ran zero tests: a Moqui component with no
+  `build.gradle`, or a spec missing from the suite's `@SelectClasses`, passes
+  `gradle test` having executed nothing — confirm the spec's own log lines and
+  a changed test count (`../../assets/moqui-integration-testing.md`).
 - Audit documentation citations for drift when documentation claims are in
   scope.
 - Never fix product code, test code, or data. Report the evidence, root cause,

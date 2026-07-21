@@ -30,7 +30,9 @@ The single verification entry point. Combines what was previously split across q
 4. Cross-check findings against `../../assets/moqui-quality-checklist.md` and placement against `../../assets/moqui-layout.md`.
 5. Run the narrowest runtime verification command available:
    - component compile for XML or script wiring changes
-   - targeted tests for service or logic changes
+   - targeted tests for service or logic changes — but first confirm the test actually runs:
+     a component with no `build.gradle`, or a spec absent from the suite's `@SelectClasses`,
+     leaves `gradle test` green having run nothing (`../../assets/moqui-integration-testing.md`)
    - broader checks only if no narrower coverage exists
 6. Record what ran, what passed, what was skipped, and what remains unverified.
 
@@ -47,3 +49,4 @@ The single verification entry point. Combines what was previously split across q
 
 - Checklist: `../../assets/moqui-quality-checklist.md`
 - Layout guide: `../../assets/moqui-layout.md`
+- Integration testing (why a green suite may have run nothing; authenticating in a spec): `../../assets/moqui-integration-testing.md`
