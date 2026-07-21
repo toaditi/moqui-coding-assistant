@@ -1,9 +1,20 @@
 # Moqui Coding Assistant
 
-A Claude Code and Codex plugin that teaches AI agents to build Moqui applications
+A Google Antigravity, Claude Code, and Codex plugin that teaches AI agents to build Moqui applications
 the way the Moqui ecosystem builds them: find what the framework already
 provides, use it, and prove the result — never reinvent, never trust an
 unverified green.
+
+## Antigravity plugin
+
+The Antigravity package is declared in `.antigravity-plugin/plugin.json` and `.agents/plugin.json`.
+Keep the repository layout intact when using it. Check the package with:
+
+```bash
+python3 scripts/validate_antigravity_plugin.py
+```
+
+See [Antigravity plugin layout and validation](docs/antigravity-plugin.md) for details.
 
 ## Codex plugin
 
