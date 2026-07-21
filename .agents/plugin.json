@@ -1,0 +1,43 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "moqui-coding-assistant",
+  "version": "0.9.1",
+  "description": "Reusable workflows for Moqui coding, repo and component management, deployment operations, integration patterns, XML contract checks, and focused verification while preserving local component conventions.",
+  "author": {
+    "name": "Aditi Patel",
+    "email": "aditi.patel@hotwax.co",
+    "url": "https://github.com/hotwax"
+  },
+  "license": "UNLICENSED",
+  "keywords": [
+    "moqui",
+    "coding",
+    "components",
+    "deployments",
+    "integrations",
+    "review",
+    "services",
+    "entities"
+  ],
+  "skills": "../skills/",
+  "agents": "../agents/",
+  "hooks": "../hooks.json",
+  "mcpServers": "../.mcp.json",
+  "interface": {
+    "displayName": "Moqui Coding Assistant",
+    "shortDescription": "Moqui coding, components, integrations, deployments, and review",
+    "longDescription": "Reusable workflows for Moqui coding, repository and component management, deployment operations, external integration patterns, XML contract checks, and focused verification while preserving local component conventions.",
+    "developerName": "Aditi Patel",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use the Moqui Coding Assistant to review this Moqui change for correctness and regressions.",
+      "Use the Moqui Coding Assistant to update a component or service while preserving local patterns.",
+      "Use the Moqui Coding Assistant to map components, integrations, and deployment steps in this repo."
+    ],
+    "brandColor": "#0F172A"
+  }
+}
