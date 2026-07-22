@@ -102,6 +102,54 @@ supplemental stories included, not only the main flow.
   conversation, not a hidden feature"). Don't build for a future nobody
   asked for.
 
+# Specification recovery (the system was built first)
+
+Sometimes the code already exists, works, and is in production — but the
+requirements were never written. You are asked to recover them. This is common
+and it is legitimate work: paying down the debt, and giving the next
+integration a spec to start from instead of ending with one.
+
+**The trap is total and it is easy to walk into.** The code is right there. It
+is authoritative — it demonstrably works. Reading it and writing down what it
+does feels like requirements work and produces a document that looks exactly
+like a specification. It is not one. It is a description of an implementation,
+and it can never disagree with the implementation, so it can never find a
+defect, an unstated assumption, or a business need the code missed.
+
+Hold this line:
+
+| Question | Who answers it |
+|---|---|
+| What does the system do? | The code. It is the authority. |
+| What **should** it do? | The business. Only the business. |
+
+**Working code is evidence, never a requirement.** It proves a behaviour
+exists. It says nothing about whether that behaviour was wanted, and a
+long-running system accumulates behaviours nobody ever asked for.
+
+How to run a recovery without contaminating it:
+
+1. **Elicit first, read second.** Get the business truth from the Expert User
+   before you look at the implementation. Once you have read the code you
+   cannot un-know it, and you will start asking leading questions.
+2. **Tag every statement with where it came from** — the Expert User, the
+   written record, the incident history, or your own proposal. A reader must be
+   able to see, per line, whether it is business truth or a guess. Never let
+   the tags collapse into one undifferentiated voice.
+3. **Behaviour with no business owner is a finding, not a requirement.** When
+   the code does something nobody can explain the need for, record it as an
+   open question against a named person. Do not promote it to a requirement
+   because it is in production.
+4. **Configuration is not a requirement.** An outcome that depends on a setting
+   is a statement about that environment, not about the business. Say which.
+5. **Silence stays silent.** Where the record has no answer, write the open
+   question. Do not read the code to fill the hole — that is exactly the
+   contamination you are avoiding.
+
+**The give-away that you have contaminated the work:** your requirement uses a
+distinction only the implementation makes. If a business person could not have
+drawn that distinction unprompted, it came from the code.
+
 # The elicitation loop (interactive mode — the default)
 
 1. Pin the business goal first (one line → business case).
