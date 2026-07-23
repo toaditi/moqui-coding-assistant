@@ -448,20 +448,22 @@ tree). The failures cluster in PACKAGE MAINTENANCE and the DEMO-NAMING seam:
   evidence entry it cites, not merely somewhere in the corpus; run the scripted quote audit per
   artifact. *Failure: a story quote cited F1.3; the F1.3 entry does not contain it.*
 
-## Round 7 — returns/refunds record-bound engagement (2026-07-23, coach-run, real deliverables)
+## Round 7 — record-bound engagement (2026-07-23, coach-run, real deliverables)
 
-Trainee: the current agent definition. Record-bound, two-outputs: the revised order-import
-requirements package + per-family return rules (oms-test PR #167, three coach-gated rounds)
-while a PM consumed the output downstream. Sponsor: Anil, ruling live in chat. Fixture:
-`maarg-agent-coach/fixtures/returns-refunds/` (engagement record + tape; private repo).
+Trainee: the current agent definition. Record-bound, two-outputs: a requirements-package
+revision plus per-family rules over three coach-gated rounds, with a PM consuming the output
+downstream and the sponsor ruling live in chat. **The full engagement log (domain, client,
+artifacts, tape) lives in the coach repo's private fixtures — by sponsor ruling, business-
+domain information does not enter this plugin.** This log records only the craft.
 
-**Validated (all prior fold-ins held):** the knife under a design-heavy record (the team's own
-design doc + mapping specs open beside it — zero design leak into requirement voice, 238 then
-338 added lines linted clean); D9 under maximum temptation (the warranty happy-path story left
-unwritten because the record does not carry the flow); G8 self-corrections disclosed in place
-(two 1.0 count errors found by the trainee's own sweep); B1a (lifecycle activities carry the
-activity, not only constraints); weighted recording with two new provenance tags minted
-cleanly (`[SPONSOR]`, `[KB]` graded as evidence-until-read-back).
+**Validated (all prior fold-ins held):** the knife under a design-heavy record (the
+engagement's own design docs open beside the work — zero design leak into requirement voice
+across two linted deliveries); D9 under maximum temptation (the most obvious missing story
+left unwritten because the record does not carry the flow); G8 self-corrections disclosed in
+place (two count errors found by the trainee's own sweep); B1a (lifecycle activities carry
+the activity, not only constraints); weighted recording with two new provenance grades minted
+cleanly (a recorded-sponsor-ruling tag, and a knowledge-base-mining grade treated as
+evidence-until-read-back).
 
 **New rules from round 7:**
 
@@ -469,25 +471,25 @@ cleanly (`[SPONSOR]`, `[KB]` graded as evidence-until-read-back).
   "keep this open, we may learn more," the register carries a distinct state ("Open (by
   sponsor choice)") with the sponsor's verbatim reason, and any FIRM partial is recorded
   beside it. Deliberately-open is not unanswered; representing it as plain "open" misstates
-  the record. *Origin: OPEN-35c — sponsor ruled the partial (log-only, never recorded in the
-  OMS) and held the remainder open on purpose.*
+  the record. *Origin: the sponsor gave a firm partial answer and held the remainder open on
+  purpose; the register had no honest state for that until this rule.*
 - **G13. Enumerate the handed record before relying on it.** Every file path in a supplied
   source list is verified to exist (enumeration, not assumption) before artifacts cite it; a
   dead path is flagged to whoever handed it and the live location hunted by concept-grep.
   This applies to COACH- and sponsor-supplied records too — the record itself is a claim.
-  *Origin: the engagement record cited `gorjana-maarg/docs/shopify-order-sync-retro.md`,
-  which does not exist; the trainee's hygiene flag was right and the coach's record was
-  corrected — the second coach-side correction of the engagement.*
+  *Origin: the engagement record handed to the trainee cited a documentation path that does
+  not exist; the trainee's hygiene flag was right and the coach's record was corrected — the
+  second coach-side correction of the engagement.*
 
 **Patterns worth keeping (trainee inventions, round 7):**
-- `[SPONSOR]` provenance tag — a recorded sponsor ruling as a first-class provenance grade.
-- `[KB]` evidence grade — knowledge-base mining is FIRM as a record of what was said/done,
+- A recorded-sponsor-ruling provenance tag — a live sponsor ruling as a first-class grade.
+- A knowledge-base-mining grade — mined records are FIRM as a record of what was said/done,
   a requirements candidate until Expert User read-back.
 - "Shapes on record — evidence, not rules" listing: situations proven to exist, explicitly
   denied requirement status until ruled.
-- Per-check stage naming (S10): every check written about a lifecycle object names the stage
-  it applies to.
-- Rationale routing under live rulings: sponsor gives who/what + why in one breath; the
+- Per-check stage naming: every check written about a lifecycle object names the stage it
+  applies to.
+- Rationale routing under live rulings: the sponsor gives who/what + why in one breath; the
   who/what enters the requirement sentence, the why goes to the business case, same commit.
 
 **Fixture-hygiene finding (for the coach):** EC2 and EC3 have no stored canonical input —
