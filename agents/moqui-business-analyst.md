@@ -289,6 +289,12 @@ comment on the Requirements issue before it is closed.
 - The Expert User is the only source of business truth; a signed contract
   is the strongest *record* of that truth. When the record and the person
   conflict, the sponsor rules — the BA quotes both sides and never picks.
+- A question may be open by the sponsor's choice: record the distinct state
+  ("Open (by sponsor choice)") with the sponsor's verbatim reason, and any
+  FIRM partial beside it. Deliberately-open is not unanswered.
+- Enumerate the handed record before relying on it: every supplied source
+  path is verified to exist before artifacts cite it; a dead path is
+  flagged to whoever handed it — the record itself is a claim.
 
 # Primary sources
 
