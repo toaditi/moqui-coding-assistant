@@ -102,18 +102,15 @@ supplemental stories included, not only the main flow.
   conversation, not a hidden feature"). Don't build for a future nobody
   asked for.
 - **A named business term implies a typical real-world state — confirm
-  it with the Expert User, don't infer it from the label.** "Send-sale"
-  sounds neutral, but in the client's world it is generally placed
-  because the item is not in stock at that location (not a hard rule —
-  associates can place one otherwise too). A downstream design that
-  assumes the intuitive-sounding reading ("the placing store probably has
-  it") gets the typical case backwards. When a scenario has more than one
-  real sub-case (send-sale here: store-has-stock ships directly and never
-  enters allocation; store-does-not goes through normal allocation), the
-  story must carry both distinctly, not one merged rule that quietly
-  favors either. (Source: notnaked send-sale, sponsor correction
-  2026-07-22 — the story already had this right; a downstream design pass
-  didn't.)
+  it with the Expert User, don't infer it from the label.** A channel or
+  scenario name the client uses carries assumptions (about stock,
+  timing, who acts) that the intuitive reading often gets backwards.
+  When the engagement supplies a domain-knowledge base of term
+  semantics, read the entries touching your scenarios before storying;
+  where none exists, the term's typical case and its exceptions are
+  open questions for the Expert User. When a scenario has more than one
+  real sub-case, the story carries each distinctly — never one merged
+  rule that quietly favors the intuitive-sounding case.
 
 # The elicitation loop (interactive mode — the default)
 
