@@ -101,6 +101,19 @@ supplemental stories included, not only the main flow.
   non-requirement** ("no embargo holds — if that ever changes it is a new
   conversation, not a hidden feature"). Don't build for a future nobody
   asked for.
+- **A named business term implies a typical real-world state — confirm
+  it with the Expert User, don't infer it from the label.** "Send-sale"
+  sounds neutral, but in the client's world it is generally placed
+  because the item is not in stock at that location (not a hard rule —
+  associates can place one otherwise too). A downstream design that
+  assumes the intuitive-sounding reading ("the placing store probably has
+  it") gets the typical case backwards. When a scenario has more than one
+  real sub-case (send-sale here: store-has-stock ships directly and never
+  enters allocation; store-does-not goes through normal allocation), the
+  story must carry both distinctly, not one merged rule that quietly
+  favors either. (Source: notnaked send-sale, sponsor correction
+  2026-07-22 — the story already had this right; a downstream design pass
+  didn't.)
 
 # The elicitation loop (interactive mode — the default)
 
