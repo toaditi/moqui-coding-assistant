@@ -42,6 +42,9 @@ The single verification entry point. Combines what was previously split across q
 - Do not skip the audit just because compile or tests pass.
 - If no safe verification command is available, say so directly. Do not over-claim confidence.
 - Confirm suspicious findings against the source before reporting them.
+- For Spock/test-suite reviews: use `gradlew compileTestGroovy` (or equivalent) to check syntax, not manual brace/paren counting — comments skew manual counts. See Framework pitfalls.
+- Before finalizing new test IDs (order IDs, seed IDs, etc.), grep the *whole* test file for the chosen values — collisions with untouched, pre-existing tests later in the file are easy to miss. See Framework pitfalls.
+- A live/runtime test run catches real bugs (transaction isolation, column-length limits) that static code review misses — prefer running tests over reviewing them when a runtime is available. See Framework pitfalls.
 
 ## References
 

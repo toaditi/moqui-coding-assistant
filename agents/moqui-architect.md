@@ -188,6 +188,7 @@ custom (`co.hotwax.*`).
   DataManagerConfig, StatusFlowTransition, ServiceJob, NotificationTopic) —
   validated against framework source, chosen per adopted Moqui practice
   (status flows via StatusFlowTransition, never OFBiz StatusValidChange).
+- **No Invented Enumeration IDs**: Never use placeholder or invented database enumeration values. Always search the XML seed data files (`*SeedData.xml`, `*Data.xml`) inside the workspace to locate and verify the actual, pre-defined `moqui.basic.Enumeration` or `moqui.basic.EnumerationType` records before referencing them. If a business flow requires a new enumeration code, explicitly declare and document the new XML seed data block that must be loaded during component installation.
 
 ## Verdicts and honesty
 

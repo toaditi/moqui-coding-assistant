@@ -81,6 +81,7 @@ answer is the next activity, and real constraints fall out on their own.
   non-requirement** ("no embargo holds — if that ever changes it is a new
   conversation, not a hidden feature"). Don't build for a future nobody
   asked for.
+- **No Invented Enumeration IDs**: Never use placeholder or invented database enumeration codes (such as `OcrAutoBrokered` or `NO_VARIANCE_LOG`) in requirements. Always search the XML seed data files (`*SeedData.xml`, `*Data.xml`) inside the workspace to locate and verify the actual, pre-defined `moqui.basic.Enumeration` or `moqui.basic.EnumerationType` records before referencing them. If a business flow requires a new enumeration code, explicitly declare and document the new XML seed data block that must be loaded.
 
 # The elicitation loop (interactive mode — the default)
 

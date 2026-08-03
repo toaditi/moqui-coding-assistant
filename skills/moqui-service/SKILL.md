@@ -37,6 +37,8 @@ description: Author or edit Moqui service definitions while preserving local nam
 - Do not hand-roll concurrency locks (lock tables, "isRunning" flags); the `semaphore` attribute on the service definition covers single-instance execution.
 - Do not hand-write input validation the parameter validation sub-elements cover (`matches`, `number-range`, `text-length`, `text-email`, ...); declared validations also generate client-side form validation free.
 - Job monitoring reads `ServiceJobRun` (one record per execution: `startTime`, `endTime`, `hasError`, `errors`), never `ServiceJobRunLock` (scheduler lock). See Framework pitfalls and the service engine reference.
+- A failed sub-call marks the whole transaction rollback-only even after `ec.message.hasError()`+`clearErrors()` — that does not undo the JTA mark. If a sub-call's failure must not affect the caller's transaction, isolate it with `transaction="force-new"` (service definition) or `.requireNewTransaction(true)` (`ServiceCallSync` builder). See Framework pitfalls.
+- `component://` resolves by the `name` attribute in that component's `component.xml`, not the directory name — check the registered name before assuming a path. See Framework pitfalls.
 
 ## References
 
