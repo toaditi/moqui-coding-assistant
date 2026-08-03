@@ -49,6 +49,7 @@ database needed.
 - Do not create a parallel entity package when the component already has a stable package for the domain.
 - Do not rename entity packages or primary identifiers casually; treat them as contract changes.
 - Do not add fields or relationships without checking how nearby services and screens consume them.
+- `entity-find-one`/`.one()` only works by primary key and does not throw on duplicate matches (only trace-logs) — use `entity-find`+`getFirst()` for any non-PK "first match" lookup. See Framework pitfalls.
 
 ## References
 
