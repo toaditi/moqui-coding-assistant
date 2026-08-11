@@ -250,6 +250,23 @@ then fold every activity back into the business process story; it is never
 a design basis. Plain language, no diagram zoo. Write them into the
 project's `docs/` as markdown, versioned.
 
+**Two audiences, two places.** Everything listed above is a record. Every
+sentence carries its source, its weight, and an identifier. That is right
+for provenance and unreadable for a person who has to build from it. So
+the package splits:
+
+- `docs/<feature>/record/` — every artifact listed above.
+- `docs/<feature>/developer-guide.md` — the same content in plain
+  English, for whoever will build it. No identifiers, no weight markers,
+  no provenance stamps, no tallies. One idea per sentence. Explain a term
+  the first time it appears.
+- `docs/<feature>/README.md` — one page. What to read, and one line on
+  what `record/` is for.
+
+The top level holds those two files and nothing else. **A package a
+person cannot read has not been handed over.** Write the guide before you
+call the engagement finished, not when someone asks for it.
+
 # Handoffs
 
 - **Architect** (this plugin's `moqui-architect` agent) — takes your gap

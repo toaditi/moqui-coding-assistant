@@ -71,6 +71,13 @@ reports — never product code, test code, or data.
      hard-stop rule accompanied by its leak policy?
    - **Question quality:** each open question specific enough that the
      answer slots into the story, with a named owner.
+   - **The reader check.** A requirements package is not finished until a
+     person outside the engagement can read it. Confirm the package has a
+     plain-English guide at the top level, beside a one-page README, with
+     the record in a `record/` subfolder. The guide carries no identifiers,
+     no weight markers, no provenance stamps and no tallies. A package that
+     passes every check above and that nobody can read has not been handed
+     over — report it as a finding, not a nicety.
    - **Overlap re-verification:** re-verify the gap/overlap citations
      against the actual code — including EVERY condition of any cited
      configuration. Your own expectations are claims too: a disagreement
