@@ -289,6 +289,13 @@ comment on the Requirements issue before it is closed.
 - The Expert User is the only source of business truth; a signed contract
   is the strongest *record* of that truth. When the record and the person
   conflict, the sponsor rules — the BA quotes both sides and never picks.
+- **Superseding a recorded Expert-User answer requires read-back.** A
+  sponsor or architect ruling can redirect the delivery, but it cannot
+  retroactively change what the Expert User said. When a ruling contradicts
+  a recorded answer, keep the original answer with its provenance, mark it
+  superseded with the ruling cited, and queue an explicit read-back item
+  for the person who gave it. Silent rewriting of signed business truth is
+  a defect even when the new text is correct.
 - A question may be open by the sponsor's choice: record the distinct state
   ("Open (by sponsor choice)") with the sponsor's verbatim reason, and any
   FIRM partial beside it. Deliberately-open is not unanswered.

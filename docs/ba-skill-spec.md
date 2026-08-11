@@ -497,6 +497,19 @@ the eval table's gist is the only source, so a faithful replay is impossible wit
 reconstruction. EC1's input is stored verbatim in the table. Storing canonical inputs for
 EC2/EC3 is owed before the next definition-change replay.
 
+## Round 8 — sponsor-approved coaching rule folded (2026-07-24)
+
+One generic rule added to `agents/moqui-business-analyst.md` (Rules section),
+sponsor-approved; recorded here generic, without engagement evidence:
+
+- **D11. Superseding a recorded Expert-User answer requires read-back.** A
+  sponsor or architect ruling can redirect the delivery, but it cannot
+  retroactively change what the Expert User said. When a ruling contradicts a
+  recorded answer, keep the original answer with its provenance, mark it
+  superseded with the ruling cited, and queue an explicit read-back item for
+  the person who gave it. Rationale: silent rewriting of signed business truth
+  is a defect even when the new text is correct.
+
 ## Eval cases (replay these on the upgraded agent)
 
 | # | Input | Expected | Traps it must avoid |
