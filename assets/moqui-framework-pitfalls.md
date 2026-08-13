@@ -81,6 +81,39 @@ class-declared override.
 - **Fix:** `someEntityList.getFirst()?.someField` instead of a truthy-guard-then-`[0]`
   dance, or a generic `.first()` that requires its own try/catch.
 
+### `!=` in an entity condition silently drops NULL rows — use the `orNull` overload
+
+`makeCondition("statusId", NOT_EQUAL, "X")` generates SQL `statusId != 'X'`, and in SQL
+`NULL != 'X'` evaluates to **unknown**, not true — so every row where the column is NULL is
+silently excluded. This is rarely what "everything except X" means.
+
+- **Symptom:** a filter that looks exhaustive quietly ignores a whole class of rows. If those
+  rows represent "not yet processed" work, they are never picked up, with no error.
+- **Fix:** use the 4-argument overload, whose last parameter is `orNull`:
+  `ec.entity.conditionFactory.makeCondition("statusId", EntityCondition.NOT_EQUAL, "X", true)`
+  — it expands to `statusId != 'X' OR statusId IS NULL`
+  (`EntityConditionFactoryImpl.makeCondition(String, ComparisonOperator, Object, boolean)`).
+  `NOT_IN` has the same NULL blind spot.
+- Shorthand constants exist: `EntityCondition.NOT_EQUAL` / `.EQUALS` / `.IN`, so you do not
+  need `EntityCondition.ComparisonOperator.NOT_EQUAL`.
+
+### `update()` on a value read from `find()` writes EVERY column, not just the ones you set
+
+An `EntityValue` returned by `find()` has been through `setSyncedWithDb()`, which nulls its
+`dbValueMap`. Setting one field then rebuilds that map holding only that field, so
+`isFieldModifiedIString` returns true for every *other* field via its `dbIdx == -1` branch —
+and `update()` emits the whole row from your snapshot.
+
+- **Symptom:** a lost update. Between your read and your write, another job changed a
+  different column on the same row; your `update()` overwrites it with the stale value from
+  your snapshot. Worst on paths that never took a `forUpdate` lock.
+- **Fix:** for a targeted single-column write, build a fresh value instead of mutating a
+  fetched one:
+  `ec.entity.makeValue("Entity").setAll([pk1: a, pk2: b, theField: v]).update()`
+  A value from `makeValue` is not `isFromDb`, so its map holds only the PK plus that field and
+  `update()` emits exactly one column. It also writes a genuine `null`, which entity-auto
+  `update#` would drop.
+
 ## Services
 
 ### `ServiceJobRunLock` is not run history
@@ -127,6 +160,40 @@ Rollback-Only)."
   it requires actually triggering the nested failure against a real transactional datasource
   (a live test run, not a mocked/unit-style test) to observe the cascade.
 
+### A `<service-call>` without `ignore-error="true"` compiles to an implicit `return`
+
+Moqui's XML-actions code generator emits `if (ec.message.hasError()) return` immediately after
+every `<service-call>` that lacks `ignore-error="true"`
+(`framework/template/XmlActions.groovy.ftl`, `service-call` macro). `<iterate>` and `<while>`
+compile to real Groovy loops, not closures, so that `return` exits the **entire actions
+script** — not just the loop iteration.
+
+- **Symptom:** error-handling written *after* the call — a `<log>`, a `clearErrors()`, a
+  "skip this item and continue" flag — is **dead code that never runs**, and one failed call
+  aborts the whole service silently. Reading the XML top to bottom gives no hint of this.
+- **Fix:** to handle a failure yourself, set `ignore-error="true"` on the call. Note the
+  framework then logs a warning and calls `ec.message.clearErrors()` for you, so
+  `ec.message.hasError()` is already false afterwards — key the recovery off the **result**
+  instead (an explicit out-parameter, or a required field being null).
+- **Almost always needed together with `transaction="force-new"`** — see "Catching
+  `ec.message.hasError()` does not undo a transaction already marked rollback-only" above.
+  `ignore-error` alone leaves the caller's transaction rollback-only, so the next service call
+  is refused anyway.
+
+### `out-map-add-to-existing` defaults to `true`, so out-maps MERGE across loop iterations
+
+With the default, the generated code does `outMap.putAll(result)` rather than replacing the
+map. Combined with the fact that a **null out-parameter is omitted from a service result
+entirely**, an out-map reused inside `<iterate>` silently keeps the *previous* iteration's
+value for any field the current call returned as null.
+
+- **Symptom:** item N appears to have item N-1's data. With hash/signature comparisons this
+  reads as "changed" forever, so the row is reprocessed on every run — a silent, permanent
+  loop that looks like a data problem, not a code one.
+- **Fix:** set `out-map-add-to-existing="false"` on any `<service-call>` whose out-map is
+  reused across iterations. Same applies to `ec.service.sync()` results assigned into a
+  long-lived variable.
+
 ### `component://` URIs resolve by the *registered* component name, not the directory name
 
 The `name` attribute in a component's `component.xml` is what `component://<name>/...`
@@ -158,6 +225,29 @@ write isn't isolated.
   don't assume "it's text, it'll fit."
 
 ## Logic (Groovy)
+
+### `<else>` binds to its parent `<if>` element, not to the preceding `</if>`
+
+XML actions are a tree, not a statement sequence. The `if` macro renders
+`<#if .node["else"]?has_content> else { ... }`, looking up `else` as a **direct child** of the
+`if` node it is rendering. So in:
+
+```xml
+<if condition="a">
+    <if condition="b"> ... </if>
+    <else> X </else>          <!-- child of the OUTER if -->
+</if>
+```
+
+`X` is **a's** else branch, not `b`'s — because `</if>` closed the inner element before
+`<else>` appeared. The `else` macro is a no-op when visited in place, so nothing warns you.
+
+- **Symptom:** a whole branch executes under the opposite condition. Shipped in real code as
+  a feature that ran only for the accounts it was *disabled* for. XML stays well-formed and
+  the service compiles, so only behavior reveals it.
+- **Fix:** nest `<else>` inside the `<if>` it belongs to, before that `</if>`. When reviewing,
+  check indentation against element nesting — and be extra careful when the `<else>` body
+  itself contains another `<if>`.
 
 ### `EntityList.findAll` / `find` / `filter` cast the closure result straight to `boolean`
 
@@ -206,6 +296,27 @@ On a typical dev setup with `entity_add_missing_startup=true` /
   then restart. Loads are idempotent upserts.
 - Order matters when both apply: stop the server (it holds the txlog lock), load seed, then
   relaunch so new-column ALTERs and new seed rows are both present.
+
+## Components & build
+
+### `src/main/groovy` is COMPILED into the component jar; `script/`, `service/`, `entity/` are not
+
+A component's `src/main/groovy/**` is compiled by Gradle into `lib/<component>-<version>.jar`
+(and `build/classes`, which the component's own `test` task puts on the classpath). Everything
+under `script/`, `service/`, `entity/`, `screen/`, `template/` is read and interpreted at
+runtime.
+
+- **Symptom:** after pulling changes that touch `src/main/groovy`, the runtime keeps using the
+  **old** class. It surfaces as a nonsense error such as
+  `No signature of static method: com.example.Helper.someMethod` for a method that plainly
+  exists in the source — which sends you hunting through test fixtures and data instead of the
+  build.
+- **Fix:** rebuild after any pull that touches `src/main/groovy`:
+  `./gradlew :runtime:component:<name>:jar`. Editing only `script/`/`service/`/`entity/` needs
+  no rebuild, which is exactly why the distinction is easy to forget.
+- Note the two artifacts are separate: a green **test** run uses `build/classes`, while a real
+  server run loads `lib/<component>.jar`. Passing tests do not by themselves prove the jar the
+  server will load is current.
 
 ## Testing (Spock)
 

@@ -39,6 +39,8 @@ description: Author or edit Moqui service definitions while preserving local nam
 - Job monitoring reads `ServiceJobRun` (one record per execution: `startTime`, `endTime`, `hasError`, `errors`), never `ServiceJobRunLock` (scheduler lock). See Framework pitfalls and the service engine reference.
 - A failed sub-call marks the whole transaction rollback-only even after `ec.message.hasError()`+`clearErrors()` — that does not undo the JTA mark. If a sub-call's failure must not affect the caller's transaction, isolate it with `transaction="force-new"` (service definition) or `.requireNewTransaction(true)` (`ServiceCallSync` builder). See Framework pitfalls.
 - `component://` resolves by the `name` attribute in that component's `component.xml`, not the directory name — check the registered name before assuming a path. See Framework pitfalls.
+- Set `ignore-error="true"` when the caller must handle a failed `<service-call>` itself — without it the generated implicit `return` makes any following recovery dead code. Key the recovery off the result (an explicit out-parameter), not `ec.message.hasError()`, which `ignore-error` has already cleared. Pair it with `transaction="force-new"` or the caller's transaction stays rollback-only. See Framework pitfalls.
+- Set `out-map-add-to-existing="false"` on any `<service-call>` whose out-map is reused inside `<iterate>`/`<while>` — it defaults to merging, and a null out-parameter is omitted from the result, so the previous iteration's value silently persists. See Framework pitfalls.
 
 ## References
 
