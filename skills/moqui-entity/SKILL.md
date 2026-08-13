@@ -50,6 +50,8 @@ database needed.
 - Do not rename entity packages or primary identifiers casually; treat them as contract changes.
 - Do not add fields or relationships without checking how nearby services and screens consume them.
 - `entity-find-one`/`.one()` only works by primary key and does not throw on duplicate matches (only trace-logs) — use `entity-find`+`getFirst()` for any non-PK "first match" lookup. See Framework pitfalls.
+- Use the 4-argument `makeCondition(field, op, value, true)` (`orNull`) for "everything except X" — plain `!=` drops NULL rows, because SQL `NULL != 'X'` is unknown, not true. Same blind spot for `NOT_IN`. See Framework pitfalls.
+- To write a single column, build a fresh `ec.entity.makeValue(...).setAll([pks..., field: v]).update()` — calling `update()` on a value read via `find()` emits EVERY column from your snapshot and can silently clobber a concurrent write. See Framework pitfalls.
 
 ## References
 

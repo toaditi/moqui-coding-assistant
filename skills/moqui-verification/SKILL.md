@@ -47,6 +47,9 @@ The single verification entry point. Combines what was previously split across q
 - For Spock/test-suite reviews: use `gradlew compileTestGroovy` (or equivalent) to check syntax, not manual brace/paren counting — comments skew manual counts. See Framework pitfalls.
 - Before finalizing new test IDs (order IDs, seed IDs, etc.), grep the *whole* test file for the chosen values — collisions with untouched, pre-existing tests later in the file are easy to miss. See Framework pitfalls.
 - A live/runtime test run catches real bugs (transaction isolation, column-length limits) that static code review misses — prefer running tests over reviewing them when a runtime is available. See Framework pitfalls.
+- Before "fixing" behavior that looks buggy, check the component's `docs/` for a dated design/requirements doc that may have explicitly approved it. If so, treat the change as a design revision, not a bug fix — update the doc alongside the code, and sweep *all* its sections (not just the touched bullet) for now-contradictory leftovers left by a partial edit.
+- After adding a test alongside a bug fix, temporarily revert just the fix (keep the test), confirm the test now fails, then restore the fix — proves the test is a genuine regression guard, not vacuously passing.
+- For non-trivial fixes, run one systematic/root-cause-verification agent and one adversarial/bug-hunting agent, both before implementing and again after opening the PR (reviewing the actual `gh pr diff`/bot comments, not just local files) — each pass tends to surface genuinely new findings.
 
 ## References
 
