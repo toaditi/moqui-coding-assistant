@@ -448,6 +448,55 @@ tree). The failures cluster in PACKAGE MAINTENANCE and the DEMO-NAMING seam:
   evidence entry it cites, not merely somewhere in the corpus; run the scripted quote audit per
   artifact. *Failure: a story quote cited F1.3; the F1.3 entry does not contain it.*
 
+## Round 7 — record-bound engagement (2026-07-23, coach-run, real deliverables)
+
+Trainee: the current agent definition. Record-bound, two-outputs: a requirements-package
+revision plus per-family rules over three coach-gated rounds, with a PM consuming the output
+downstream and the sponsor ruling live in chat. **The full engagement log (domain, client,
+artifacts, tape) lives in the coach repo's private fixtures — by sponsor ruling, business-
+domain information does not enter this plugin.** This log records only the craft.
+
+**Validated (all prior fold-ins held):** the knife under a design-heavy record (the
+engagement's own design docs open beside the work — zero design leak into requirement voice
+across two linted deliveries); D9 under maximum temptation (the most obvious missing story
+left unwritten because the record does not carry the flow); G8 self-corrections disclosed in
+place (two count errors found by the trainee's own sweep); B1a (lifecycle activities carry
+the activity, not only constraints); weighted recording with two new provenance grades minted
+cleanly (a recorded-sponsor-ruling tag, and a knowledge-base-mining grade treated as
+evidence-until-read-back).
+
+**New rules from round 7:**
+
+- **D10. A question may be open BY CHOICE — the register says so.** When the sponsor rules
+  "keep this open, we may learn more," the register carries a distinct state ("Open (by
+  sponsor choice)") with the sponsor's verbatim reason, and any FIRM partial is recorded
+  beside it. Deliberately-open is not unanswered; representing it as plain "open" misstates
+  the record. *Origin: the sponsor gave a firm partial answer and held the remainder open on
+  purpose; the register had no honest state for that until this rule.*
+- **G13. Enumerate the handed record before relying on it.** Every file path in a supplied
+  source list is verified to exist (enumeration, not assumption) before artifacts cite it; a
+  dead path is flagged to whoever handed it and the live location hunted by concept-grep.
+  This applies to COACH- and sponsor-supplied records too — the record itself is a claim.
+  *Origin: the engagement record handed to the trainee cited a documentation path that does
+  not exist; the trainee's hygiene flag was right and the coach's record was corrected — the
+  second coach-side correction of the engagement.*
+
+**Patterns worth keeping (trainee inventions, round 7):**
+- A recorded-sponsor-ruling provenance tag — a live sponsor ruling as a first-class grade.
+- A knowledge-base-mining grade — mined records are FIRM as a record of what was said/done,
+  a requirements candidate until Expert User read-back.
+- "Shapes on record — evidence, not rules" listing: situations proven to exist, explicitly
+  denied requirement status until ruled.
+- Per-check stage naming: every check written about a lifecycle object names the stage it
+  applies to.
+- Rationale routing under live rulings: the sponsor gives who/what + why in one breath; the
+  who/what enters the requirement sentence, the why goes to the business case, same commit.
+
+**Fixture-hygiene finding (for the coach):** EC2 and EC3 have no stored canonical input —
+the eval table's gist is the only source, so a faithful replay is impossible without
+reconstruction. EC1's input is stored verbatim in the table. Storing canonical inputs for
+EC2/EC3 is owed before the next definition-change replay.
+
 ## Eval cases (replay these on the upgraded agent)
 
 | # | Input | Expected | Traps it must avoid |
