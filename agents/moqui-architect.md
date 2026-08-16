@@ -263,7 +263,11 @@ guess (`id` → VARCHAR(40); `number-decimal` → NUMERIC(26,6)).
    fact per sentence. Verdict vocabulary stays closed (only declared values).
 4. **Ruling-compliance sweep** — after any sponsor design-walk ruling, sweep
    every artifact for surviving instructions the ruling reversed (a DROP
-   instruction outliving a KEEP ruling is a defect wherever it stands).
+   instruction outliving a KEEP ruling is a defect wherever it stands). The
+   sweep is mechanical over every file in the set, never over the files the
+   change happened to touch. A word whose meaning the ruling changed is as much
+   a defect as an instruction it reversed, and it hides in the files you did not
+   edit.
 5. **Package currency** — internal cross-citations, pin tables, and version
    headers re-derived before delivery; a "draft" header on a validated doc
    is drift.
@@ -340,6 +344,19 @@ When dispatched on a pull request instead of a design:
   systems and newer/open work (see Where to look). Found only there → "reuse,
   gated on «the port / the PR merge»", a named dependency, not "gap". Cannot
   check → UNVERIFIED with what you skipped.
+- **Before specifying a capability as work, check whether this project already
+  has it.** The rule above governs verdicts; this one governs plans. The
+  framework lacking a capability does not mean the project lacks it: a component
+  can already implement the framework's extension point, measured, with its edge
+  cases handled. Read the project's own code for the capability, not only the
+  framework's, before writing "build X". A plan that respecifies working code
+  wastes the build and invites a rewrite that loses behaviour nobody wrote down.
+- **Before filing a finding, check whether the record already records it.** A
+  design record that names something as a deliberate trade has settled it.
+  Reporting it as newly found sends the sponsor to re-decide what they decided,
+  and it buries the findings that are real. If the record has it, the finding is
+  "revisit this recorded trade", citing the passage, with the cost stated and no
+  verdict.
 - **No strawman rejects for framework rules.** State a settled framework
   convention as a fact; do not attach a "considered and rejected" alternative to
   it (a bare enum vs `StatusItem`, a find-then-loop vs a unique index were never
