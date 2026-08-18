@@ -7,6 +7,12 @@ the Agent Coach (maarg-agent-coach plugin). Covers the AUTHORING half of
 the System Architect role (data statements → model → mappings → outlines);
 the review half lives in `agents/moqui-architect.md` and is already strong.
 
+**This repository is public, so this file carries the RULES only, generically
+worded.** The engagement record behind each rule — client and project names,
+the audited packages, the transcripts, the named failures — lives in the
+private coach repository under `packs/architect/`. Where a rule below says
+"observed failure", the named instance is on file there.
+
 ## S. Data statements (book-derived seed rules)
 
 - **S1.** One sentence per fact: subject–verb–object, any relationship verb.
@@ -26,15 +32,22 @@ the review half lives in `agents/moqui-architect.md` and is already strong.
 ## H. The hybrid data model (sponsor doctrine — absolute)
 
 - **H1.** Three entity families share the database: customized OFBiz
-  (`org.apache.ofbiz.*`), Moqui framework (`moqui.*`), HotWax custom
-  (`co.hotwax.*`). Every mapping names its family AND its defining file.
-- **H2.** Mappings resolve against the checked-out codebase (ofbiz-oms-udm
-  + oms extensions, pinned versions) — NEVER against memory of upstream
-  OFBiz, Mantle, or the HEMP book's appendix (which is Mantle-based: form
-  yes, mappings no).
-- **H3.** The local model is CUSTOMIZED: verify fields exist as claimed
-  (e.g. `OrderItem.correspondingPoId` is a HotWax field, not vanilla
-  OFBiz). A plausible upstream memory is the most dangerous kind of wrong.
+  (`org.apache.ofbiz.*`), Moqui framework (`moqui.*`), and project-custom
+  entities under the project's own namespace. Read the project's components
+  to learn that namespace; never assume it. Every mapping names its family
+  AND its defining file.
+- **H2.** Mappings resolve against the checked-out codebase (the UDM
+  component + the OMS extensions, pinned versions) — NEVER against memory of
+  upstream OFBiz, Mantle, or the HEMP book's appendix (which is Mantle-based:
+  form yes, mappings no).
+- **H3.** The local model is CUSTOMIZED **in both directions**: it adds fields
+  upstream never had, AND it repurposes fields upstream already defines.
+  Verify every field exists as claimed, and settle provenance ("ours or
+  upstream's?") by diffing against the upstream release the project forked —
+  never from memory. The field name tells you neither. A plausible upstream
+  memory is the most dangerous kind of wrong, and it cuts both ways: asserting
+  a stock field is custom is the same defect as asserting a custom field is
+  stock.
 - **H4.** Moqui framework entities are legitimate design citizens
   (SystemMessage, DataManagerConfig, StatusFlowTransition) — validated
   against framework source; adopted Moqui practices govern their use.
@@ -43,58 +56,54 @@ the review half lives in `agents/moqui-architect.md` and is already strong.
 
 | # | Fixture | Traps |
 |---|---|---|
-| AEC1 | Pre-Order data-statement pass, sitting 1 (story main flow) — fixture grows in maarg-agent-coach | unit-grain vs `correspondingPoId` order-grain mismatch must SURFACE, not map smoothly |
+| AEC1 | A data-statement pass, sitting 1 (story main flow) — fixture grows in maarg-agent-coach | unit-grain vs `OrderItem.correspondingPoId` order-grain mismatch must SURFACE, not map smoothly |
+| AEC2 | Generic entity-naming scenario (see round 3) | archetype-derived compound Detail PK; `statusTypeId`-connected status on the master; a reason `Enumeration` — not a status — on the detail; no strawman for the StatusFlowTransition choice |
+
+`correspondingPoId` is a stock Apache OFBiz field on `OrderItem`
+(`applications/datamodel/entitydef/order-entitymodel.xml:557` upstream). It is
+named here because it is open-source OFBiz, not project identity. AEC1's trap is
+about GRAIN, never about provenance.
 
 ## Status
 
 Seeded 2026-07-11, before the first training sitting. Rules from observed
 failures land below as rounds, same as `ba-skill-spec.md`.
 
-## Round 1 — sitting 1, Pre-Order main flow (2026-07-11)
+## Round 1 — sitting 1, story main flow (2026-07-11)
 
 Trainee: supplemented dispatch under the architect definition + this spec.
-Result: **21 statements, PASS at the highest bar.** Coach spot-verified 8
-citations in the entity XMLs/services — all exact. AEC1 (the planted
-unit-grain catch) fully surfaced: verdict NEW with the nearest precedent
-cited and shown misaligned at BOTH allocator sites (the full-cover skip
-conditions), including the silent-skip collision with R13's spirit. Zero
-failure rules this sitting — recorded honestly as a clean pass.
+Result: PASS at the highest bar. Every spot-verified citation was exact. AEC1
+(the planted unit-grain catch) fully surfaced: verdict NEW with the nearest
+precedent cited and shown misaligned at BOTH allocator sites. Zero failure
+rules this sitting — recorded honestly as a clean pass.
 
 **Patterns codified from the trainee's own inventions:**
 - **S6. End every sitting with an honesty ledger** — the UNVERIFIED list,
   stated plainly ("none of these were dressed as EXISTS"). Adopted as a
   required section of the deliverable.
-- **H1a. The hybrid annotation:** a HotWax field extending an OFBiz entity
-  is marked "[H field on O entity]" — the two-family reality of one
+- **H1a. The hybrid annotation:** a project-custom field extending an OFBiz
+  entity is marked "[H field on O entity]" — the two-family reality of one
   mapping, visible at a glance.
 - **S7. Smells ride along.** Name-vs-meaning mismatches found while mapping
   (a "confirmed" date in a field named "estimated"; a hold expressed as a
   location; one word covering two reservation mechanisms) are reported in a
   dedicated smells list — they are design input, not statement content.
 
-Deliverable value beyond training: 8 smells, of which #1 (line-grain vs
-unit-grain allocation, no spanning) and #3 (ATP as a bare counter with no
-allocation ledger — cannot give units back) point at the same missing
-concept and are expected to shape the NEW-entity phase.
+## Round 2 — sittings 2–6 + consolidation (2026-07-11)
 
-## Round 2 — sittings 2–6 + consolidation, Pre-Order data-statement pass (2026-07-11)
-
-Five section sittings (alternates, kits, regional, time-flow, R-sweep) run in
-parallel + a consolidation pass. Result: **~100 statements → 47 deduped, PASS
-throughout.** Every EXISTS carried family + defining file; the hybrid-model
-discipline (H1–H4) held on every mapping. Coach spot-verified the boldest
-claims in code — all exact.
+Five section sittings run in parallel + a consolidation pass. PASS throughout.
+Every EXISTS carried family + defining file; the hybrid-model discipline
+(H1–H4) held on every mapping.
 
 **Demonstrated (encode as positive patterns, confirmed across five trainees):**
 - **The honesty ledger (S6)** caught real limits every sitting — none dressed
   UNVERIFIED as EXISTS.
-- **Smells-ride-along (S7)** surfaced FIVE latent existing-code defects while
-  mapping (dead inverted kit guard; `thudate` typo; `prendingOrderCountList`
-  NPE; dropped `CommunicationEvent` params; UDM-doc `pseudoId` drift). Bonus
-  deliverable value far beyond the statements.
-- **Convergent-concept synthesis** — the consolidation named "the Allocation
-  Ledger" from six independent sitting findings (unit grain, give-back, kit
-  components, region coverage, history, per-shipment sums). Codify:
+- **Smells-ride-along (S7)** surfaced five latent existing-code defects while
+  mapping (a dead inverted guard, a misspelled field name, a null-pointer on a
+  list variable, dropped service parameters, doc-vs-code identifier drift).
+  Bonus deliverable value far beyond the statements.
+- **Convergent-concept synthesis** — the consolidation named one missing
+  concept from six independent sitting findings. Codify:
 
 - **S8. Consolidation names the concept.** Phase 2–3's job is not just
   dedupe — it is to NAME the new concepts that multiple NEW verdicts share,
@@ -103,23 +112,15 @@ claims in code — all exact.
   reported.** When the only code shape for a required fact is dead code
   (zero callers) or defective (inverted guard, typo), the verdict is NEW —
   and the defect goes to the honesty/notes section, never cited as EXISTS.
-- **H6. Never read the package name as provenance.** A HotWax entity can sit
-  in an `org.apache.ofbiz.*` package (family masquerade); the defining file
-  and author decide the family, not the namespace string.
-
-**Infra note:** the safety-classifier outage blocked subagent dispatch for the
-consolidation; the Coach performed phase 2–3 in the main session directly
-(legitimate — consolidation is coach judgment work, not a delegable sitting).
-The five parallel sittings had completed before the outage.
+- **H6. Never read the package name as provenance.** A project-custom entity
+  can sit in an `org.apache.ofbiz.*` package (family masquerade); the defining
+  file and author decide the family, not the namespace string.
 
 ## Status
 
 Rounds 1–2 complete; the authoring half of the architect role is validated on
-a full real deliverable (the Pre-Order data-statement pass). AEC1 caught in
-round 1; five latent defects surfaced in round 2. **Next:** sponsor/business
-validation of the statements (plain true/false read), then fold the authoring
-half + the Write-tool grant decision into `agents/moqui-architect.md`, then
-replay AEC1.
+a full real deliverable. AEC1 caught in round 1; five latent defects surfaced
+in round 2.
 
 ## Round 3 — naming + verification-scope rules folded (2026-07-14)
 
@@ -138,55 +139,46 @@ observed gaps:
 3. **No strawman rejects for framework rules** — settled conventions are stated
    as facts; the rejected-alternative reasoning is only for genuine deviations.
 
-**Eval (AEC2):** a generic entity-naming scenario — design the status, the reason
-enum + enumType, and the PK for a sample master + append-only detail pair. The
-right answer applies rule 1 (archetype-derived compound Detail PK; a
-`statusTypeId`-connected status on the master; a reason `Enumeration` — not a
-status — on the detail) and rule 3 (no strawman for the StatusFlowTransition
-choice).
-
 ## Round 4 — three-engagement audit (2026-07-17, coach audit round 2)
 
-Source: adversarial audit of the Pre-Order design package (PR #301 state) and the recovered
-Transfer-Order v1 design, every finding verified in the source before landing here. Citation
-fidelity was strong where it counts (10/10 spot-checked bold EXISTS claims EXACT in code; honesty
-ledger and smells list real and used). The failures cluster in ARTIFACT MAINTENANCE and
+Source: an adversarial audit of two real design packages, every finding verified
+in the source before landing here. Citation fidelity was strong where it counts
+(every spot-checked bold EXISTS claim was exact in code; honesty ledger and
+smells list real and used). The failures cluster in ARTIFACT MAINTENANCE and
 SELF-LINT COVERAGE, not in code reading:
 
 - **H7. Ruling-compliance sweep.** After any sponsor design-walk ruling, sweep EVERY design
   artifact for surviving instructions that contradict the ruling — an instruction the ruling
-  reversed is a defect wherever it still stands. *Failure: data-statements.md still told builders
-  to DROP `OrderInvPromiseHistory` after the Sponsor ruled KEEP (D6, 2026-07-13); the doc was
-  edited after the ruling but never reconciled.*
+  reversed is a defect wherever it still stands. *Failure: a data-statements doc still told
+  builders to DROP an entity after the sponsor ruled KEEP; the doc was edited after the ruling
+  but never reconciled.*
 - **H8. Cite the exemplar's ACTUAL mechanism.** Before claiming "exactly as X does it", re-read X —
   if the cited exemplar deliberately abandoned the mechanism you name, the claim is wrong.
-  *Failure: FutureInvItemRes PK-generation claimed `setSequencedIdSecondary` "exactly as
+  *Failure: a new entity's PK generation claimed `setSequencedIdSecondary` "exactly as
   InventoryItemDetail" — the cited exemplar deliberately does NOT use it.*
 - **H9. Deprecation status rides every reuse citation.** A cited reuse surface carries its
   lifecycle state; pointing a capability at a deprecated endpoint without saying so sells dead
-  road. *Failure: D25/D23/D20 direct capability F at ProductStoreSetting REST endpoints without
-  noting their deprecation.*
+  road. *Failure: three design decisions pointed a capability at `ProductStoreSetting` REST
+  endpoints without noting their deprecation.*
 - **H10. Cross-check the package's own defect list before asserting "existing working
   capability".** A capability the same package's defect record shows NPE-ing on a live branch is
-  not "existing working capability" — state both halves. *Failure: HOLD_PRORD_PHYCL_INV queue-hold
-  presented as working while the package's defect list records the branch NPE.*
+  not "existing working capability" — state both halves. *Failure: a queue-hold presented as
+  working while the package's own defect list recorded the branch NPE.*
 - **S9. Process outlines may only reference states the data design defines.** A lifecycle word
   ("promotes committed to reserved") that the entity design does not define — on rows the design
-  declares immutable — is a state-machine contradiction. *Failure: A6 release mapping vs the Res
-  design's append-only rows.*
+  declares immutable — is a state-machine contradiction.
 - **S10. Package-currency sweep (the BA's G8, applied to design docs).** Internal citations
   (file/line/claim references between the package's own docs), pin tables, and version headers are
-  re-derived before delivery. *Failures: design-proposal cites data-statement line numbers that no
-  longer exist; three artifacts state three different pin sets; "draft v1" header on a
+  re-derived before delivery. *Failures: a design proposal cited data-statement line numbers that
+  no longer existed; three artifacts stated three different pin sets; a "draft v1" header sat on a
   sponsor-validated doc.*
 
 **Review gate — the architect's pre-delivery self-lint (run on every authored artifact):**
-1. Provenance coverage 100%: every statement row carries its story-step/R-rule. *(Failure: the
-   PC1–PC10 table shipped with no provenance column.)*
+1. Provenance coverage 100%: every statement row carries its story-step/R-rule. *(Failure: a
+   capability table shipped with no provenance column.)*
 2. Family-tag coverage 100%: every EXISTS/EXTEND mapping carries its [O]/[M]/[H] tag, and the tag
-   matches the defining file. *(Failure: 23 of 92 rows untagged; one tag wrong by the doc's own
-   rule.)*
+   matches the defining file. *(Failure: a quarter of the mapping rows untagged; one tag wrong by
+   the doc's own rule.)*
 3. Statement-text purity (S5): no system identifiers inside statement text; one fact per sentence.
 4. Verdict vocabulary closed: only the declared verdict values appear.
 5. Ruling-compliance sweep (H7) + internal-citation currency (S10).
-
