@@ -395,10 +395,16 @@ def collect(root: Path, targets: list[Path]) -> tuple[list[dict[str, object]], l
     # Only checked when the target service is in the same scan scope - a narrowed --paths run
     # that includes the ServiceJob data but not the service definition can't verify this, and
     # should not report a false positive.
+    #
+    # ServiceCallSyncImpl.java only throws AuthenticationRequiredException when authenticate is
+    # literally "true" (ServiceCallSyncImpl.java:207); "false" and "anonymous-view" never hit that
+    # check either, so they're just as safe as "anonymous-all" for a job with no logged-in user.
+    # Flagging anything other than "anonymous-all" over-fires on legitimate authenticate="false"
+    # services.
     for job_symbol in service_job_refs:
         service_name = str(job_symbol["name"])
         authenticate = service_authenticate.get(service_name)
-        if authenticate is None or authenticate == "anonymous-all":
+        if authenticate != "true":
             continue
         job_name = job_symbol.get("jobName", service_name)
         findings.append(
@@ -407,9 +413,10 @@ def collect(root: Path, targets: list[Path]) -> tuple[list[dict[str, object]], l
                 "service-job-not-anonymous",
                 Path(str(job_symbol["path"])),
                 int(job_symbol["line"]),
-                f"ServiceJob `{job_name}` calls `{service_name}`, which declares authenticate=`{authenticate}` "
-                f"instead of `anonymous-all`. A scheduled job runs with no authenticated user in context, so "
-                f"this call will fail authentication on every run.",
+                f"ServiceJob `{job_name}` calls `{service_name}`, which requires authentication "
+                f"(authenticate=\"true\", the default). A scheduled job runs with no authenticated user "
+                f"in context, so this call will fail on every run - declare authenticate=\"anonymous-all\" "
+                f"(or \"false\"/\"anonymous-view\" if that fits the service better).",
                 root,
             )
         )

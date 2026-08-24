@@ -22,7 +22,7 @@ The single verification entry point. Combines what was previously split across q
 2. Run the audit:
    - `python3 ../../scripts/moqui_quality_audit.py audit --root "<repo-root>"`
    - Add `--paths "<file-or-dir>" ...` to narrow.
-   - `service-job-not-anonymous` (a service invoked by a scheduled `ServiceJob` without `authenticate="anonymous-all"`) is a cross-file check: it only fires when both the service definition and the `ServiceJobData` entry are inside the scanned scope. A `--paths` narrowed to only the changed service file can miss it — run without `--paths`, or include the relevant `data/*.xml`, when a change touches a scheduled service.
+   - `service-job-not-anonymous` (a service invoked by a scheduled `ServiceJob` that still relies on `authenticate="true"`, explicit or default) is a cross-file check: it only fires when both the service definition and the `ServiceJobData` entry are inside the scanned scope. A `--paths` narrowed to only the changed service file can miss it — run without `--paths`, or include the relevant `data/*.xml`, when a change touches a scheduled service.
 3. Inspect the XML or scripts manually for the contract details that matter to the change:
    - services: verb, noun, `allow-remote`, `authenticate`, descriptions, script locations
    - entities: package, `entity-name`, descriptions, table mappings
