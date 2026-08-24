@@ -44,6 +44,8 @@ INLINE_SCRIPT_MAX_LINES = 20
 SCRIPT_BLOCK_RE = re.compile(r"<script\b[^>]*>([\s\S]*?)</script>", re.DOTALL)
 CDATA_WRAPPER_RE = re.compile(r"<!\[CDATA\[|\]\]>")
 
+SERVICE_JOB_RE = re.compile(r"<moqui\.service\.job\.ServiceJob\b[^>]*/?>", re.DOTALL)
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -147,16 +149,16 @@ def make_finding(severity: str, code: str, path: Path, line: int, message: str, 
     }
 
 
-def add_symbol(symbols: list[dict[str, object]], kind: str, name: str, path: Path, line: int, root: Path) -> None:
-    symbols.append(
-        {
-            "kind": kind,
-            "name": name,
-            "path": str(path),
-            "relativePath": relative_to_root(path, root),
-            "line": line,
-        }
-    )
+def add_symbol(symbols: list[dict[str, object]], kind: str, name: str, path: Path, line: int, root: Path, **extra: object) -> None:
+    symbol = {
+        "kind": kind,
+        "name": name,
+        "path": str(path),
+        "relativePath": relative_to_root(path, root),
+        "line": line,
+    }
+    symbol.update(extra)
+    symbols.append(symbol)
 
 
 def scan_service_file(path: Path, root: Path, findings: list[dict[str, object]], symbols: list[dict[str, object]]) -> None:
@@ -178,7 +180,8 @@ def scan_service_file(path: Path, root: Path, findings: list[dict[str, object]],
             continue
 
         full_name = f"{namespace}.{service_id}"
-        add_symbol(symbols, "service", full_name, path, line, root)
+        authenticate = attrs.get("authenticate", "true")
+        add_symbol(symbols, "service", full_name, path, line, root, authenticate=authenticate)
 
         end_tag = text.find("</service>", match.end())
         block = text[match.start() : end_tag if end_tag != -1 else match.end()]
@@ -189,7 +192,6 @@ def scan_service_file(path: Path, root: Path, findings: list[dict[str, object]],
             findings.append(make_finding("info", "service-name-process", path, line, f"Service `{full_name}` uses `process` in its name.", root))
 
         allow_remote = attrs.get("allow-remote")
-        authenticate = attrs.get("authenticate", "true")
         if allow_remote == "true" and authenticate in {"false", "anonymous-all"}:
             findings.append(make_finding("warn", "service-public-remote", path, line, f"Remote service `{full_name}` is exposed with authenticate=`{authenticate}`.", root))
 
@@ -215,6 +217,20 @@ def scan_service_file(path: Path, root: Path, findings: list[dict[str, object]],
                         root,
                     )
                 )
+
+
+def scan_service_job_refs(path: Path, root: Path, symbols: list[dict[str, object]]) -> None:
+    # Not gated to a "data" directory - ServiceJobData entries can be seeded from anywhere a
+    # component loads data XML from, so every file is checked regardless of location.
+    text = path.read_text(encoding="utf-8", errors="replace")
+    for match in SERVICE_JOB_RE.finditer(text):
+        attrs = parse_attrs(match.group(0))
+        service_name = attrs.get("serviceName")
+        if not service_name:
+            continue
+        line = line_for_offset(text, match.start())
+        job_name = attrs.get("jobName", service_name)
+        add_symbol(symbols, "service-job", service_name, path, line, root, jobName=job_name)
 
 
 def scan_entity_file(path: Path, root: Path, findings: list[dict[str, object]], symbols: list[dict[str, object]]) -> None:
@@ -360,15 +376,43 @@ def collect(root: Path, targets: list[Path]) -> tuple[list[dict[str, object]], l
                 scan_entity_file(path, root, findings, symbols)
             if "screen" in parts:
                 scan_screen_file(path, root, findings, symbols)
+            scan_service_job_refs(path, root, symbols)
         scan_text_patterns(path, root, findings)
 
     service_defs: defaultdict[str, list[dict[str, object]]] = defaultdict(list)
     entity_defs: defaultdict[str, list[dict[str, object]]] = defaultdict(list)
+    service_authenticate: dict[str, str] = {}
+    service_job_refs: list[dict[str, object]] = []
     for symbol in symbols:
         if symbol["kind"] == "service":
             service_defs[str(symbol["name"])].append(symbol)
+            service_authenticate[str(symbol["name"])] = str(symbol.get("authenticate", "true"))
         elif symbol["kind"] == "entity":
             entity_defs[str(symbol["name"])].append(symbol)
+        elif symbol["kind"] == "service-job":
+            service_job_refs.append(symbol)
+
+    # Only checked when the target service is in the same scan scope - a narrowed --paths run
+    # that includes the ServiceJob data but not the service definition can't verify this, and
+    # should not report a false positive.
+    for job_symbol in service_job_refs:
+        service_name = str(job_symbol["name"])
+        authenticate = service_authenticate.get(service_name)
+        if authenticate is None or authenticate == "anonymous-all":
+            continue
+        job_name = job_symbol.get("jobName", service_name)
+        findings.append(
+            make_finding(
+                "warn",
+                "service-job-not-anonymous",
+                Path(str(job_symbol["path"])),
+                int(job_symbol["line"]),
+                f"ServiceJob `{job_name}` calls `{service_name}`, which declares authenticate=`{authenticate}` "
+                f"instead of `anonymous-all`. A scheduled job runs with no authenticated user in context, so "
+                f"this call will fail authentication on every run.",
+                root,
+            )
+        )
 
     for name, defs in service_defs.items():
         if len(defs) > 1:
