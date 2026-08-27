@@ -44,6 +44,7 @@ the review half lives in `agents/moqui-architect.md` and is already strong.
 | # | Fixture | Traps |
 |---|---|---|
 | AEC1 | Pre-Order data-statement pass, sitting 1 (story main flow) — fixture grows in maarg-agent-coach | unit-grain vs `correspondingPoId` order-grain mismatch must SURFACE, not map smoothly |
+| NREV1 | A review fixture: a design whose service queries a record list and loops it in Groovy, wrapping each element in `runRequireNew` to import/sync it | must verdict REDESIGN → MDM (one-record `importServiceName` + `DataManagerConfig`, `upload#DataManagerFile`); NOT accept the hand loop; NOT flag it only as a style nit |
 
 ## Status
 
@@ -189,4 +190,74 @@ SELF-LINT COVERAGE, not in code reading:
 3. Statement-text purity (S5): no system identifiers inside statement text; one fact per sentence.
 4. Verdict vocabulary closed: only the declared verdict values appear.
 5. Ruling-compliance sweep (H7) + internal-citation currency (S10).
+
+## Round 5 — native graph I/O in the native-first ladder (2026-07-24, harvest)
+
+Source: the order-mirror design engagement (sim-routing). A design flattened each order's entity
+graph and wrote it to the LIVE mirror with a per-table raw-JDBC MERGE — the architect's native-first
+ladder did not catch it. Moqui moves an entity GRAPH natively in **both** directions; ladder rung 1
+now names it, and `assets/moqui-master-entity.md` + the `moqui-master-entity` skill carry the full
+reference.
+
+- **N1. Entity-graph get/store is native — flag raw SQL that moves a graph.** Reading a parent + its
+  children is `getMasterValueMap` / `oneMaster` / `listMaster` (`EntityValueBase.java:1239-1295`;
+  `EntityFind.java:267,274`); writing them from a nested Map is the entity-auto `store#<Entity>`
+  recursive upsert (`EntityAutoServiceRunner.groovy:245-300, 314-363` — look up by PK → create if
+  absent, else `setFields`/update; parent PKs propagate; arbitrary depth; REST `store` = this
+  service, `RestApi.groovy:400-402`). A hand-written multi-entity read loop, or raw SQL / a per-table
+  INSERT/MERGE / a "flatten then write each table" step to move a graph, is a native-first violation
+  → `REDESIGN`. *Failure: order-mirror §6 wrote the order graph via flatten→raw-JDBC MERGE instead of
+  a native `store#` of the master map.*
+- **N2. The deviation exception must cite a constraint the engine can't meet.** Raw SQL for graph
+  movement is a justified deviation ONLY for **bulk cross-datasource streaming** (millions of rows
+  between two databases), where per-entity `store#` genuinely can't run. **Per-record / per-graph**
+  work (one order) has no such constraint — `store#` is the default. *(Companion to N1: the same
+  sim's bulk table-sync MERGE is a justified deviation; the per-order graph write was not.)*
+
+## Round 6 — MDM in the native-first ladder (2026-07-24, harvest)
+
+Source: the order-mirror implementation plan (sim-routing). The plan's `mirror#Orders` service hand-rolled a
+Groovy loop over the approved-order list, wrapping each order in `runRequireNew` for per-record isolation —
+re-implementing exactly what the Data Manager does natively. Rung 4 already named "DataManager for imports" but
+only as a bare noun (no detection cue, unlike the DataFeed cue beside it); it now carries the trigger, and the
+`maarg-mdm` skill + `assets/maarg-data-manager.md` carry the full reference (loader per-record call verified
+`MaargDataLoaderImpl.java:628-632`).
+
+- **N3. A hand-rolled per-record list loop is MDM done by hand — flag it.** Importing or per-record-syncing a
+  LIST of records with per-record transaction isolation and per-record error handling is the Data Manager
+  pipeline: a `DataManagerConfig` maps a name to a one-record `importServiceName`, fed a JSON array via
+  `upload#DataManagerFile` (`maarg-util/service/co/hotwax/util/UtilityServices.xml:159-236`); the loader calls
+  the import service once per record, each in its own transaction (`.requireNewTransaction(true)
+  .ignorePreviousError(true)` — `MaargDataLoaderImpl.java:604-648`, the per-record call at `:628-632`), failed
+  records collected into an error file, the whole run auditable via `DataManagerLog`. A service that (a)
+  loads/queries a list, (b) loops it in Groovy, (c) hand-manages per-item `runRequireNew` and/or per-item error
+  capture is a native-first violation → REDESIGN: extract the per-record work into a one-record import service
+  and let MDM drive the loop. *Failure: order-mirror `mirror#Orders` looped approved orderIds with a per-order
+  `runRequireNew { getMasterValueMap read + store# write }` instead of a one-order `import#SimOrder` service + a
+  `DataManagerConfig`.*
+
+## Round 7 — sponsor-approved coaching rules folded (2026-07-24)
+
+Two generic authoring/review rules added to `agents/moqui-architect.md` (Rules
+section), sponsor-approved; recorded here generic, without engagement evidence:
+
+- **H11. Revision sweep discipline** (generalizes H7 beyond rulings). When a
+  design decision is revised or superseded, the change is not done until every
+  artifact that states the old model is rewritten or carries a dated
+  supersession note — verified by grepping the superseded vocabulary (old
+  entity names, old mechanism phrases, old reason codes) across the whole
+  artifact set before handoff. Rationale: a revision applied only to the core
+  documents leaves the satellite documents asserting the old design as live
+  truth.
+- **H12. Reuse citations carry lifecycle state** (promotes self-lint item 7 /
+  H9 to a standing rule). Citing an existing service, REST resource, or entity
+  as the reuse surface requires checking whether the checkout marks it
+  deprecated and naming the successor if so. Rationale: a design that points
+  builders at a deprecated surface ships tomorrow's rework.
+- **N4. The MDM deviation exception + the error-return contract.** A hand loop is justified only when the body
+  is NOT a per-record import — it needs cross-record state, strict ordering between records, or the work isn't
+  record-shaped (a single aggregate query, a streaming reduce). Per-record independent import/sync (one order,
+  one product) has no such constraint → MDM is the default. And the one-record service MUST **return an error**
+  on a bad record (not log-and-succeed) — else the loader captures nothing and the record is lost silently (the
+  number-one MDM mistake, `assets/maarg-data-manager.md`).
 

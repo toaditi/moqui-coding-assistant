@@ -39,7 +39,11 @@ the need lands:
 
 1. **Entity facade** — `ec.entity`, entity-auto CRUD services
    (`create#`/`update#`/`store#`), view-entities (check for an existing view
-   before any multi-step lookup), `<date-filter>`, alias functions.
+   before any multi-step lookup), **entity masters for a whole graph**
+   (`getMasterValueMap`/`oneMaster`/`listMaster` to READ a parent + its children
+   as one nested Map; entity-auto `store#<Entity>` to WRITE the same-shaped Map
+   back — recursive create-or-update — see the `moqui-master-entity` skill),
+   `<date-filter>`, alias functions.
 2. **Service facade** — service definitions (XML actions first; Groovy only
    when XML is genuinely wrong), SECAs/EECAs, service jobs, async, `.rest.xml`
    for REST (no wrapper service files — a service not mapped in a `.rest.xml`
@@ -47,13 +51,20 @@ the need lands:
 3. **Resource/render facade** — `ec.resource` for all file access
    (`component://` locations), FreeMarker for template-shaped output, screen
    render modes for multi-format documents.
-4. **Framework infrastructure** — SystemMessage for integration flows,
-   DataManager for imports, MCache for caching, ElasticSearch facades, authz
-   artifacts for security. **DataDocument + DataFeed** for pushing a
-   cross-entity document to a service or search index when data changes
-   (real-time, defined as data) — a SECA that reacts to a status change by
-   calling an external service is almost always a DataFeed done by hand; see
-   the `moqui-data-feed` skill.
+4. **Framework infrastructure** — SystemMessage for integration flows, MCache
+   for caching, ElasticSearch facades, authz artifacts for security.
+   **DataManager (MDM)** for importing or per-record-processing a LIST of
+   records — a `DataManagerConfig` names a one-record import service, fed a JSON
+   array via `upload#DataManagerFile`; the loader calls it once per record, each
+   in its own transaction, a failed record captured to an error file without
+   stopping the rest (`MaargDataLoaderImpl.java:628-632`). A service that loops a
+   record list hand-managing per-record `runRequireNew` or per-record error
+   capture is almost always an MDM import done by hand → REDESIGN to a one-record
+   import service + a config; see the `maarg-mdm` skill. **DataDocument +
+   DataFeed** for pushing a cross-entity document to a service or search index
+   when data changes (real-time, defined as data) — a SECA that reacts to a
+   status change by calling an external service is almost always a DataFeed done
+   by hand; see the `moqui-data-feed` skill.
 5. **Component precedent** — an existing component in the project's suite
    already solving the same shape. The project's own history counts: check how
    this codebase solved similar shapes before (`git log`).
@@ -340,6 +351,18 @@ When dispatched on a pull request instead of a design:
   systems and newer/open work (see Where to look). Found only there → "reuse,
   gated on «the port / the PR merge»", a named dependency, not "gap". Cannot
   check → UNVERIFIED with what you skipped.
+- **Revision sweep discipline.** When a design decision is revised or
+  superseded, the change is not done until every artifact that states the old
+  model is either rewritten or carries a dated supersession note — and you
+  verify it by grepping the superseded vocabulary (old entity names, old
+  mechanism phrases, old reason codes) across the whole artifact set before
+  handoff. A revision applied only to the core documents leaves the satellite
+  documents asserting the old design as live truth.
+- **Reuse citations carry lifecycle state.** Citing an existing service, REST
+  resource, or entity as the reuse surface requires checking whether the
+  checkout marks it deprecated and naming the successor if so. "It exists and
+  works" is not enough — a design that points builders at a deprecated surface
+  ships tomorrow's rework.
 - **No strawman rejects for framework rules.** State a settled framework
   convention as a fact; do not attach a "considered and rejected" alternative to
   it (a bare enum vs `StatusItem`, a find-then-loop vs a unique index were never
