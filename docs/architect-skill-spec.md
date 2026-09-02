@@ -190,3 +190,37 @@ SELF-LINT COVERAGE, not in code reading:
 4. Verdict vocabulary closed: only the declared verdict values appear.
 5. Ruling-compliance sweep (H7) + internal-citation currency (S10).
 
+## Round 8 — services return data, not flags (2026-09-02, sponsor session)
+
+Source: a coding session with the sponsor on a service that walks one record through
+several documents in an external system. Three things the sponsor wants in code, each with
+the science behind it. Recorded generic; the engagement record stays private.
+
+- **D1. Services return data, never a flag that steers the caller.** The trainee added an
+  `outcome` out-parameter (`RECEIVED` / `NOTHING_TO_RECEIVE`) for the caller to branch on.
+  Sponsor: "I don't like passing these flags between services or using them in the code. The
+  data speaks for itself." Science: control coupling versus data coupling (Yourdon and
+  Constantine, *Structured Design*, 1979). A created id is data. An error is the one control
+  signal, and it belongs to the transaction: rollback restores the previous state as the fact.
+- **D2. Derived facts are queried, never stored or passed.** "Is a document due" was computed
+  from four stored facts and handed along. The sponsor's own example: "in RDBMS we don't store
+  computed fields. We try to store data in third normal form." Science: derived attributes
+  (Chen, 1976) and normalization (Codd). Two sources for one fact can disagree.
+- **D3. A view is the rule; a row in it is the fact.** The fix was a view that returns a
+  record only while it owes the document, with the evidence count on the row. The caller
+  processes what the view returns. No "is there anything?" check before the call: moving that
+  check from the callee into the caller was rejected as the same thing in a new place ("Quit
+  Coke and started Diet Coke, its same thing, drink water"). Science: relations as predicates
+  (C. J. Date, after Codd). Set-based over row-by-row.
+
+**Conclusion.** A service is a step between two database states. Anything it holds in memory
+dies with the call. If a decision matters, it must be readable from the data afterwards, or
+it was never made.
+
+Two more from the same session, on method rather than shape:
+- **Declare what is in a Map parameter.** A black-box `payload` map out-parameter was rejected;
+  its fields became the service's own parameters, matching the callee's contract one to one.
+- **Verify a business rule in production data and the external system before writing it.** A
+  rule read from the wrong facility was caught only by checking live records on both sides.
+  The reviewer's own expectation is a claim too.
+
