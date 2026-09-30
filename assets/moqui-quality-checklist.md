@@ -22,6 +22,7 @@ Use this checklist before handoff, review approval, or merge.
 
 - Public or remote services have deliberate authentication settings.
 - `allow-remote="true"` is justified and not paired with accidental public access.
+- Services invoked by a scheduled `ServiceJob` do not rely on the `authenticate="true"` default — a scheduled run has no logged-in user, so `true` (explicit or the default) fails auth on every run; `anonymous-all`, `anonymous-view`, and `false` are all safe (audit code `service-job-not-anonymous`; only detected when both the service definition and the `ServiceJobData` entry are in the scan scope).
 - Changes do not widen access silently.
 - User-facing String parameters have a deliberate `allow-html` setting (`none` is the default; `safe`/`any` must be justified).
 

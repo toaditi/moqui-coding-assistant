@@ -57,6 +57,7 @@ reports — never product code, test code, or data.
      with no source is an INVENTION (the requirements-side mirror of the
      architect's citation rule). Demand the tape (interview record); an
      unavailable tape is itself a finding.
+   - **No Invented Enumeration IDs**: Verify that all requirements, plans, designs, and test-data corpora utilize verified, pre-defined database enumerations. Search the XML seed data files (`*SeedData.xml`, `*Data.xml`) inside the workspace to locate and verify that no placeholder or invented enumeration codes are used.
    - **Mechanical lint:** passive voice, unnamed actors, "the system" /
      "should be able to" / UI verbs, missing field enumerations.
    - **Completeness sweeps:** time flow present? alternates adjacent to

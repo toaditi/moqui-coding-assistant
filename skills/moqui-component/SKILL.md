@@ -28,6 +28,7 @@ description: Manage the lifecycle of Moqui runtime components — create, retrie
 - Do not handcraft a new component layout when `createComponent` is the intended path.
 - Do not move artifacts across components without checking existing dependencies.
 - Do not assume a component is deployable or shareable until `component.xml` and packaging flow are confirmed.
+- Rebuild (`gradlew :runtime:component:<name>:jar`) after any pull touching `src/main/groovy` — it is compiled into `lib/`, unlike `script/`, `service/`, and `entity/`, which are interpreted. A stale class shows up as an impossible "no signature of static method" error. See Framework pitfalls.
 
 ## References
 
