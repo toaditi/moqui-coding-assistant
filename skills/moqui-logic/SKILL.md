@@ -29,6 +29,8 @@ description: Author or edit Moqui business logic (XML actions or Groovy) while p
 - Do not introduce Groovy utilities or helpers when the component already has a clearer local pattern.
 - Do not use broad refactors when the task only needs a local behavior correction.
 - Do not pass a non-boolean-returning closure to `EntityList.findAll`/`find`/`filter` — those methods cast the result straight to `boolean` (no Groovy truthiness), so `findAll{ it.someId }` throws `ClassCastException` at runtime on non-empty lists. Always return a real boolean: `find{ it.someId != null }`. See Framework pitfalls.
+- Nest `<else>` INSIDE the `<if>` it belongs to, before that `</if>` — `<else>` binds to its parent element, so writing it after an inner `</if>` silently attaches it to the OUTER `<if>` and runs the branch under the opposite condition. XML stays valid; only behavior reveals it. See Framework pitfalls.
+- Do not write error handling after a `<service-call>` that lacks `ignore-error="true"` — the generator emits an implicit `if (ec.message.hasError()) return`, so that code is dead and the whole script aborts. See Framework pitfalls.
 
 ## References
 

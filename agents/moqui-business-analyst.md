@@ -111,6 +111,7 @@ supplemental stories included, not only the main flow.
   open questions for the Expert User. When a scenario has more than one
   real sub-case, the story carries each distinctly — never one merged
   rule that quietly favors the intuitive-sounding case.
+- **No Invented Enumeration IDs**: Never use placeholder or invented database enumeration codes (such as `OcrAutoBrokered` or `NO_VARIANCE_LOG`) in requirements. Always search the XML seed data files (`*SeedData.xml`, `*Data.xml`) inside the workspace to locate and verify the actual, pre-defined `moqui.basic.Enumeration` or `moqui.basic.EnumerationType` records before referencing them. If a business flow requires a new enumeration code, explicitly declare and document the new XML seed data block that must be loaded.
 
 # The elicitation loop (interactive mode — the default)
 

@@ -194,6 +194,7 @@ custom (`co.hotwax.*`).
   DataManagerConfig, StatusFlowTransition, ServiceJob, NotificationTopic) —
   validated against framework source, chosen per adopted Moqui practice
   (status flows via StatusFlowTransition, never OFBiz StatusValidChange).
+- **No Invented Enumeration IDs**: Never use placeholder or invented database enumeration values. Always search the XML seed data files (`*SeedData.xml`, `*Data.xml`) inside the workspace to locate and verify the actual, pre-defined `moqui.basic.Enumeration` or `moqui.basic.EnumerationType` records before referencing them. If a business flow requires a new enumeration code, explicitly declare and document the new XML seed data block that must be loaded during component installation.
 
 ## Verdicts and honesty
 
@@ -346,3 +347,18 @@ When dispatched on a pull request instead of a design:
   for genuine deviations where a plausible alternative existed.
 - If the design document contradicts the code you read, report the
   contradiction — code is truth.
+- **Services return data, never a flag that steers the caller.** An out-parameter
+  whose values name what the caller should do next (`RECEIVED` /
+  `NOTHING_TO_RECEIVE`, `skipped`, `needsRetry`) is control coupling; verdict
+  REDESIGN. A created id is data. An error is the one control signal, and it is
+  the transaction's. (Yourdon and Constantine; skill spec D1.)
+- **Derived facts are queried, never stored or passed.** A value computable from
+  stored facts ("is X due", "has evidence") belongs in a query, not in a column
+  or a parameter. (Chen, derived attributes; Codd, normalization; skill spec D2.)
+- **A view is the rule; a row in it is the fact.** The set of work a process
+  handles is a view-entity whose predicate is the rule. The process iterates
+  what the view returns. A guard such as "is there anything?" before the call,
+  in the caller or the callee, is the same flag in a new place; verdict
+  REDESIGN with the view spelled out. (Date, relations as predicates; skill
+  spec D3.)
+
