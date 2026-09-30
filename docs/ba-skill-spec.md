@@ -9,6 +9,12 @@ verify the upgraded agent actually holds the skill.
 Format per rule: the rule, and (where one exists) the real training failure that
 surfaced it.
 
+**This repository is public, so this file carries the RULES only, generically
+worded.** The engagement record behind each rule — client and project names,
+the audited packages, the interview tapes — lives in the private coach
+repository under `packs/ba/`. Where a rule below says "observed failure", the
+named instance is on file there.
+
 ## A. Story grammar (lintable — the agent self-checks every sentence it writes)
 
 - **A1. Named actor + active verb, every sentence.** Passive voice is a defect.
@@ -152,18 +158,18 @@ BA artifact — whoever produced it, agent or human.
    truth only ("is this what we actually do?"). The two gates above run first
    so the human never spends attention on grammar.
 
-## Round 1 — self-play training results (2026-07-10, Pre-Order, real feature)
 
-Trainee: the current `moqui-business-analyst` definition (cold, no docs).
-Client: Claude as "Priya," briefed from real Pre-Order docs + legacy code.
-Deliverable: `maarg-sd/docs/pre-order-requirements/` (7 artifacts, real).
+## Round 1 — self-play training, full engagement (2026-07-10)
+
+Trainee: the `moqui-business-analyst` definition (cold, no docs). Expert User:
+a briefed role-play persona. Deliverable: a real 7-artifact requirements set.
 
 **Confirmed on the agent (rules hold as written):**
 - E1 — it fired an 8-question volley in exchange 2 (client answered
   selectively; one thread went silent). The loop text alone doesn't prevent
   this → promote to a hard rule in the agent's Rules section.
-- C2 — it closed the interview with NO time-flow sweep; the daily morning
-  report only surfaced because the client volunteered it at sign-off.
+- C2 — it closed the interview with NO time-flow sweep; a daily report only
+  surfaced because the client volunteered it at sign-off.
 - G1a — it kept no interview log. Provenance review ran only because the
   reviewer kept a client-side tape.
 
@@ -177,10 +183,10 @@ Deliverable: `maarg-sd/docs/pre-order-requirements/` (7 artifacts, real).
   same treatment here — correct?"), never as a recorded fact. (The trainee
   recorded one; the read-back caught it — the label removes the luck.)
 - **G6. The reviewer's answer key is also a claim.** Round 1: the reviewer's
-  key was wrong twice (missed order-routing's parking-release rule; credited
-  draft job-registry entries as capability) and the trainee's citations won.
-  A disagreement between reviewer and artifact is resolved by reading the
-  code, never by reviewer authority.
+  key was wrong twice (it missed a rule the routing component already
+  implemented, and credited draft registry entries as shipped capability)
+  and the trainee's citations won. A disagreement between reviewer and
+  artifact is resolved by reading the code, never by reviewer authority.
 
 **Positive patterns to encode (the trainee invented these; keep them):**
 - Component pins recorded in the gap/overlap header (doc-drift discipline —
@@ -196,7 +202,7 @@ Deliverable: `maarg-sd/docs/pre-order-requirements/` (7 artifacts, real).
 - Design-candidates table maps every parked design to the requirement it
   serves.
 
-## Round 2 — document-input training results (2026-07-10, same engagement)
+## Round 2 — document-input training (2026-07-10, same engagement)
 
 Input: two sponsor-supplied legacy engineering documents handed to the BA
 mid-engagement (after sign-off), with no hint of contents. Tested: mining
@@ -205,40 +211,37 @@ late-change flow, and the review gate on its own output.
 
 **Demonstrated (encode as positive patterns):**
 - **Belief-vs-record disclosure.** Two engineering records contradicted what
-  the Expert User believes her system does (the page date never rolled; no
-  real sell-out cap). Correct move, executed: disclose the discrepancy to
-  the Expert User plainly, requirements unchanged, reclassified from
-  "keep what works" to "build what legacy only pretended to do."
+  the Expert User believes her system does. Correct move, executed: disclose
+  the discrepancy to the Expert User plainly, requirements unchanged,
+  reclassified from "keep what works" to "build what legacy only pretended
+  to do."
 - **The legacy-evidence artifact** — document sources get their own
   provenance record: facts mined / contradictions / reliability cautions
   (routed to the Architect, never smuggled in as requirements) /
   corrections-applied log. This is G1a for document input.
 - **Explicit non-requirement.** The Expert User declined speculative
-  flexibility (embargo holds) — recorded as a non-requirement with "a new
-  conversation, not a hidden feature." YAGNI made visible.
+  flexibility — recorded as a non-requirement with "a new conversation, not
+  a hidden feature." YAGNI made visible.
 - **Correction protocol.** On a review finding against its own claim: fix
   the artifacts FIRST, then disclose to the Expert User, take the blame
-  plainly, and convert the correction into a handoff safeguard (the
-  no-date-filter instruction to the architects).
+  plainly, and convert the correction into a handoff safeguard.
 - **Unchosen behavior ≠ requirement.** Found an undocumented legacy behavior
-  (release waits for the promise date) and asked whether it was deliberate
-  before carrying it — "maybe it's just how it was built and nobody chose
-  it."
+  and asked whether it was deliberate before carrying it — "maybe it's just
+  how it was built and nobody chose it."
 - **Migration-regression framing:** a legacy behavior missing in the new
-  suite (cancellation ATP give-back) flagged as "without a build, migration
-  would regress it."
+  suite flagged as "without a build, migration would regress it."
 
 **New rules from round-2 failures:**
 - **B5. Every hard-stop rule needs a leak policy.** A "never X" requirement
   is an intent, not a guarantee — enforcement always has a race window. For
   every such rule ask: "when it leaks anyway, what happens, how fast, who is
-  told?" (Failure: R1 written as absolute; the overflow flow was missing
+  told?" *(Failure: a rule written as absolute; the overflow flow was missing
   until the review gate forced the question — despite the agent's own
-  evidence showing the leak was the client's worst incident.)
-- **F5. Report every condition in a cited configuration.** (Failure: cited a
+  evidence showing the leak was the client's worst incident.)*
+- **F5. Report every condition in a cited configuration.** *(Failure: cited a
   routing config's parking filter as proof of release-on-stock while the
-  same block carried a `promiseDaysCutoff` date gate two lines below —
-  a partial read of its own citation, announced to the client as good news.)
+  same block carried a date-cutoff gate two lines below — a partial read of
+  its own citation, announced to the client as good news.)*
 - **E1 enforcement note:** the volley stopped in round 2 only after the
   dispatch made "one topic at a time" explicit → the rule must live in the
   agent definition as a hard rule, not only in the loop description.
@@ -248,22 +251,18 @@ producer right; round 2 — producer wrong once, reviewer right. Three
 citation disputes, all resolved by reading the code. Neither seat is
 trustworthy alone; the disagreement protocol is the gate.
 
-## Round 3 — real-client interview training (2026-07-11, real client engagement)
+## Round 3 — record-bound interview training (2026-07-11)
 
-Trainee: the UPGRADED agent definition (post fold-in). Client: Claude as
-the client's founder, RECORD-BOUND (real client; answers only from 7
-recorded meetings + contract + rulings; unrecorded decisions defer and stay
-open). Sources feeding the persona: meeting-notes summaries + one full
-transcript. Fixture: `maarg-sd/docs/ba-training/` (tape + client briefing —
-kept in the private workspace; client identity never enters this repo).
+Trainee: the UPGRADED agent definition (post fold-in). Expert User: a
+RECORD-BOUND role-play persona — answers only from recorded meetings, the
+contract, and rulings; unrecorded decisions defer and stay open. Fixture
+(tape + briefing) is private; client identity never enters this repo.
 
 **Validated (the upgraded agent held every prior rule):** E1 one topic/turn
 across 7 topics; read-back every turn; escalation line held under direct
-client pressure ("when do I get the phase answer?" → factual state, no
-promise, urgency quoted to sponsor); deferrals stayed open (Q29 accounting;
-Q32 region-face; Q34 widths; Q35 audit; Q36 ledger mechanics); musing ≠
-decision (demand-decides-split parked labeled); current-state ≠ target
-(manual split recorded as temporary workaround).
+client pressure (factual state, no promise, urgency quoted to sponsor);
+deferrals stayed open; musing ≠ decision (a parked split proposal labeled);
+current-state ≠ target (a manual workaround recorded as temporary).
 
 **New rules from round 3:**
 - **E10. Weight every recorded item: FIRM / LEAN / THEORY / HOMEWORK.** A
@@ -274,8 +273,8 @@ decision (demand-decides-split parked labeled); current-state ≠ target
 - **E11. Client confidentiality across engagements.** Never quote one
   client's configuration or behavior to another ("brand X always
   split-ships"). Elicit this client's grain without disclosing that
-  client's. (Failure: the trainee cited another brand's default to the
-  client in interview.)
+  client's. *(Failure: the trainee cited another brand's default to the
+  client in interview.)*
 - **B6. Undefined words in signed documents: define it or delete it.** An
   undefined term in a signed contract is unpriced scope waiting to happen.
   Establish who authored the word (vendor vocabulary is not a client
@@ -287,36 +286,34 @@ decision (demand-decides-split parked labeled); current-state ≠ target
   ruling lands against a real bar, not a vibe.
 - **G7. Audit even the client's self-assessment.** "Did I ever bring it
   up?" is a checkable claim — check it before writing it down (the trainee
-  verified zero waitlist mentions across seven meetings before recording
-  the disowning).
+  verified zero mentions of the feature across seven meetings before
+  recording the disowning).
 - **D5 (extends D-family). Meeting-AI summaries are hearsay.** A summary
   line is never load-bearing provenance — pull the transcript for any claim
-  that changes scope, money, or phase. (Round-2 meeting-mining finding — incident record now in the tape:
-  the summary inverted the client's "manual V1" meaning; the transcript
-  reversed the escalation.)
+  that changes scope, money, or phase. *(Round-2 meeting-mining finding: the
+  summary inverted the client's meaning; the transcript reversed the
+  escalation.)*
 
 **Pattern worth keeping:** requirement↔limitation wiring — when a client
 states a requirement that contradicts a platform limitation already found
 in gap/overlap, bind them explicitly ("your words are now the requirement
 it contradicts") so the build item carries both sides.
 
-## Round 5 — record-bound corpus engagement (2026-07-11, real-prospect-as-ICP, real client)
+## Round 5 — record-bound corpus engagement (2026-07-11)
 
-Trainee: the current agent definition. No live client: the record was a
-15-then-18-transcript meeting corpus (a REAL prospect + its consultants)
-plus two sponsor-supplied documents (a vendor proposal, a consolidated
-fit-gap brief). Deliverable (real, two-outputs): the ICP business process
-story → gap/overlap against a DEMO/reference store → a signal-cited
-backlog. Fixture: EC5 (the agency repo's private `fixtures/ba/` — client
-identity never enters this public repo).
+Trainee: the current agent definition. No live client: the record was an
+18-transcript meeting corpus plus two sponsor-supplied documents (a vendor
+proposal, a consolidated fit-gap brief). Deliverable (real, two outputs): an
+ICP business process story → gap/overlap against a demo/reference store → a
+signal-cited backlog. Fixture EC5 is private; client identity never enters
+this public repo.
 
 **Validated (prior fold-ins held in a new domain):** E1 across four rounds
 (one question per return, every time); G1a tape discipline; C2/E8 time
-flow present unprompted; weighted recording (95 FIRM / 11 LEAN / 13
-THEORY+HOMEWORK on round 1); E10 labels; fix-first correction protocol;
-D-family under a reviewer trap (coach flagged a proposal detail as
-suspected boilerplate; the agent VERIFIED it in the record — client
-speech — instead of absorbing or reflex-rejecting).
+flow present unprompted; weighted recording under E10; fix-first correction
+protocol; D-family under a reviewer trap (the coach flagged a proposal
+detail as suspected boilerplate; the agent VERIFIED it in the record —
+client speech — instead of absorbing or reflex-rejecting).
 
 **New rules from round 5:**
 - **G1b. Quotes are verbatim to the character.** Transcription artifacts
@@ -325,7 +322,7 @@ speech — instead of absorbing or reflex-rejecting).
   quoted text must always land in the source. Quote marks mean
   source-verbatim only; editorial phrases are never quoted.
   *Failure: the agent normalized "sinking"→"syncing" inside quote marks;
-  the reviewer's provenance grep missed; the agent's own audit then found
+  the reviewer's provenance grep missed it; the agent's own audit then found
   104 non-verbatim quotes and 16 editorial phrases wearing quote marks.*
 - **D6. A referenced-but-absent document is an open item, not a blocker.**
   When the record cites a document the corpus does not contain, name it,
@@ -360,18 +357,18 @@ speech — instead of absorbing or reflex-rejecting).
 for conflicts the record leaves OPEN. A conflict with a recorded ruling by
 the client's decision-owner is RESOLVED: quote the ruling, preserve both
 positions and the history, carry the ruling as the firm position. *The
-coach's key held "must stay escalated"; the agent marked it resolved by
-the client's recorded end-of-record ruling; the transcript supported the
-agent. Program G6 tally: keys wrong 3, producer wrong 1 — the
-read-the-source protocol remains the only trustworthy gate.*
+coach's key held "must stay escalated"; the agent marked it resolved by the
+client's recorded end-of-record ruling; the transcript supported the agent.
+Program G6 tally: keys wrong 3, producer wrong 1 — the read-the-source
+protocol remains the only trustworthy gate.*
 
 **Patterns worth keeping (agent inventions, round 5):**
 - Scripted quote-verbatim audit (whitespace-folded, gloss-stripped,
   character-exact), logged as a handoff safeguard any reviewer can re-run.
 - Pin tables record branch + dirty-file state per component, method
   stated — not just versions.
-- Scripted self-count of summary figures; hand-count corrected in the
-  open (62→102) — non-hollow counting applied to one's own artifacts.
+- Scripted self-count of summary figures; a hand-count corrected in the
+  open — non-hollow counting applied to one's own artifacts.
 - Backlog items carry their own honesty flags ("platform verification
   pending") instead of overclaiming.
 - "Not on this backlog" section: N/A rows, declined scope, and
@@ -387,56 +384,55 @@ read-the-source protocol remains the only trustworthy gate.*
 
 ## Round 6 — three-engagement audit (2026-07-17, coach audit round 2)
 
-Source: adversarial audit of the Pre-Order requirements package (PR #301 state) and the
-notnaked-ICP package, every finding verified in the source. The strengths held (weighted
-recording exemplary; Q31 escalation held under client pressure; transcript-over-summary
-verification; explicit non-requirements; 12+ gap/overlap citations re-verified in the pinned
-tree). The failures cluster in PACKAGE MAINTENANCE and the DEMO-NAMING seam:
+Source: an adversarial audit of two real requirements packages, every finding
+verified in the source. The strengths held (weighted recording exemplary; an
+escalation held under client pressure; transcript-over-summary verification;
+explicit non-requirements; 12+ gap/overlap citations re-verified in the
+pinned tree). The failures cluster in PACKAGE MAINTENANCE and the
+DEMO-NAMING seam:
 
 - **G8. Package-currency sweep.** Before any delivery, re-derive every hand-typed count, version,
   and status line that mirrors another artifact; re-stamp the entry-point README; a table legend
   covers every verdict value its rows use; a contract-silent FIRM rule added late triggers a
-  coverage-map re-stamp (the unpriced-scope list is live, not write-once). *Failures: README stuck
-  at "story v12 / R1–R16" while the package stood at v18 / R1–R19; the story's v18 header said "NO
-  escalations remain open" while Q31 was open in three sibling artifacts; the coverage map used a
-  RESOLVED verdict its legend never defines; R17–R19 (contract-silent, client-FIRM) never entered
-  the unpriced list; the mandate's 13/5/5/1 coverage tally is irreproducible from the 22-row map
-  (real tally 12/4/4 + 2 RESOLVED); the clarification list had three different lengths across
-  three artifacts.*
+  coverage-map re-stamp (the unpriced-scope list is live, not write-once). *Failures: the README
+  named an older story version and rule range than the package actually stood at; a story header
+  said "NO escalations remain open" while one was open in three sibling artifacts; the coverage
+  map used a RESOLVED verdict its legend never defines; three late contract-silent client-FIRM
+  rules never entered the unpriced list; a mandate's coverage tally was irreproducible from its own
+  map; the clarification list had three different lengths across three artifacts.*
 - **G2 (extended). The story lint runs on EVERY story document** — admin and supplemental stories
   included — and every acting subject must be a defined actor. *Failures: "The system" as acting
-  subject in the five tool-requirements stories; "enters" in the admin story; "the business" acting
+  subject in five tool-requirements stories; "enters" in the admin story; "the business" acting
   in the main story without an actor definition.*
 - **B8. Requirement statements pass the same knife as stories.** An R-rule that names entities,
   ledger mechanics, presentation formats, or refresh mechanisms is a design wearing a requirement
-  costume — extract the need, park the mechanism. *Failure: the board/trace/actions requirement
+  costume — extract the need, park the mechanism. *Failure: a board/trace/actions requirement
   series fused entity names and refresh mechanics into requirement text.*
 - **G11. A readiness verdict discloses the sign-off state of every gate input.** "READY" resting on
-  an unsigned story without saying so is an over-claim. *Failure: readiness-admin stamped READY
-  with gate (a) met by a story that was never signed off.*
+  an unsigned story without saying so is an over-claim. *Failure: a readiness doc stamped READY
+  with its first gate met by a story that was never signed off.*
 - **G12. Legacy-behavior claims cite their evidence file.** A "the legacy does X" statement
-  traceable to no evidence document is an invention until sourced. *Failure: "the legacy references
-  PRE_ORDER_DATE/BACKORDER_DATE" appears in the sync spec and dev notes; no evidence file carries
-  it.*
+  traceable to no evidence document is an invention until sourced. *Failure: a claim about which
+  date fields the legacy references appears in a sync spec and in dev notes; no evidence file
+  carries it.*
 - **G9. Every numeric claim carries its reproducible tally** — the method and source stated, or
   the number is not stated. (The record-mining rule "every count carries its exact query,"
-  generalized to all artifacts.) *Failure: the notnaked backlog's repetition counts claim a
-  re-tally "in the evidence record" that exists nowhere.*
+  generalized to all artifacts.) *Failure: a backlog's repetition counts claim a re-tally "in the
+  evidence record" that exists nowhere.*
 - **D8. Demo-naming lint.** Demo-facing artifacts are grep-audited against the naming map before
   delivery: no real people or brands, dropped demo names swept everywhere (glosses included), and
-  the sweep re-runs when the map changes. *Failures: Bloomingdale's (the client's real concession
-  partner) in the demo-facing story; the real vendor-side first name "Aditya" in demo artifacts;
-  three dropped demo brands surviving in actors/business-case/backlog after the naming ruling.*
+  the sweep re-runs when the map changes. *Failures: a real retail partner's brand name left in a
+  demo-facing story; a real vendor-side employee's first name left in demo artifacts; three
+  dropped demo brands surviving in actors/business-case/backlog after the naming ruling.*
 - **G10. Rule-retrofit sweep.** A rule earned mid-engagement triggers a re-audit of the SAME
   engagement's already-produced artifacts before close. *Failure: D7 (vendor speech is capability
-  claims) was earned in round 5, yet a vendor-recommended warehouse-only constraint survived in
-  that engagement's own story as requirement content, cited to a client evidence entry that does
-  not contain it.*
+  claims) was earned in round 5, yet a vendor-recommended constraint survived in that engagement's
+  own story as requirement content, cited to a client evidence entry that does not contain it.*
 - **B1a. The extracted requirement is the ACTIVITY, not only its quality constraint.** When
   parking a mechanism ("an hourly sync job pulling X"), the surviving requirement includes the
   business activity itself ("Company automatically records X from Shopify") — plus the freshness
   question. Extracting only a freshness constraint and demoting the recording activity to design
-  freedom loses the requirement inside the design. *Live exam failure (EC1v, 2026-07-17): R3
+  freedom loses the requirement inside the design. *Live exam failure (EC1v, 2026-07-17): the rule
   captured freshness; the auto-record activity itself was handed to the designer as an open
   mechanism choice.*
 - **D9. A rationale-implied activity stays OUT of the flow until confirmed.** The owned open
@@ -446,7 +442,13 @@ tree). The failures cluster in PACKAGE MAINTENANCE and the DEMO-NAMING seam:
   the alternate flow, hedged but present.*
 - **G1a (extended). The quote chain is per-entry:** every quoted string greps into the SPECIFIC
   evidence entry it cites, not merely somewhere in the corpus; run the scripted quote audit per
-  artifact. *Failure: a story quote cited F1.3; the F1.3 entry does not contain it.*
+  artifact. *Failure: a story quote cited one evidence entry; that entry does not contain it.*
+
+**D8 was written against its own evidence.** The rule bans real people and brands
+from demo-facing artifacts. Until 2026-08-16 its failure note named the real
+brand and the real person it was written about, in this public repository. Both
+are now generalized. The named version is in the private record. A rule whose
+example breaks the rule is a defect, however small the example looks.
 
 ## Eval cases (replay these on the upgraded agent)
 
@@ -455,19 +457,19 @@ tree). The failures cluster in PACKAGE MAINTENANCE and the DEMO-NAMING seam:
 | EC1 | "OMS needs a returns dashboard where the CSR can click a return and see its Shopify refund status. Also a nightly sync job... so the dashboard stays current." | 2 requirements (CSR reviews return incl. refund status; Company automatically records refund status from Shopify), 2 parked designs (dashboard, sync job), why → business case, freshness → open question | losing the sync-requirement when cutting the design; keeping "nightly" as fact |
 | EC2 | Warehouse-return ramble ("the guys check it... scrap it... every Friday accounting wants a report... photographed for insurance") | main flow + damaged-alternate + time flow; photo rule woven in; scrap activity kept; Qs for actor roles, claim process, report contents/purpose | passive voice; dropping the Friday review; inventing roles; why→activity |
 | EC3 | BOPIS interview (multi-turn role-play vs an Expert User) | parks "one screen"; chases "somehow"; reads back, no leading questions; catches the "Never again" alternate; records notify-the-store as design freedom | inventing the picklist from a hedged musing; "by customer name" vs "shows their phone" |
-| EC4 | Pre-Order full engagement (cold agent; briefed role-play client; real Maarg suite for gap/overlap) — fixtures (interview tape + client briefing) are INTERNAL, kept outside this public repo in the agency repo's `fixtures/ba/` (placement ruling 2026-07-17) | full artifact set incl. time flow + owner-named questions; parks all design leaks; routes thresholds to sponsor; late-scope additions flow into story; gap/overlap citations verify against the suite; sponsor-bucket threads all land | 8-question volley (E1); missing time-flow sweep (E8); no interview log (G1a); extension recorded as fact (E9); citing draft job-registry entries as capability |
-| EC5 | Record-bound corpus engagement (18 real-client transcripts + 2 documents → ICP story → reference-store gap/overlap → signal-cited backlog) — fixture (engagement briefing + four-round tape) is INTERNAL, in the agency repo's `fixtures/ba/` (placement ruling 2026-07-17) | per-sentence provenance to file+speaker; time flow; weighted recording; escalations vs recorded rulings handled per the round-5 refinement; F8 three-tier verdicts with pins; decision-gated backlog; documents reconciled with document-evidence record | silent quote normalization (G1b); blocking on an absent referenced document (D6); vendor claims entering the story (D7); AI-summary provenance (D5); averaging a scope arc instead of carrying the final ruling with history |
+| EC4 | Full engagement (cold agent; briefed role-play client; a real component suite for gap/overlap) — fixtures (interview tape + client briefing) are INTERNAL, kept outside this public repo (placement ruling 2026-07-17) | full artifact set incl. time flow + owner-named questions; parks all design leaks; routes thresholds to sponsor; late-scope additions flow into story; gap/overlap citations verify against the suite; sponsor-bucket threads all land | 8-question volley (E1); missing time-flow sweep (E8); no interview log (G1a); extension recorded as fact (E9); citing draft registry entries as capability |
+| EC5 | Record-bound corpus engagement (18 transcripts + 2 documents → ICP story → reference-store gap/overlap → signal-cited backlog) — fixture (engagement briefing + four-round tape) is INTERNAL, kept outside this public repo (placement ruling 2026-07-17) | per-sentence provenance to file+speaker; time flow; weighted recording; escalations vs recorded rulings handled per the round-5 refinement; F8 three-tier verdicts with pins; decision-gated backlog; documents reconciled with document-evidence record | silent quote normalization (G1b); blocking on an absent referenced document (D6); vendor claims entering the story (D7); AI-summary provenance (D5); averaging a scope arc instead of carrying the final ruling with history |
 
 ## Status
 
 - **Trained live (human trainee, Anil):** the knife (B), story grammar (A),
   flow control (C), invention discipline (D), elicitation (E — BOPIS exercise
   paused mid-way).
-- **Trained via self-play (agent trainee, rounds 1–2, Pre-Order):** full
+- **Trained via self-play (agent trainee, rounds 1–2):** full
   engagement — elicitation, all artifacts incl. business case + actor
-  definitions, gap/overlap against the real suite (F), document input,
+  definitions, gap/overlap against a real suite (F), document input,
   belief-vs-record, late change, the review gate (G) end-to-end.
-- **Trained via record-bound corpus engagement (round 5, real-prospect-as-ICP):**
+- **Trained via record-bound corpus engagement (round 5):**
   meeting-corpus intake at scale (G1c), document reconciliation against a
   live record (vendor proposal + fit-gap brief), reference-store
   gap/overlap (F8), decision-gated backlog planning, quote-verbatim

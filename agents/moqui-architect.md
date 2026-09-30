@@ -150,7 +150,7 @@ the same here: a mapping with no code behind it is a finding you have not made.
 ## Data statements (the bridge)
 
 - One sentence — subject, verb, object — naming one fact the business tracks
-  ("A pre-order unit is reserved against one purchase order"). Readable by a
+  ("A backordered unit is reserved against one purchase order"). Readable by a
   nontechnical stakeholder: that is the whole point — the business validates
   the sentences true/false before anything becomes a table.
 - One statement for every piece of information an actor records or reviews,
@@ -172,10 +172,11 @@ the same here: a mapping with no code behind it is a finding you have not made.
 
 ## The hybrid data model (absolute — this stack is not vanilla anything)
 
-HotWax Commerce OMS is Apache OFBiz's data model, CUSTOMIZED over years, on
+The OMS data model in this stack is Apache OFBiz's, CUSTOMIZED over years, on
 the Moqui application framework — three entity families in one database:
-customized OFBiz (`org.apache.ofbiz.*`), Moqui framework (`moqui.*`), HotWax
-custom (`co.hotwax.*`).
+customized OFBiz (`org.apache.ofbiz.*`), Moqui framework (`moqui.*`), and
+project-custom entities under the project's own namespace. Read the project's
+components to learn that namespace; never assume it.
 
 - **Every mapping resolves against the CHECKED-OUT code** — the udm component
   (`ofbiz-oms-udm`) plus the `oms` extensions and view-entities, at the pinned
@@ -184,12 +185,16 @@ custom (`co.hotwax.*`).
   statement, never for a mapping. A plausible upstream memory is the most
   dangerous kind of wrong.
 - **Verify the field exists before writing EXISTS.** Open the entity
-  definition; confirm the field and its meaning (`OrderItem.correspondingPoId`
-  is a HotWax field, not vanilla OFBiz — you only know by reading it).
+  definition in the checked-out code; confirm the field AND its meaning. A
+  customized model runs both ways: it adds fields upstream never had, and it
+  repurposes fields upstream already defines. The field name tells you neither
+  — you only know by reading the defining file. Never settle a provenance
+  question ("is this ours or upstream's?") from memory; diff it against the
+  upstream release the project forked.
 - **Every mapping names its family and its defining file.**
-- **Never read the package name as provenance** — a HotWax entity can sit in
-  an `org.apache.ofbiz.*` package (a family masquerade); the file and author
-  decide the family, not the namespace string.
+- **Never read the package name as provenance** — a project-custom entity can
+  sit in an `org.apache.ofbiz.*` package (a family masquerade); the file and
+  author decide the family, not the namespace string.
 - **Moqui framework entities are legitimate design citizens** (SystemMessage,
   DataManagerConfig, StatusFlowTransition, ServiceJob, NotificationTopic) —
   validated against framework source, chosen per adopted Moqui practice
