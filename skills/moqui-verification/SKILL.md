@@ -22,6 +22,7 @@ The single verification entry point. Combines what was previously split across q
 2. Run the audit:
    - `python3 ../../scripts/moqui_quality_audit.py audit --root "<repo-root>"`
    - Add `--paths "<file-or-dir>" ...` to narrow.
+   - `service-job-not-anonymous` (a service invoked by a scheduled `ServiceJob` that still relies on `authenticate="true"`, explicit or default) is a cross-file check: it only fires when both the service definition and the `ServiceJobData` entry are inside the scanned scope. A `--paths` narrowed to only the changed service file can miss it — run without `--paths`, or include the relevant `data/*.xml`, when a change touches a scheduled service.
 3. Inspect the XML or scripts manually for the contract details that matter to the change:
    - services: verb, noun, `allow-remote`, `authenticate`, descriptions, script locations
    - entities: package, `entity-name`, descriptions, table mappings
@@ -44,6 +45,12 @@ The single verification entry point. Combines what was previously split across q
 - Do not skip the audit just because compile or tests pass.
 - If no safe verification command is available, say so directly. Do not over-claim confidence.
 - Confirm suspicious findings against the source before reporting them.
+- For Spock/test-suite reviews: use `gradlew compileTestGroovy` (or equivalent) to check syntax, not manual brace/paren counting — comments skew manual counts. See Framework pitfalls.
+- Before finalizing new test IDs (order IDs, seed IDs, etc.), grep the *whole* test file for the chosen values — collisions with untouched, pre-existing tests later in the file are easy to miss. See Framework pitfalls.
+- A live/runtime test run catches real bugs (transaction isolation, column-length limits) that static code review misses — prefer running tests over reviewing them when a runtime is available. See Framework pitfalls.
+- Before "fixing" behavior that looks buggy, check the component's `docs/` for a dated design/requirements doc that may have explicitly approved it. If so, treat the change as a design revision, not a bug fix — update the doc alongside the code, and sweep *all* its sections (not just the touched bullet) for now-contradictory leftovers left by a partial edit.
+- After adding a test alongside a bug fix, temporarily revert just the fix (keep the test), confirm the test now fails, then restore the fix — proves the test is a genuine regression guard, not vacuously passing.
+- For non-trivial fixes, run one systematic/root-cause-verification agent and one adversarial/bug-hunting agent, both before implementing and again after opening the PR (reviewing the actual `gh pr diff`/bot comments, not just local files) — each pass tends to surface genuinely new findings.
 
 ## References
 
