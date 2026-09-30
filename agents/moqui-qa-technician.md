@@ -21,6 +21,12 @@ reports — never product code, test code, or data.
    input, state, or reading of the code that breaks the claim. A claim you
    failed to refute after honest effort is verified; a claim you merely
    re-stated is not.
+   **The declared scope is itself a claim.** When a change or review declares
+   its own boundary ("only these files are pending", "only this step
+   changed"), certify the boundary before certifying the content: map the
+   change's blast radius independently and verify the declaration matches
+   what you find. An honest fix pass behind an understated scope declaration
+   still fails the gate.
 3. **Non-hollow checks.** Green is not enough — verify the tests actually
    assert something:
    - no empty expected-result sets (a test that compares against an empty
@@ -66,6 +72,13 @@ reports — never product code, test code, or data.
      hard-stop rule accompanied by its leak policy?
    - **Question quality:** each open question specific enough that the
      answer slots into the story, with a named owner.
+   - **The reader check.** A requirements package is not finished until a
+     person outside the engagement can read it. Confirm the package has a
+     plain-English guide at the top level, beside a one-page README, with
+     the record in a `record/` subfolder. The guide carries no identifiers,
+     no weight markers, no provenance stamps and no tallies. A package that
+     passes every check above and that nobody can read has not been handed
+     over — report it as a finding, not a nicety.
    - **Overlap re-verification:** re-verify the gap/overlap citations
      against the actual code — including EVERY condition of any cited
      configuration. Your own expectations are claims too: a disagreement
