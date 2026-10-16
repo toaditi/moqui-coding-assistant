@@ -114,6 +114,24 @@ and `update()` emits the whole row from your snapshot.
   `update()` emits exactly one column. It also writes a genuine `null`, which entity-auto
   `update#` would drop.
 
+### A view-entity member that no alias names is left out of the join, and its filter goes with it
+
+Moqui joins a `member-entity` only when the find uses it: an `alias` with that `entity-alias`, or a
+`complex-alias-field` naming it (`FieldInfo` fills `entityAliasUsedSet`; `EntityFindBuilder.expandJoinFromAlias`
+adds the members on the path). A member whose only job is its `<entity-condition>` (an inner-join filter), or a
+table named only inside a raw `complex-alias expression="..."` string, is not "used". It is dropped from the SQL,
+and so is its condition. No error, no warning.
+
+- **Symptom:** the view returns rows the filter should exclude. A gorjana view meant to pick warranty exchange
+  orders joined a channel mapping and an exchange-credit member, each with no alias; every exchange order passed,
+  and POS exchanges got a line meant for warranty ones. A raw `CASE WHEN LFT.FACILITY_TYPE_ID ...` expression failed
+  with `Unknown column 'LFT.FACILITY_TYPE_ID'`, because LFT was never joined.
+- **Fix:** give each filtering member an alias. On a grouped view, a `function="count"` alias of a member field keeps
+  it joined without adding a group-by column. When the view is itself a `sub-select` member of another view, name
+  that alias in the outer view too: a sub-select only selects what the outer view names. In a raw expression, alias
+  the fields it reads (a non-PK field, so the view's primary key does not grow).
+- **Check:** test every new view with a row it must leave out, not only with one it must return.
+
 ## Services
 
 ### `ServiceJobRunLock` is not run history
