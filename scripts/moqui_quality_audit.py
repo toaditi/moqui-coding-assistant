@@ -30,6 +30,21 @@ TEXT_PATTERNS = [
     ("warn", "println", re.compile(r"(?<![\w.])println\b"), "Avoid plain println in production Moqui code."),
     ("warn", "system-out", re.compile(r"\bSystem\.out\.println\s*\("), "Avoid System.out.println in production code."),
     ("warn", "print-stack-trace", re.compile(r"\bprintStackTrace\s*\("), "Avoid printStackTrace; use framework logging instead."),
+    (
+        "warn",
+        "raw-bigdecimal",
+        re.compile(r"\bnew\s+(?:java\.math\.)?BigDecimal\s*\("),
+        "`new BigDecimal(...)` is not locale aware and fails on values like `1,000`. "
+        "Use `ec.l10n.parseNumber(input, null)` and guard the null it returns on bad input.",
+    ),
+    (
+        "warn",
+        "raw-timestamp-valueof",
+        re.compile(r"\bTimestamp\.valueOf\s*\("),
+        "`Timestamp.valueOf(...)` needs the strict `yyyy-MM-dd HH:mm:ss` format and fails on values "
+        "like `2026-09-01 00:00`. Use `ec.l10n.parseTimestamp(input, null)` and guard the null it "
+        "returns; to shift a timestamp by days use `ec.user.nowCalendar`.",
+    ),
     ("info", "todo", re.compile(r"\bTODO\b"), "Resolve TODO markers or link them to tracked follow-up work."),
     ("info", "fixme", re.compile(r"\bFIXME\b"), "Resolve FIXME markers or link them to tracked follow-up work."),
 ]

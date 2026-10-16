@@ -285,6 +285,74 @@ runtime whenever the list is non-empty (surfaced via REST as HTTP 400).
   groovy script`. Do not confuse this with `Error in condition [...]`, which comes from an
   `<econdition ignore="...">` expression and is a different problem.
 
+### A typed service parameter is already parsed and validated, so do not parse it again
+
+The team standard ([forum post 397](https://forum.hotwax.io/t/use-moqui-utilities-for-safe-type-conversion/397),
+`hotwax-maarg-util#252`) says to replace `new BigDecimal(...)` and `Timestamp.valueOf(...)` with the
+`ec.l10n` parsers. Before reaching for either, check how the value arrives. When it arrives as a service
+parameter, declaring its `type` is the whole fix. `ParameterInfo.convertType` routes a String parameter
+by declared type: `Timestamp`, `Date` and `Time` go through `ec.l10n.parseTimestamp` / `parseDate` /
+`parseTime`, and `Integer`, `Long`, `Float`, `Double`, `BigDecimal` and `BigInteger` go through
+`ec.l10n.parseNumber` — each with the parameter's optional `format` attribute. When the parse returns
+null the framework adds a validation error naming the value, the type and the format, so the service
+fails before the body runs.
+
+- **Symptom of getting this wrong:** a parameter declared `type="String"` and parsed inside the service
+  body, which duplicates work the framework does better and loses the validation message.
+- **Fix:** declare the real type on the `<parameter>`, add `format` when the caller sends a non-default
+  layout, and use the value directly in the body.
+- **Where hand parsing is still right:** a value read out of an entity field, a `SystemProperty`, a
+  `ServiceJobParameter`, or a JSON payload. Those never pass through `ParameterInfo`, so see the next
+  entry.
+
+### The `ec.l10n` parse helpers return `null` on bad input, they never throw
+
+When you do parse by hand, `ec.l10n.parseNumber(input, null)` and `ec.l10n.parseTimestamp(input, null)`
+both end in a commons-validator `validate(...)` call and **return `null`** if the input will not parse
+(`L10nFacadeImpl.parseTimestamp`, `.parseNumber`). The Java calls they replace threw
+`IllegalArgumentException` naming the bad value. A straight swap therefore moves the failure off the
+parse line and onto whatever reads the result next, carrying nothing that points back.
+
+- **Symptom:** a `NullPointerException` one or more lines below the parse, or a `null` written to a field
+  and carried on quietly. Worst when the old `catch` is deleted and its variable is left behind:
+  `mantle-shopify-connector` PR #755 turned `try { Timestamp.valueOf(x) } catch (IllegalArgumentException e)`
+  into a null check but kept `ec.logger.error("...", e)`, so the recovery path now dies on
+  `MissingPropertyException: No such property: e`. Ten more call sites from that same PR call
+  `.toInstant()` straight on the result.
+- **Fix:** guard the result on the next line, and decide what an unparseable value means. Either log an
+  error naming the field and the value and fall back to a default, or raise an error that names them.
+  Never let the `null` travel. When you delete a `try`/`catch` to adopt the helper, delete every
+  reference to the catch variable with it.
+- **Date arithmetic is not parsing.** `ec.user.nowTimestamp` is already a `Timestamp`. Do not round trip
+  it through `toLocalDateTime()` and `Timestamp.valueOf(...)` to shift it by days. Use
+  `ec.user.nowCalendar`, a `Calendar` already set to the user's time zone
+  (`UserFacadeImpl.getNowCalendar`), with `add(Calendar.DAY_OF_YEAR, -n)`; or
+  `ec.user.getPeriodRange("30d", -1)` when a midnight-aligned window is wanted.
+- **Check:** run the path once with a value the helper cannot read (`"not a date"`, `"1.000,50"`). The
+  old code gave a clear exception. Confirm the new code still says which field held the bad value.
+- **Audit codes:** `raw-bigdecimal` (warn), `raw-timestamp-valueof` (warn).
+
+### `ObjectUtilities.basicConvert` is not locale aware, and it swallows the failure
+
+`basicConvert(value, javaType)` is the standard's "general type conversion" helper, and it is right for
+reshaping a value whose text is already machine-formatted. It is not a parser. Its String branch handles
+only `Boolean`, `Integer`, `Long` and `BigDecimal`, and for `BigDecimal` it calls
+`new BigDecimal(value.toString())`, the exact call the standard forbids, so `1,000` fails there too.
+Everything else falls through to Groovy's `asType`, which has no String to `Timestamp` conversion. On any
+failure `basicConvert` logs a warning and **returns the value unchanged**, so a String keeps travelling
+where a `BigDecimal` or a `Timestamp` was expected.
+
+- **Symptom:** no exception, one warning in the log, then a `ClassCastException` or a wrong comparison
+  far from the conversion. Or the original text written to an entity field.
+- **`<set type="...">` is basicConvert.** `template/XmlActions.groovy.ftl` compiles
+  `<set field="x" from="y" type="Timestamp"/>` to `basicConvert(y, "Timestamp")`, so that tag cannot
+  parse a String into a `Timestamp` either; it leaves the String in place.
+- **Fix:** for anything a person or an external system supplied, use `ec.l10n.parseNumber` or
+  `ec.l10n.parseTimestamp` and guard the `null`. Keep `basicConvert` for moving between types inside the
+  system, where the text is already canonical.
+- **Check:** if the value can carry a grouping separator or a local decimal mark, `basicConvert` is the
+  wrong call.
+
 ## Status & seed data
 
 ### `statusId` updates are validated against `StatusFlowTransition`
