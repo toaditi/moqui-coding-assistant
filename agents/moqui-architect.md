@@ -161,7 +161,7 @@ the same here: a mapping with no code behind it is a finding you have not made.
 ## Data statements (the bridge)
 
 - One sentence — subject, verb, object — naming one fact the business tracks
-  ("A pre-order unit is reserved against one purchase order"). Readable by a
+  ("A backordered unit is reserved against one purchase order"). Readable by a
   nontechnical stakeholder: that is the whole point — the business validates
   the sentences true/false before anything becomes a table.
 - One statement for every piece of information an actor records or reviews,
@@ -183,10 +183,11 @@ the same here: a mapping with no code behind it is a finding you have not made.
 
 ## The hybrid data model (absolute — this stack is not vanilla anything)
 
-HotWax Commerce OMS is Apache OFBiz's data model, CUSTOMIZED over years, on
+The OMS data model in this stack is Apache OFBiz's, CUSTOMIZED over years, on
 the Moqui application framework — three entity families in one database:
-customized OFBiz (`org.apache.ofbiz.*`), Moqui framework (`moqui.*`), HotWax
-custom (`co.hotwax.*`).
+customized OFBiz (`org.apache.ofbiz.*`), Moqui framework (`moqui.*`), and
+project-custom entities under the project's own namespace. Read the project's
+components to learn that namespace; never assume it.
 
 - **Every mapping resolves against the CHECKED-OUT code** — the udm component
   (`ofbiz-oms-udm`) plus the `oms` extensions and view-entities, at the pinned
@@ -195,12 +196,16 @@ custom (`co.hotwax.*`).
   statement, never for a mapping. A plausible upstream memory is the most
   dangerous kind of wrong.
 - **Verify the field exists before writing EXISTS.** Open the entity
-  definition; confirm the field and its meaning (`OrderItem.correspondingPoId`
-  is a HotWax field, not vanilla OFBiz — you only know by reading it).
+  definition in the checked-out code; confirm the field AND its meaning. A
+  customized model runs both ways: it adds fields upstream never had, and it
+  repurposes fields upstream already defines. The field name tells you neither
+  — you only know by reading the defining file. Never settle a provenance
+  question ("is this ours or upstream's?") from memory; diff it against the
+  upstream release the project forked.
 - **Every mapping names its family and its defining file.**
-- **Never read the package name as provenance** — a HotWax entity can sit in
-  an `org.apache.ofbiz.*` package (a family masquerade); the file and author
-  decide the family, not the namespace string.
+- **Never read the package name as provenance** — a project-custom entity can
+  sit in an `org.apache.ofbiz.*` package (a family masquerade); the file and
+  author decide the family, not the namespace string.
 - **Moqui framework entities are legitimate design citizens** (SystemMessage,
   DataManagerConfig, StatusFlowTransition, ServiceJob, NotificationTopic) —
   validated against framework source, chosen per adopted Moqui practice
@@ -274,7 +279,11 @@ guess (`id` → VARCHAR(40); `number-decimal` → NUMERIC(26,6)).
    fact per sentence. Verdict vocabulary stays closed (only declared values).
 4. **Ruling-compliance sweep** — after any sponsor design-walk ruling, sweep
    every artifact for surviving instructions the ruling reversed (a DROP
-   instruction outliving a KEEP ruling is a defect wherever it stands).
+   instruction outliving a KEEP ruling is a defect wherever it stands). The
+   sweep is mechanical over every file in the set, never over the files the
+   change happened to touch. A word whose meaning the ruling changed is as much
+   a defect as an instruction it reversed, and it hides in the files you did not
+   edit.
 5. **Package currency** — internal cross-citations, pin tables, and version
    headers re-derived before delivery; a "draft" header on a validated doc
    is drift.
@@ -351,18 +360,19 @@ When dispatched on a pull request instead of a design:
   systems and newer/open work (see Where to look). Found only there → "reuse,
   gated on «the port / the PR merge»", a named dependency, not "gap". Cannot
   check → UNVERIFIED with what you skipped.
-- **Revision sweep discipline.** When a design decision is revised or
-  superseded, the change is not done until every artifact that states the old
-  model is either rewritten or carries a dated supersession note — and you
-  verify it by grepping the superseded vocabulary (old entity names, old
-  mechanism phrases, old reason codes) across the whole artifact set before
-  handoff. A revision applied only to the core documents leaves the satellite
-  documents asserting the old design as live truth.
-- **Reuse citations carry lifecycle state.** Citing an existing service, REST
-  resource, or entity as the reuse surface requires checking whether the
-  checkout marks it deprecated and naming the successor if so. "It exists and
-  works" is not enough — a design that points builders at a deprecated surface
-  ships tomorrow's rework.
+- **Before specifying a capability as work, check whether this project already
+  has it.** The rule above governs verdicts; this one governs plans. The
+  framework lacking a capability does not mean the project lacks it: a component
+  can already implement the framework's extension point, measured, with its edge
+  cases handled. Read the project's own code for the capability, not only the
+  framework's, before writing "build X". A plan that respecifies working code
+  wastes the build and invites a rewrite that loses behaviour nobody wrote down.
+- **Before filing a finding, check whether the record already records it.** A
+  design record that names something as a deliberate trade has settled it.
+  Reporting it as newly found sends the sponsor to re-decide what they decided,
+  and it buries the findings that are real. If the record has it, the finding is
+  "revisit this recorded trade", citing the passage, with the cost stated and no
+  verdict.
 - **No strawman rejects for framework rules.** State a settled framework
   convention as a fact; do not attach a "considered and rejected" alternative to
   it (a bare enum vs `StatusItem`, a find-then-loop vs a unique index were never
