@@ -25,7 +25,8 @@ the file, one record at a time, and keeps a full log.
 ## The flow
 
 ```
-upload#DataManagerFile (configId + file + parameters)
+create#DataManagerLog (configId + contentLocation + parameters)
+  or upload#DataManagerFile (configId + file + parameters)
       │  saves file under runtime/datamanager/imported/<configId>/
       │  creates DataManagerLog, status = DmlsPending
       ▼
@@ -44,7 +45,8 @@ DataManagerLog updated: DmlsFinished or DmlsFailed
 
 | Piece | What it does | Where |
 |---|---|---|
-| `upload#DataManagerFile` | takes the file in, creates the log (pending) | `maarg-util/service/co/hotwax/util/UtilityServices.xml:159-236` |
+| `create#DataManagerLog` | queues a file already written (by `DataFileWriter`), creates the log (pending) | `maarg-util/service/co/hotwax/util/UtilityServices.xml:230-263` |
+| `upload#DataManagerFile` | takes an uploaded file in, creates the log (pending) | `maarg-util/service/co/hotwax/util/UtilityServices.xml:194-225` |
 | `ScheduledDataManagerRunner` | the background worker; runs every 60s | `maarg-util/src/main/groovy/co/hotwax/mdm/ScheduledDataManagerRunner.groovy` |
 | `MaargDataLoaderImpl` | reads the file, calls the import service per record | `maarg-util/src/main/java/co/hotwax/datamanager/MaargDataLoaderImpl.java:604-648` |
 | `DataManagerLogDetails` | one view with everything: status, failed count, error file | `maarg-util/entity/ServiceEntities.xml:83-119` |
@@ -105,9 +107,12 @@ A file is always a JSON array. Each record is one of two shapes:
 
 ## One rule for producers
 
-Everything that puts work into MDM goes through **`upload#DataManagerFile`**
-(or arrives by SFTP via `importPath`). Nothing in the codebase creates a
-`DataManagerLog` row directly — don't be the first.
+Everything that puts work into MDM goes through a service that writes the log,
+its content row and its parameter rows together. Code that wrote the file with
+`DataFileWriter` calls **`create#DataManagerLog`** with `contentLocation`; this
+is the common path. Code holding an uploaded file calls
+**`upload#DataManagerFile`**. A file can also arrive by SFTP via `importPath`.
+Never create a `DataManagerLog` row with the entity directly.
 
 ## Exports
 

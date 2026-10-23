@@ -217,8 +217,9 @@ only as a bare noun (no detection cue, unlike the DataFeed cue beside it); it no
 
 - **N3. A hand-rolled per-record list loop is MDM done by hand — flag it.** Importing or per-record-syncing a
   LIST of records with per-record transaction isolation and per-record error handling is the Data Manager
-  pipeline: a `DataManagerConfig` maps a name to a one-record `importServiceName`, fed a JSON array via
-  `upload#DataManagerFile` (`maarg-util/service/co/hotwax/util/UtilityServices.xml:159-236`); the loader calls
+  pipeline: a `DataManagerConfig` maps a name to a one-record `importServiceName`, fed a JSON array written with
+  `DataFileWriter` and queued with `create#DataManagerLog` (`maarg-util/service/co/hotwax/util/UtilityServices.xml:230-263`;
+  `upload#DataManagerFile` at `:194-225` for an uploaded file); the loader calls
   the import service once per record, each in its own transaction (`.requireNewTransaction(true)
   .ignorePreviousError(true)` — `MaargDataLoaderImpl.java:604-648`, the per-record call at `:628-632`), failed
   records collected into an error file, the whole run auditable via `DataManagerLog`. A service that (a)

@@ -55,7 +55,7 @@ the need lands:
    for caching, ElasticSearch facades, authz artifacts for security.
    **DataManager (MDM)** for importing or per-record-processing a LIST of
    records — a `DataManagerConfig` names a one-record import service, fed a JSON
-   array via `upload#DataManagerFile`; the loader calls it once per record, each
+   array written with `DataFileWriter` and queued with `create#DataManagerLog`; the loader calls it once per record, each
    in its own transaction, a failed record captured to an error file without
    stopping the rest (`MaargDataLoaderImpl.java:628-632`). A service that loops a
    record list hand-managing per-record `runRequireNew` or per-record error
