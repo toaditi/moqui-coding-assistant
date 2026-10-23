@@ -27,7 +27,8 @@ request.
   after: `moqui-entity` (entities/view-entities), `moqui-service` +
   `moqui-logic` (services), `moqui-screen` / `moqui-navigation` (screens),
   `moqui-integration` (REST/connectors), `moqui-security` (authz),
-  `moqui-component` (scaffolding), `moqui-ftl` (templates).
+  `moqui-component` (scaffolding), `moqui-ftl` (templates), `maarg-mdm`
+  (any data file written with `DataFileWriter`, and MDM imports).
 - **Use what the framework provides.** Hand-written code where a native
   mechanism exists (entity-auto CRUD, view-entities, StatusFlowTransition,
   SECAs, `.rest.xml` routing) is a defect even if it works — the architect
