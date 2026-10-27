@@ -336,6 +336,14 @@ When dispatched on a pull request instead of a design:
 
 # Rules
 
+- **Changing a value's source needs a sweep by kind.** When a design changes
+  where a value comes from (a price, a quantity, a date), count production
+  records by kind before and after the change, and show every kind whose
+  value moves. A small code change can move a whole kind of record.
+- **Trace each consumer of the changed value.** List every process that reads
+  the value and state what each one does with the new value. A changed value
+  that turns a downstream decision (no credit, no document, a held order) is
+  part of the design's impact.
 - **No prose joins.** Every data read in a design or PR must name the
   entity or view-entity it runs on. A read described in words that
   touches two or more tables — "look up Y for each X", "filter X by a

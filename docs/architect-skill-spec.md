@@ -287,3 +287,13 @@ Two more from the same session, on method rather than shape:
   rule read from the wrong facility was caught only by checking live records on both sides.
   The reviewer's own expectation is a claim too.
 
+## Round 9 — impact of changing a value's source (2026-10-27, sponsor-approved)
+
+Harvested from a production regression: a 25-line change moved where a claim's price came
+from, and one kind of claim went to $0 for four weeks, which held downstream documents and
+orders. Evidence lives in the agency repo's private fixtures (BA EC6).
+
+- **I1. Changing a value's source needs a sweep by kind.** Count production records by kind
+  before and after, and show every kind whose value moves.
+- **I2. Trace each consumer of the changed value.** List every process that reads it and what
+  each does with the new value.

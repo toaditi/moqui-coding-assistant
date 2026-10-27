@@ -512,6 +512,36 @@ sponsor-approved; recorded here generic, without engagement evidence:
   the person who gave it. Rationale: silent rewriting of signed business truth
   is a defect even when the new text is correct.
 
+## Round 9 — sponsor-approved rules from a production regression (2026-10-27)
+
+Harvested after the fact from a record-bound real-client engagement. A pricing fix shipped
+after a ruling question that described its example by a data value ("the customer paid $0").
+The example was really a warranty replacement, and three kinds of order shared that value.
+The ruling covered all three without anyone seeing it, and one kind broke in production for
+four weeks. The engagement record and evidence live in the agency repo's private fixtures
+(EC6); this log records only the craft.
+
+- **E12. Name the example by its business kind.** A ruling question describes its example the
+  way the business names it, not by the data value that triggered the question. When the kind
+  is unknown, find it before asking.
+- **E13. List the kinds a ruling will cover, before asking.** Find every kind of record the
+  rule will apply to, with one real example each, and show them in the question. Ask per kind,
+  or ask the expert to confirm the ruling covers each listed kind. A ruling on one kind is never
+  applied to another kind without its own confirmation.
+- **B9. A defect fix that changes business behavior needs its story first.** Write or find the
+  business process story for the whole chain before the ruling question, and check the ruling
+  against the story's later steps, including a repeat of the same activity on its own output.
+- **G14. Evidence must be the same kind as the ruling.** Check each cited production record's
+  kind before citing it. *Origin: records that looked the same (a $0 credit memo) were cited as
+  evidence, but belonged to a different kind (credit offset by another line).*
+
+**Validated:** D11. The new ruling conflicted with the recorded one; both were quoted with
+dates and the old one was marked replaced in the artifact.
+
+**Patterns worth keeping:** worked examples, before and after, one per kind, before asking for
+the ruling (E13 done right); every requirement statement carries production evidence as
+"N of M cases".
+
 ## Eval cases (replay these on the upgraded agent)
 
 | # | Input | Expected | Traps it must avoid |
@@ -521,6 +551,8 @@ sponsor-approved; recorded here generic, without engagement evidence:
 | EC3 | BOPIS interview (multi-turn role-play vs an Expert User) | parks "one screen"; chases "somehow"; reads back, no leading questions; catches the "Never again" alternate; records notify-the-store as design freedom | inventing the picklist from a hedged musing; "by customer name" vs "shows their phone" |
 | EC4 | Full engagement (cold agent; briefed role-play client; a real component suite for gap/overlap) — fixtures (interview tape + client briefing) are INTERNAL, kept outside this public repo (placement ruling 2026-07-17) | full artifact set incl. time flow + owner-named questions; parks all design leaks; routes thresholds to sponsor; late-scope additions flow into story; gap/overlap citations verify against the suite; sponsor-bucket threads all land | 8-question volley (E1); missing time-flow sweep (E8); no interview log (G1a); extension recorded as fact (E9); citing draft registry entries as capability |
 | EC5 | Record-bound corpus engagement (18 transcripts + 2 documents → ICP story → reference-store gap/overlap → signal-cited backlog) — fixture (engagement briefing + four-round tape) is INTERNAL, kept outside this public repo (placement ruling 2026-07-17) | per-sentence provenance to file+speaker; time flow; weighted recording; escalations vs recorded rulings handled per the round-5 refinement; F8 three-tier verdicts with pins; decision-gated backlog; documents reconciled with document-evidence record | silent quote normalization (G1b); blocking on an absent referenced document (D6); vendor claims entering the story (D7); AI-summary provenance (D5); averaging a scope arc instead of carrying the final ruling with history |
+
+| EC6 | A defect fix raises a side question about records with a $0 paid value; the example is really a warranty replacement — fixture INTERNAL, in the agency repo's private fixtures | names the example's business kind (E12); lists the kinds sharing the value with one example each and asks per kind (E13); raises the chain to a repeat claim (B9) | asking the surface question ("$0: credit 0 or list price?"); a tag as the kind marker; one ruling applied to all kinds; a code check stated as the requirement |
 
 ## Status
 

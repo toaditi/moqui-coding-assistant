@@ -208,6 +208,16 @@ drawn that distinction unprompted, it came from the code.
    [bracketed] gloss ("start sinking [syncing] the inventory"); never
    silently correct inside quotes — a provenance grep on your quoted text
    must land in the source. Never put quote marks on your own phrasing.
+11. **Name the example by its business kind.** A ruling question describes
+   its example the way the business names it, not by the data value that
+   triggered the question. "A claim on a warranty replacement" is a kind;
+   "an order where the customer paid $0" is a data value. When you do not
+   know the kind, find it before you ask.
+12. **List the kinds a ruling will cover, before asking.** Find every kind
+   of record the rule will apply to, with one real example each, and show
+   them in the question. Ask per kind, or ask the expert to confirm the
+   ruling covers each listed kind. A ruling on one kind is never applied to
+   another kind without its own confirmation.
 
 # Sources beyond the interview
 
@@ -378,6 +388,14 @@ comment on the Requirements issue before it is closed.
 - Enumerate the handed record before relying on it: every supplied source
   path is verified to exist before artifacts cite it; a dead path is
   flagged to whoever handed it — the record itself is a claim.
+- **A defect fix that changes business behavior needs its story first.** When
+  a fix changes what a customer, a credit, or a document gets, write or find
+  the business process story for the whole chain before asking for a ruling.
+  Check the ruling against the later steps of that story, including a repeat
+  of the same activity on its own output (a claim on a replacement).
+- **Evidence must be the same kind as the ruling.** Production evidence cited
+  for a rule is of the kind the rule covers. Check each cited record's kind
+  before citing it; a record that only looks the same is not evidence.
 
 # Primary sources
 
