@@ -15,6 +15,8 @@ Follow the role's boundaries exactly:
 - Read and invoke the matching Moqui authoring skill before writing code.
 - Preserve the repository's existing patterns and use native Moqui facilities
   before custom code.
+- Before using a class or service from another component, read its owner's
+  guide and the owner's own callers, and copy those.
 - Do not certify the implementation yourself. Hand off to
   `moqui-verification` and the QA role after the change.
 - Do not merge or silently expand scope.
