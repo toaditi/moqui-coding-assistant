@@ -542,6 +542,37 @@ dates and the old one was marked replaced in the artifact.
 the ruling (E13 done right); every requirement statement carries production evidence as
 "N of M cases".
 
+## Round 10 — sponsor-approved rule: check a finding before bringing it (2026-11-13)
+
+Harvested from a record-bound real-client engagement. Twice in one day the analyst brought the
+Expert User a finding, then withdrew it a few turns later. A finding read from two production
+records ("kit lines never reach the ERP") went into a test document. The first record's kit
+lines had been cancelled. The second was too recent to judge. Every completed case in the set
+(5 of 5) showed the opposite. Earlier the same day, a term ("inventory transfer") was used with
+the product catalog's meaning. The client's own document gave it another meaning, and that
+document was in a folder listing the analyst had already read. The sponsor: "What if I had moved
+on with first response of agent? That is bad." The standing rule "verify before you assert"
+was in force and did not stop either case, because it does not say how to verify. These rules
+say how. Engagement record and evidence: the agency repo's private fixtures (EC7).
+
+- **G15. Try to disprove a finding before bringing it.** Look for the record that would prove
+  it wrong. A claim with "always", "never", "every" or "today" rests on the whole set, or on a
+  stated count ("5 of 5 completed cases since August"). Two examples are a lead, not a finding.
+- **G16. Rule out the ordinary causes before reading an absence as a defect.** When a record is
+  missing downstream, first read the source line's own status (cancelled, still requested), its
+  timing (has the job run since?), and any known failure that explains it.
+- **G17. Read the client's own meaning of a term before using it.** A word the client uses
+  ("inventory transfer", "pullback") means what the client's documents and code say. Look there
+  first, before the product catalog or general use.
+- **G18. Nothing unchecked enters an artifact.** A finding goes into a story, a test case or a
+  record only after G15 and G16. Raised earlier, it is labelled "not checked" in the same
+  sentence.
+
+**Replay on v0.18.0:** EC1, EC2 and EC7 passed. EC3 to EC6 were not replayed. In EC7 the
+agent counted the whole set and named its unexplained records as unexplained. It also
+"corrected" the brief with a false claim about a code value, without checking it. A
+correction of the brief is a finding too, and G15 applies to it.
+
 ## Eval cases (replay these on the upgraded agent)
 
 | # | Input | Expected | Traps it must avoid |
@@ -553,6 +584,7 @@ the ruling (E13 done right); every requirement statement carries production evid
 | EC5 | Record-bound corpus engagement (18 transcripts + 2 documents → ICP story → reference-store gap/overlap → signal-cited backlog) — fixture (engagement briefing + four-round tape) is INTERNAL, kept outside this public repo (placement ruling 2026-07-17) | per-sentence provenance to file+speaker; time flow; weighted recording; escalations vs recorded rulings handled per the round-5 refinement; F8 three-tier verdicts with pins; decision-gated backlog; documents reconciled with document-evidence record | silent quote normalization (G1b); blocking on an absent referenced document (D6); vendor claims entering the story (D7); AI-summary provenance (D5); averaging a scope arc instead of carrying the final ruling with history |
 
 | EC6 | A defect fix raises a side question about records with a $0 paid value; the example is really a warranty replacement — fixture INTERNAL, in the agency repo's private fixtures | names the example's business kind (E12); lists the kinds sharing the value with one example each and asks per kind (E13); raises the chain to a repeat claim (B9) | asking the surface question ("$0: credit 0 or list price?"); a tag as the kind marker; one ruling applied to all kinds; a code check stated as the requirement |
+| EC7 | Read access to production and the ERP; the question "Do kit lines on a store pullback reach the ERP?" — fixture INTERNAL, in the agency repo's private fixtures | reads each line's status first; counts every completed kit pullback in a stated window (5 of 5 reach the ERP as parts); names the recent case without a transfer as not checked, or explains it; reads the client's kit-part relation before judging | "kits never reach the ERP" from two records; reading cancelled kit lines as missing; reading a same-day record as a failure; writing the claim into a document before checking (G18) |
 
 ## Status
 
@@ -570,5 +602,5 @@ the ruling (E13 done right); every requirement statement carries production evid
   provenance (G1b) — sponsor-approved and folded in 2026-07-11.
 - **Still untrained:** user experience story as a distinct artifact, the
   churn signal in anger, board-mode (Requirements-issue) operation.
-- **Next:** replay EC1–EC5 on any future definition change; a fixture that
+- **Next:** replay EC1–EC7 on any future definition change; a fixture that
   fails blocks the fold-in.
