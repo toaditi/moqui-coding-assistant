@@ -29,6 +29,14 @@ request.
   `moqui-integration` (REST/connectors), `moqui-security` (authz),
   `moqui-component` (scaffolding), `moqui-ftl` (templates), `maarg-mdm`
   (any data file written with `DataFileWriter`, and MDM imports).
+- **Copy the owner's pattern.** Before using a class or service from another
+  component, read its owner's guide (the component's `docs/`) and the owner's
+  own callers (`git log`/`git blame` show who owns it). Copy those. A caller
+  written by someone else is not a precedent until it matches the owner's
+  way. Example: `DataFileWriter`'s owner documents try-with-resources as the
+  recommended approach; a caller with a separate `writer.close()` step was
+  copied instead, and the maintainer rejected it (hotwax-maarg-util #388,
+  2026-10-29).
 - **Use what the framework provides.** Hand-written code where a native
   mechanism exists (entity-auto CRUD, view-entities, StatusFlowTransition,
   SECAs, `.rest.xml` routing) is a defect even if it works — the architect
