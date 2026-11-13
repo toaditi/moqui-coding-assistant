@@ -47,13 +47,21 @@ connector is `@deprecated use DataFileWriter`.
    only when the receiver wants split files, as the inventory and order feeds do
    with `recordLimitPerFeed`. A batch whose message holds one location must not
    pass it: every file after the first is written and never read.
-3. **Commit, then close.** `getGeneratedFiles()` or `getGeneratedFilesInfo()`
-   is the commit. `close()` without a commit deletes the files. In Groovy use
-   try-with-resources and take the info inside the try. In XML actions, follow
-   `<set field="fileInfo" from="writer.getGeneratedFilesInfo()?.getAt(0)"/>`
-   then `writer.close()` (`PurchaseOrderServices.xml:170-173` in the NetSuite
-   connector). A try block can open in one `<script>` and close in a later one
-   (`OrderServices.xml:1076-1104` in the NetSuite connector).
+3. **Write and commit inside try-with-resources.** `getGeneratedFiles()` or
+   `getGeneratedFilesInfo()` is the commit. `close()` without a commit deletes
+   the files. Open the writer in try-with-resources and take the info inside the
+   try, so the writer closes even when a write throws. The writer's own guide
+   calls this "the recommended approach" (`maarg-util/docs/DataFileWriter.md:151`,
+   written by the maarg-util maintainer), and every example there uses it. In XML actions this is a
+   `<script>` block:
+   `try (DataFileWriter writer = new DataFileWriter(ec, path, DataFileWriter.JSON)) { writer.addRecords(records); fileInfo = writer.getGeneratedFilesInfo()?.getAt(0) }`
+   (`export#DocumentData` in maarg-util `UtilityServices.xml`, and
+   `SqsOrderImport.xml:178-203` in the shopify connector). Never
+   `<set field="writer" .../>` followed by a separate `writer.close()`: an error
+   in between skips the close and leaves the file open and half written
+   (maarg-util maintainer review, hotwax-maarg-util #388, 2026-10-29).
+   `PurchaseOrderServices.xml:170-173` in the NetSuite connector still has that
+   old pattern; do not copy it.
 4. **No records means no file.** The file opens on the first write, so the info
    list comes back empty and `?.getAt(0)` is null. Check `fileInfo` before you
    create a message or a `DataManagerLog`.
@@ -73,6 +81,9 @@ connector is `@deprecated use DataFileWriter`.
    `ec.context.fileWriterContext` (`DataFileWriter.PATH_TOKENS_KEY`). A full
    location from `MaargUtil.toContentLocation(...)` also works. Never a disk
    path. An existing file name gets a `_1` suffix, so it is not overwritten.
+   In Groovy code write the tokens escaped, `"imported/\${configId}/Name_\${dateTime}.json"`,
+   so `DataFileWriter` fills them, never Groovy (`SqsOrderImport.xml:179`;
+   maintainer review, hotwax-maarg-util #388).
 8. **One writer per thread.** It is not thread-safe, and it writes only to
    file-backed locations.
 
@@ -145,6 +156,8 @@ transaction (`MaargDataLoaderImpl.java:604-648`). Therefore:
 | A flush or batch-size setting on `DataFileWriter` | ruled out; the 1,000-record batch is the design |
 | A number as the fourth `DataFileWriter` argument | the output splits into `_1`, `_2` files nobody reads |
 | `close()` without `getGeneratedFiles*()` | the file is deleted |
+| `writer.close()` as a separate step after the writes | an error skips it; the file stays open and half written |
+| Path tokens written as `${...}` in Groovy code | Groovy may fill them before `DataFileWriter` does; write `\${...}` |
 | Assuming the file rolls back with the transaction | a file left for a batch that never existed |
 | `JSONL` for an MDM import | the loader reads a JSON array only |
 
