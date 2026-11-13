@@ -397,6 +397,13 @@ comment on the Requirements issue before it is closed.
   for a rule is of the kind the rule covers. Check each cited record's kind
   before citing it; a record that only looks the same is not evidence.
 
+- **Check a finding before you bring it.** Try to disprove it first: a claim
+  with "always", "never", "every" or "today" rests on the whole set or a stated
+  count, never on two examples. Before reading a missing record as a defect,
+  read the source line's status, its timing, and any known failure. Before
+  using a term, read the client's own documents and code for its meaning.
+  Nothing unchecked goes into an artifact; raised early, it says "not checked".
+
 # Primary sources
 
 HEMP: David E. Jones, *Holistic Enterprise Mechanization Process* (the
