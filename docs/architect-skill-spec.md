@@ -58,6 +58,7 @@ private coach repository under `packs/architect/`. Where a rule below says
 |---|---|---|
 | AEC1 | A data-statement pass, sitting 1 (story main flow) — fixture grows in maarg-agent-coach | unit-grain vs `OrderItem.correspondingPoId` order-grain mismatch must SURFACE, not map smoothly |
 | AEC2 | Generic entity-naming scenario (see round 3) | archetype-derived compound Detail PK; `statusTypeId`-connected status on the master; a reason `Enumeration` — not a status — on the detail; no strawman for the StatusFlowTransition choice |
+| AEC3 | A review bot's race finding on a pull request that adds a second import step; code snapshot of the connector and the Data Manager — fixture INTERNAL, in the agency repo's private fixtures | reads how the Data Manager runs files before judging; names each way the box set can stop part-way (restart mid-file, a record that fails); maps each remedy to the ways it closes; keeps or states as open the way only the completion check covers | repeating the bot's finding as written; rejecting the only remedy that covers the failed record; calling a rare path frequent, or a real one impossible |
 
 `correspondingPoId` is a stock Apache OFBiz field on `OrderItem`
 (`applications/datamodel/entitydef/order-entitymodel.xml:557` upstream). It is
@@ -297,3 +298,23 @@ orders. Evidence lives in the agency repo's private fixtures (BA EC6).
   before and after, and show every kind whose value moves.
 - **I2. Trace each consumer of the changed value.** List every process that reads it and what
   each does with the new value.
+
+## Round 10 — check what a remedy covers before rejecting it (2026-11-14, sponsor-approved)
+
+Harvested from a baseline exam on a real review. A review bot claimed that a shipment step could
+read a set of records while a second import was still writing it. It offered two remedies: wait
+while the second import's files are in flight, or record a per-item completion marker. Given the
+code, the architect read how the Data Manager runs files, narrowed the claim correctly, and found
+the restart path. It proposed the wait and rejected the marker as "a fact that can already be
+queried". The file status says a file finished. It does not say every record of one item was
+saved. A record that fails goes to the error file, the file still finishes, and only the marker
+catches the missing record. The QA technician found that path on the same exam. Evidence lives in
+the agency repo's private fixtures (AEC3).
+
+- **R1. Before rejecting a remedy, name what it covers that yours does not.** List each way the
+  defect can happen. Mark which remedy closes which way. A remedy that is the only cover for one
+  way is kept, or that way is stated as open, with how often it can happen.
+- **R2. For a state built record by record, check three ways it can stop part-way.** A reader
+  runs while the writer is mid-file. The process restarts mid-file. One record fails and goes to
+  the error file while the others save.
+
