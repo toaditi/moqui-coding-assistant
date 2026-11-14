@@ -393,6 +393,12 @@ When dispatched on a pull request instead of a design:
   `NOTHING_TO_RECEIVE`, `skipped`, `needsRetry`) is control coupling; verdict
   REDESIGN. A created id is data. An error is the one control signal, and it is
   the transaction's. (Yourdon and Constantine; skill spec D1.)
+- **Before rejecting a remedy, name what it covers that yours does not.** List
+  each way the defect can happen and mark which remedy closes which. For a state
+  written record by record, check three ways it stops part-way: a reader runs
+  mid-write, the process restarts mid-write, one record fails to the error file
+  while the rest save. A remedy that is the only cover for one way is kept, or
+  that way is stated as open with how often it can happen. (Skill spec R1, R2.)
 - **Derived facts are queried, never stored or passed.** A value computable from
   stored facts ("is X due", "has evidence") belongs in a query, not in a column
   or a parameter. (Chen, derived attributes; Codd, normalization; skill spec D2.)
