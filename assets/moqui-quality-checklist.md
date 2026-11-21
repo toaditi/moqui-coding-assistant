@@ -31,7 +31,8 @@ Use this checklist before handoff, review approval, or merge.
 - Groovy and Java code do not use `System.out.println`, `println`, or `printStackTrace`.
 - `TODO` and `FIXME` markers are either removed or backed by a tracked follow-up.
 - Logging uses framework-appropriate patterns.
-- Inline `<script>` blocks in a service's `<actions>` stay small (audit threshold: 20 non-blank lines). Above the threshold, refactor into XML actions (`<iterate>`, `<set>`, `<if>`, `<entity-find>`, `<filter-map-list>`) or extract to `script/*.groovy` referenced via `type="script" location="..."`.
+- Inline `<script>` blocks in a service's `<actions>` stay small (audit threshold: 20 non-blank lines). Above the threshold, refactor into XML actions (`<iterate>`, `<set>`, `<if>`, `<entity-find>`, `<filter-map-list>`) or move a real algorithm into a class under `src/` that the actions call. Do not add new files under `script/`.
+- The diff passes the self-check table at the end of `moqui-house-rules.md`.
 
 ## Verification
 

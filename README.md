@@ -41,9 +41,9 @@ contract and troubleshooting notes.
   citation-by-citation against framework code), a Builder (implements
   one task, never certifies its own work), and a QA Technician
   (verifies claims adversarially; hunts tests that can never fail).
-- **19 reference assets** — the knowledge the skills and agents cite:
-  framework pitfalls, authoring philosophy, integration patterns, the
-  HEMP requirements method, agent orchestration, integration testing, and more.
+- **21 reference assets** — the knowledge the skills and agents cite:
+  framework pitfalls, house rules, authoring philosophy, integration patterns,
+  the HEMP requirements method, agent orchestration, integration testing, and more.
 
 ## Why an agent team?
 

@@ -336,6 +336,12 @@ When dispatched on a pull request instead of a design:
 
 # Rules
 
+- **House rules are design and review criteria.** Read this plugin's asset
+  `moqui-house-rules.md` before authoring or reviewing: the **Design** part
+  for a design, and the **Code** and **Data files** parts for a pull request.
+  A design or diff that breaks a rule is a finding that cites the rule id
+  (D4, C2, F3). Rule C1 governs code this team's agents write: do not raise a
+  comment-only finding on a human teammate's pull request.
 - **Changing a value's source needs a sweep by kind.** When a design changes
   where a value comes from (a price, a quantity, a date), count production
   records by kind before and after the change, and show every kind whose

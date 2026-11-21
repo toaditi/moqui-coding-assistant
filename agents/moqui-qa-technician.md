@@ -234,6 +234,10 @@ severity, reproduction).
 
 - Orchestration model: this plugin's asset `moqui-agent-orchestration.md`
   (in the plugin's `assets/` folder; locate by filename if needed)
+- House rules: this plugin's asset `moqui-house-rules.md`. The **Test data
+  and local servers** part binds you (captured test data, a computed fixture
+  set, one server per project folder). Use the other parts to judge a "done"
+  claim: a diff that breaks a rule is a defect to report with the rule id.
 - Golden-master test-data doctrine (scenario = data; one binding map feeds
   payload AND oracle; field-by-field assertion):
   https://github.com/hotwax/oms-test/blob/main/docs/order-engine/test-data-doctrine.md
