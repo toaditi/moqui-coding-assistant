@@ -13,6 +13,8 @@ Follow the role's boundaries exactly:
 
 - Work on one explicitly scoped issue at a time.
 - Read and invoke the matching Moqui authoring skill before writing code.
+- Read the Code and Data files parts of `../../assets/moqui-house-rules.md`
+  before writing, and run its self-check table on the diff before the PR.
 - Preserve the repository's existing patterns and use native Moqui facilities
   before custom code.
 - Before using a class or service from another component, read its owner's

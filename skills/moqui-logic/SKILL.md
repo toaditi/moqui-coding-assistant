@@ -12,7 +12,7 @@ description: Author or edit Moqui business logic (XML actions or Groovy) while p
 3. Decide where the logic belongs. **XML is the default; Groovy is the exception:**
    - If the logic can be expressed cleanly with built-in action tags (`<entity-find>`, `<service-call>`, `<set>`, `<if>`, `<iterate>`, `<return>`, etc.), write it in XML.
    - Use Groovy only when XML actions are demonstrably the wrong tool: complex branching, non-trivial transformations, regex/string work, or logic that is genuinely easier to read and test in Groovy. "Faster to type" is not a reason.
-   - **The 30% rule:** if the Groovy needed exceeds ~30% of the service body, extract it to its own `script/**/*.groovy` file and call it via `<script location="..."/>`. Do not hide a script-sized chunk inside an inline `<script>` block.
+   - **The 30% rule:** inline Groovy stays under ~30% of the service body. If it would exceed that, first redesign toward XML actions over a view-entity. A real algorithm goes in a class under `src/` that the actions call. Do not add a new file under `script/`, and do not hide a script-sized chunk inside an inline `<script>` block. See House rules C5.
 4. Preserve framework-native patterns:
    - use `ec.entity`, `ec.service`, `ec.logger`, and `ec.message`
    - avoid `println`, `System.out.println`, and `printStackTrace`
@@ -25,7 +25,8 @@ description: Author or edit Moqui business logic (XML actions or Groovy) while p
 
 - Do not change script behavior without checking the caller contract.
 - Do not reach for Groovy when XML actions can express the logic cleanly. XML first; Groovy only when XML is genuinely the wrong tool.
-- Do not let an inline `<script>` block grow past ~30% of the service body — extract it to a dedicated `script/**/*.groovy` file and reference it with `<script location="..."/>`.
+- Do not let an inline `<script>` block grow past ~30% of the service body. Redesign toward XML actions over a view-entity, or move a real algorithm into a class under `src/` that the actions call. Do not add a new `script/**/*.groovy` file, a new closure in an existing script, or a `type="java"` wrapper class. See House rules C5.
+- Do not write comments, boolean flag variables, alias variables, `in-map="true"`, or a `transaction` attribute, and do not edit the maps and lists passed in. Log messages follow `[Entity] [Context] - [Action]`. See House rules C1 to C12.
 - Do not introduce Groovy utilities or helpers when the component already has a clearer local pattern.
 - Do not use broad refactors when the task only needs a local behavior correction.
 - Do not pass a non-boolean-returning closure to `EntityList.findAll`/`find`/`filter` — those methods cast the result straight to `boolean` (no Groovy truthiness), so `findAll{ it.someId }` throws `ClassCastException` at runtime on non-empty lists. Always return a real boolean: `find{ it.someId != null }`. See Framework pitfalls.
@@ -41,3 +42,4 @@ description: Author or edit Moqui business logic (XML actions or Groovy) while p
 - Change sequence: `../../assets/moqui-change-sequence.md`
 - Checklist: `../../assets/moqui-quality-checklist.md`
 - Framework pitfalls: `../../assets/moqui-framework-pitfalls.md`
+- House rules: `../../assets/moqui-house-rules.md`

@@ -15,6 +15,10 @@ request.
   `assets/` folder) — the claim protocol, label contract, and merge protocol.
   **Follow it exactly** when the project runs the agent-team board; outside
   the board, your dispatch prompt states the task and branch directly.
+- This plugin's asset `moqui-house-rules.md`, the **Code** and **Data files**
+  parts: the rules the sponsor has set in review (no comments, no boolean
+  flags, XML actions, named parameters, the log message pattern, hand-written
+  ids, upgrade steps, paused jobs). Read them before the first line of code.
 - The specific issue or task you are working: its description, root-cause
   analysis, and dependencies.
 - The project's standing rules (CLAUDE.md: toolchain versions, pinned
@@ -43,7 +47,8 @@ request.
   will find it in review; find it yourself first.
 - **Before opening the PR:** run this plugin's `moqui-verification` skill and
   its quality audit on your changed files, and the narrowest compile/test
-  command available. Fix what they flag.
+  command available. Then search your diff with the self-check table at the
+  end of `moqui-house-rules.md`. Fix what they flag.
 - **Reads-true:** verify the real contract before assuming it (read the
   entity/service definition, not your memory of it); no dead code; docs and
   comments must match behavior.

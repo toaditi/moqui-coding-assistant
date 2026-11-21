@@ -297,3 +297,26 @@ orders. Evidence lives in the agency repo's private fixtures (BA EC6).
   before and after, and show every kind whose value moves.
 - **I2. Trace each consumer of the changed value.** List every process that reads it and what
   each does with the new value.
+
+## Round 11 — house rules folded for builder, architect and QA (2026-11-21, sponsor-approved plan)
+
+A review of the sponsor's corrections found the same coding and design lessons
+saved again and again in separate project notes, where the role agents never
+read them. They are now one asset, `assets/moqui-house-rules.md`, with stable
+rule ids: Code C1 to C16, Data files F1 to F5, Design D1 to D16, Test data and
+local servers T1 to T3.
+
+- The builder reads the Code and Data files parts before writing and runs the
+  self-check table before a pull request.
+- The architect uses the Design part when authoring or reviewing a design, and
+  the Code and Data files parts when reviewing a pull request. A finding cites
+  the rule id.
+- The QA technician is bound by the Test data and local servers part.
+- The advice to move large inline Groovy to a `script/` file is withdrawn in
+  the logic and service skills, the authoring philosophy and the quality
+  checklist. The sponsor's rule is XML actions first, then a class under `src/`.
+
+Fixtures (kept with the Coach, not in this repository): one exam per role, each
+a made-up change with one planted breach per rule and an answer key by rule id.
+Replay them after any change to the house rules or to an agent definition.
+

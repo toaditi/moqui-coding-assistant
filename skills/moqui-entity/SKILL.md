@@ -49,6 +49,7 @@ database needed.
 - Do not create a parallel entity package when the component already has a stable package for the domain.
 - Do not rename entity packages or primary identifiers casually; treat them as contract changes.
 - Do not add fields or relationships without checking how nearby services and screens consume them.
+- A change to a shared entity goes in the component that defines it, a derivable value is a view-entity aggregate and not a stored field, `fromDate`/`thruDate` mean effective dating only, and a hand-written primary key in a data file is a readable id of 20 characters or fewer or a number below 100000. See House rules (`../../assets/moqui-house-rules.md`) D2, D8, F1, F2.
 - `entity-find-one`/`.one()` only works by primary key and does not throw on duplicate matches (only trace-logs) — use `entity-find`+`getFirst()` for any non-PK "first match" lookup. See Framework pitfalls.
 - Use the 4-argument `makeCondition(field, op, value, true)` (`orNull`) for "everything except X" — plain `!=` drops NULL rows, because SQL `NULL != 'X'` is unknown, not true. Same blind spot for `NOT_IN`. See Framework pitfalls.
 - To write a single column, build a fresh `ec.entity.makeValue(...).setAll([pks..., field: v]).update()` — calling `update()` on a value read via `find()` emits EVERY column from your snapshot and can silently clobber a concurrent write. See Framework pitfalls.
