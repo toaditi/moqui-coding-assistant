@@ -56,26 +56,60 @@ connector is `@deprecated use DataFileWriter`.
    `<script>` block:
    `try (DataFileWriter writer = new DataFileWriter(ec, path, DataFileWriter.JSON)) { writer.addRecords(records); fileInfo = writer.getGeneratedFilesInfo()?.getAt(0) }`
    (`export#DocumentData` in maarg-util `UtilityServices.xml`, and
-   `SqsOrderImport.xml:178-203` in the shopify connector). Never
+   `SqsOrderImport.xml:178-203` in the shopify connector, which write a list that
+   arrives whole). A service that builds its records in a loop adds each one
+   inside the loop (rule 4). Never
    `<set field="writer" .../>` followed by a separate `writer.close()`: an error
    in between skips the close and leaves the file open and half written
    (maarg-util maintainer review, hotwax-maarg-util #388, 2026-10-29).
    `PurchaseOrderServices.xml:170-173` in the NetSuite connector still has that
    old pattern; do not copy it.
-4. **No records means no file.** The file opens on the first write, so the info
+4. **Add each record as the service builds it.** When the service builds its
+   records in a loop, open the writer before the loop. Add each record with
+   `writer.addRecord(record)` at the step where it passes its checks, and write
+   that record's own row (a ledger row, a claim) in the same step. Commit after
+   the loop. Never collect the records in a list and hand the list to the writer
+   or to another service after the loop: the list and the second loop over it for
+   the rows are steps the code does not need. Take any id the rows carry, such as
+   the message id, before the loop. In XML actions the `try` opens in one
+   `<script>` and closes in a later one, with the loop between them
+   (`create#NetSuiteSalesOrderBatch` and `create#NetSuiteCustomerBatch` in the
+   NetSuite connector, #664 and #709, 2026-11-16):
+   ```xml
+   <set field="systemMessageId" from="ec.entity.sequencedIdPrimary('moqui.service.message.SystemMessage', null, null)"/>
+   <script><![CDATA[
+       import co.hotwax.util.DataFileWriter
+       try (DataFileWriter writer = new DataFileWriter(ec, filePath, DataFileWriter.JSONL)) {
+   ]]></script>
+   <iterate list="dueIds" entry="dueId">
+       <service-call name="prepare#Body" in-map="[dueId: dueId]" out-map="prepared" out-map-add-to-existing="false"/>
+       <if condition="prepared.body">
+           <script>writer.addRecord(prepared.body)</script>
+           <service-call name="create#BatchItemDetail" in-map="[dueId: dueId, systemMessageId: systemMessageId]"/>
+       </if>
+   </iterate>
+   <script><![CDATA[
+           batchFile = writer.getGeneratedFilesInfo()?.getAt(0)
+       }
+   ]]></script>
+   ```
+   Do not change a record after adding it: the writer keeps the record itself, not
+   a copy, until it writes. A list that arrives whole, such as one page of an API
+   answer or a document export, still goes in with one `writer.addRecords(list)`.
+5. **No records means no file.** The file opens on the first write, so the info
    list comes back empty and `?.getAt(0)` is null. Check `fileInfo` before you
    create a message or a `DataManagerLog`.
-5. **The file is not part of the database transaction.** A committed file stays
+6. **The file is not part of the database transaction.** A committed file stays
    if the transaction rolls back later. When it must go with the transaction,
    register a rollback action:
    `ec.service.special().name('<delete service>').parameters([location: location]).registerOnRollback()`
    (`framework/.../ServiceCallSpecial.java:41`), or
    `ec.transaction.registerSynchronization(...)` from Groovy.
-6. **Pick the format by the reader.** `JSON` writes one array; MDM reads only
+7. **Pick the format by the reader.** `JSON` writes one array; MDM reads only
    that (`MaargDataLoaderImpl.java:650-652` refuses any other root). `JSONL` writes one object per line, for a receiver that reads line by
    line (a NetSuite batch file). `CSV` takes its headers from the first record's
    keys.
-7. **Path.** Pass a path relative to the content root, for example
+8. **Path.** Pass a path relative to the content root, for example
    `imported/${configId}/ShopifyOrderList_${dateTime}.json`. Tokens other than
    `date`, `dateTime` and `contentRoot` come from a map in
    `ec.context.fileWriterContext` (`DataFileWriter.PATH_TOKENS_KEY`). A full
@@ -84,7 +118,7 @@ connector is `@deprecated use DataFileWriter`.
    In Groovy code write the tokens escaped, `"imported/\${configId}/Name_\${dateTime}.json"`,
    so `DataFileWriter` fills them, never Groovy (`SqsOrderImport.xml:179`;
    maintainer review, hotwax-maarg-util #388).
-8. **One writer per thread.** It is not thread-safe, and it writes only to
+9. **One writer per thread.** It is not thread-safe, and it writes only to
    file-backed locations.
 
 ## 3. Writing a producer (the side that queues a file for MDM)
@@ -155,6 +189,7 @@ transaction (`MaargDataLoaderImpl.java:604-648`). Therefore:
 | Creating `DataManagerLog` rows with the entity directly | no content or parameter rows; use `create#DataManagerLog` |
 | A flush or batch-size setting on `DataFileWriter` | ruled out; the 1,000-record batch is the design |
 | A number as the fourth `DataFileWriter` argument | the output splits into `_1`, `_2` files nobody reads |
+| Records collected in a list, then written after the loop | a list and a second loop for the rows that the code does not need; add each record in the loop |
 | `close()` without `getGeneratedFiles*()` | the file is deleted |
 | `writer.close()` as a separate step after the writes | an error skips it; the file stays open and half written |
 | Path tokens written as `${...}` in Groovy code | Groovy may fill them before `DataFileWriter` does; write `\${...}` |
